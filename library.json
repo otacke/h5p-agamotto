@@ -1,0 +1,22 @@
+{
+  "title": "Agamotto",
+  "description": "Displays an interactive sequence of images",
+  "majorVersion": 0,
+  "minorVersion": 1,
+  "patchVersion": 0,
+  "runnable": 1,
+  "embedTypes": ["iframe"],
+  "author": "Oliver Tacke",
+  "license": "pd",
+  "machineName": "H5P.Agamotto",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 0
+  },
+  "preloadedJs": [
+    { "path": "scripts/agamotto.js" }
+  ],
+  "preloadedCss": [
+    { "path": "styles/agamotto.css" }
+  ]
+}

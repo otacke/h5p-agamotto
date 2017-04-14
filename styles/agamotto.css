@@ -1,0 +1,40 @@
+.h5p-agamotto {
+  width: auto;
+  margin: 0 auto;
+}
+.h5p-agamotto .h5p-agamotto-title {
+  width: auto;
+  margin: 16px;
+}
+.h5p-agamotto #h5p-agamotto-images {
+  position: relative;
+  margin: 16px;
+}
+.h5p-agamotto #h5p-agamotto-image1 {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+.h5p-agamotto #h5p-agamotto-image2 {
+  position: absolute;
+  width: 100%;
+}
+.h5p-agamotto .h5p-agamotto-slider-container {
+  margin: 16px;
+}
+.h5p-agamotto #h5p-agamotto-slider {
+  width: 100%;
+}
+.h5p-agamotto #h5p-agamotto-descriptions {
+  position: relative;
+  margin: 16px;
+}
+.h5p-agamotto #h5p-agamotto-description1 {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+}
+.h5p-agamotto #h5p-agamotto-description2 {
+  position: absolute;
+  width: 100%;
+}

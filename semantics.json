@@ -1,0 +1,58 @@
+[
+  {
+    "name": "title",
+    "label": "Title",
+    "importance": "high",
+    "type": "text",
+    "optional": true,
+    "placeholder": "Here you can add an optional title.",
+    "description": "The title you'd like to show above the image"
+  },
+  {
+    "name": "items",
+    "type": "list",
+    "label": "Items",
+    "entity": "item",
+    "importance": "high",
+    "min": 2,
+    "field": {
+      "name": "item",
+      "type": "group",
+      "label": "Item",
+      "importance": "low",
+      "expanded": true,
+      "fields": [
+        {
+          "name": "image",
+          "label": "Image",
+          "importance": "low",
+          "type": "image",
+          "optional": false,
+          "description": "The image to be used. Make sure all images have the same dimensions"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "importance": "low",
+          "widget": "html",
+          "label": "Description",
+          "optional": true,
+          "placeholder": "My image description ...",
+          "description": "Optional description for the image",
+          "enterMode": "p",
+          "tags": [
+            "strong",
+            "em",
+            "sub",
+            "sup",
+            "h3",
+            "h4",
+            "ul",
+            "ol",
+            "a"
+          ]
+        }
+      ]
+    }
+  }
+]
