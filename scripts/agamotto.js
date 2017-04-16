@@ -12,13 +12,16 @@ H5P.Agamotto = function ($) {
    */
   function C(options, id) {
     this.options = options;
+    this.maxItem = options.items.length - 1;
 
     this.image1, this.image2 = undefined;
     this.description1, this.description2 = undefined;
+    this.index = 0;
+    this.opacity = 1;
 
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = false;
-    for (var i = 0; i < this.options.items.length; i++) {
+    for (var i = 0; i < this.maxItem + 1; i++) {
       if (this.options.items[i].description !== '') {
         this.hasDescription = true;
         break;
@@ -34,12 +37,61 @@ H5P.Agamotto = function ($) {
      */
     this.getMaxDescriptionHeight = function() {
       var maxDescriptionHeight = 0;
-      for (var i = 0; i < this.options.items.length; i++) {
+      for (var i = 0; i < this.maxItem + 1; i++) {
         this.description2.innerHTML = this.options.items[i].description;
         maxDescriptionHeight = Math.max(maxDescriptionHeight, this.description2.offsetHeight);
       }
       return maxDescriptionHeight;
-    }
+    };
+
+    /**
+     * Map a value from one range to another.
+     *
+     * @param {number} value - the value to me remapped.
+     * @param {number} lo1 - lower boundary of first range.
+     * @param {number} hi1 - upper boundary of first range.
+     * @param {number} lo2 - lower boundary of second range.
+     * @param {number} hi2 - upper boundary of second range.
+     * @return {number} - remapped value.
+     */
+    this.map = function (value, lo1, hi1, lo2, hi2) {
+      return lo2 + (hi2 - lo2) * (value - lo1) / (hi1 - lo1);
+    };
+
+    /**
+     * Constrain a number value within a range.
+     *
+     * @param {number} value - value to be constrained.
+     * @param {number} lo - lower boundary of the range.
+     * @param {number} hi - upper boundary of the range.
+     * @returns {number} - constrained value.
+     */
+    this.constrain = function (value, lo, hi) {
+      return Math.min(hi, Math.max(lo, value));
+    };
+
+    /**
+     * Update images and descriptions.
+     *
+     * @param {Number} index - index of top image.
+     * @param {Number} opacity - opacity of top image.
+     */
+    this.update = function (index, opacity) {
+      bottomIndex = this.constrain(index + 1, 0, this.maxItem);
+
+      // Update images
+      this.image1.src = H5P.getPath(this.options.items[index].image.path, this.id);
+      this.image2.src = H5P.getPath(this.options.items[bottomIndex].image.path, this.id);
+      this.image1.style.opacity = opacity;
+
+      // Update descriptions
+      if (this.hasDescription) {
+        this.description1.innerHTML = this.options.items[index].description;
+        this.description2.innerHTML = this.options.items[bottomIndex].description;
+        this.description1.style.opacity = opacity;
+        this.description2.style.opacity = 1 - opacity;
+      }
+    };
 
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
@@ -65,7 +117,7 @@ H5P.Agamotto = function ($) {
       $container.append('<div class="h5p-agamotto-title"><h2>' + self.options.title + '</h2></div>');
     }
     $container.append('<div id="h5p-agamotto-images"><img id="h5p-agamotto-image1" src="#"/><img id="h5p-agamotto-image2" src="#"/></div>');
-    $container.append('<div class="h5p-agamotto-slider-container"><input id="h5p-agamotto-slider" type="range" value="0"/></div>');
+    $container.append('<div class="h5p-agamotto-slider-container"><input id="h5p-agamotto-slider" type="range" value="0" min="0" max="100"/></div>');
 
     // Descriptions
     if (self.hasDescription) {
@@ -96,32 +148,37 @@ H5P.Agamotto = function ($) {
     // Create slider including event handling
     var slider = document.getElementById('h5p-agamotto-slider');
     slider.addEventListener('input', function () {
+      this.setAttribute('value', this.value);
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to
        * the left and right of the slider where nothing happens
        */
       var margin = 5;
-      var mappedValue = (self.options.items.length-1) * (this.value - margin) / ((slider.getAttribute('max') || 100) - margin);
+      var mappedValue = self.map(
+        this.value,
+        (parseInt(this.min) || 0) + margin,
+        (parseInt(this.max) || 100) - margin,
+        0,
+        self.maxItem
+      );
 
       // Account for margin change and mapping outside the image indexes
-      var topIndex = Math.min(Math.max(0, Math.floor(mappedValue)), self.options.items.length-1);
-      var bottomIndex = Math.min(Math.max(0, topIndex + 1), self.options.items.length-1);
+      var topIndex = self.constrain(Math.floor(mappedValue), 0, self.maxItem);
 
       // Using a power value will allow the actual image to be displayed a little longer before blending
-      var topOpacity = Math.pow(topIndex + 1 - mappedValue, 2);
+      var topOpacity = Math.pow(1 - self.constrain(mappedValue - topIndex, 0, 1), 2);
 
-      // Update images
-      self.image1.src = H5P.getPath(self.options.items[topIndex].image.path, self.id);
-      self.image2.src = H5P.getPath(self.options.items[bottomIndex].image.path, self.id);
-      self.image1.style.opacity = topOpacity;
+      self.index = topIndex;
+      self.opacity = topOpacity;
+      self.update(topIndex, topOpacity);
+    });
 
-      // Update descriptions
-      if (self.hasDescription) {
-        self.description1.innerHTML = self.options.items[topIndex].description;
-        self.description2.innerHTML = self.options.items[bottomIndex].description;
-        self.description1.style.opacity = topOpacity;
-        self.description2.style.opacity = 1 - topOpacity;
+    slider.addEventListener('change', function () {
+      if (self.options.snap === true) {
+        var snapIndex = Math.round(self.index + 1 - self.opacity);
+        this.value = snapIndex * parseInt(this.max) / self.maxItem;
+        self.update(snapIndex, 1);
       }
     });
   };

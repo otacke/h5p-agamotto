@@ -13,7 +13,7 @@
     "type": "list",
     "label": "Items",
     "entity": "item",
-    "importance": "high",
+    "importance": "medium",
     "min": 2,
     "field": {
       "name": "item",
@@ -54,5 +54,13 @@
         }
       ]
     }
+  },
+  {
+    "name": "snap",
+    "importance": "medium",
+    "type": "boolean",
+    "label": "Snap slider",
+    "description": "If set to true, the slider will snap to fixed positions",
+    "default": true
   }
 ]
