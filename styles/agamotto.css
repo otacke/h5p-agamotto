@@ -24,6 +24,7 @@
 }
 .h5p-agamotto #h5p-agamotto-slider {
   width: 100%;
+  margin: 0; /* Firefox seems to set a default margin otherwise */
 }
 .h5p-agamotto #h5p-agamotto-descriptions {
   position: relative;
