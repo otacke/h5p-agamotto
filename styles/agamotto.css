@@ -1,6 +1,13 @@
 .h5p-agamotto {
   width: auto;
   margin: 0 auto;
+  /* Will prevent flickering when sliding */
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .h5p-agamotto .h5p-agamotto-warning {
   width: auto;
@@ -25,13 +32,39 @@
   position: absolute;
   width: 100%;
 }
-.h5p-agamotto .h5p-agamotto-slider-container {
-  margin: 8px 16px 0 16px;
+.h5p-agamotto #h5p-agamotto-slider-container {
+  margin: 0 16px;
+  height: 36px;
+  background: #2c2c2c;
+  position: relative;
+}
+.h5p-agamotto #h5p-agamotto-slider-track {
+	height:8px;
+	background-color:#0b0d0c;
+	top:14px;
+	left:16px;
+	position:absolute;
+  z-index:2;
+}
+#h5p-agamotto-slider-thumb {
+  position: absolute;
+  speak: none;
+  color: #fbfbfb;
+  z-index: 3;
+  top: 10px;
+  left: 8px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  text-shadow: 0 0 2px #666;
+  outline: none;
+  border: 0;
+  background: #fbfbfb;
+  border-radius: 4px;
 }
 .h5p-agamotto #h5p-agamotto-slider {
   width: 100%;
   margin: 0;
-
 }
 .h5p-agamotto #h5p-agamotto-descriptions {
   position: relative;
