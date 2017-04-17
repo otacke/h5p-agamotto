@@ -15,6 +15,7 @@
     "entity": "item",
     "importance": "medium",
     "min": 2,
+    "max": 50,
     "field": {
       "name": "item",
       "type": "group",

@@ -11,8 +11,26 @@ H5P.Agamotto = function ($) {
    * @param {number} content id.
    */
   function C(options, id) {
+    if (!options.items) {
+      return;
+    }
+
+    // Remove items with missing image
+    for (var i = 0; i < options.items.length; i++) {
+      if (options.items[i].image === undefined) {
+        console.log('An image is missing. I will continue without it, but please check your settings.');
+        options.items.splice(i, 1);
+        i--;
+      }
+    }
+    // Restrict to 50 images
+    options.items = options.items.splice(0, 50);
     this.options = options;
-    this.maxItem = options.items.length - 1;
+
+    this.maxItem = this.options.items.length - 1;
+    if (this.maxItem > 100) {
+      console.log('You have more than 100 images. This will not work well.');
+    }
 
     this.image1, this.image2 = undefined;
     this.description1, this.description2 = undefined;
@@ -111,6 +129,11 @@ H5P.Agamotto = function ($) {
 
     // Setup HTML DOM
     $container.addClass("h5p-agamotto");
+    if (!self.options.items || self.maxItem < 1) {
+      $container.append('<div class="h5p-agamotto-warning">I really need at least two images :-)</div>');
+      self.trigger('resize');
+      return;
+    }
 
     // Title, images and slider
     if (self.options.title) {
