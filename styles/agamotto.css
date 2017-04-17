@@ -4,11 +4,11 @@
 }
 .h5p-agamotto .h5p-agamotto-title {
   width: auto;
-  margin: 16px;
+  margin: 0 16px;
 }
 .h5p-agamotto #h5p-agamotto-images {
   position: relative;
-  margin: 16px;
+  margin: 0 16px;
 }
 .h5p-agamotto #h5p-agamotto-image1 {
   position: absolute;
@@ -20,7 +20,7 @@
   width: 100%;
 }
 .h5p-agamotto .h5p-agamotto-slider-container {
-  margin: 16px;
+  margin: 8px 16px;
 }
 .h5p-agamotto #h5p-agamotto-slider {
   width: 100%;
@@ -28,12 +28,14 @@
 }
 .h5p-agamotto #h5p-agamotto-descriptions {
   position: relative;
-  margin: 16px;
+  margin: 0 16px;
 }
 .h5p-agamotto #h5p-agamotto-description1 {
   position: absolute;
   z-index: 1;
   width: 100%;
+  height: inherit;
+  overflow-y: auto;
 }
 .h5p-agamotto #h5p-agamotto-description2 {
   position: absolute;
