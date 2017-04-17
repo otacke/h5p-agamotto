@@ -181,6 +181,10 @@ H5P.Agamotto = function ($) {
         self.update(snapIndex, 1);
       }
     });
+
+    window.addEventListener('resize', function () {
+      document.getElementById('h5p-agamotto-images').style.height = self.image1.height + 'px';
+    });
   };
 
   return C;
