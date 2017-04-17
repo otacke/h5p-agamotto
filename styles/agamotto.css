@@ -2,13 +2,19 @@
   width: auto;
   margin: 0 auto;
 }
+.h5p-agamotto .h5p-agamotto-warning {
+  width: auto;
+  margin: 16px;
+  font-size: 1.5em;
+  text-align: center;
+}
 .h5p-agamotto .h5p-agamotto-title {
   width: auto;
   margin: 0 16px;
 }
 .h5p-agamotto #h5p-agamotto-images {
   position: relative;
-  margin: 0 16px;
+  margin: 16px 16px 0 16px;
 }
 .h5p-agamotto #h5p-agamotto-image1 {
   position: absolute;
@@ -42,4 +48,3 @@
   position: absolute;
   width: 100%;
 }
-
