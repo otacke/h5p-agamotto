@@ -50,7 +50,8 @@
   position: relative;
 }
 .h5p-agamotto #h5p-agamotto-slider-container #h5p-agamotto-slider-track {
-	height:8px;
+  cursor: pointer;
+  height:8px;
 	background-color:#0b0d0c;
 	top:14px;
 	left:16px;

@@ -191,7 +191,20 @@ H5P.Agamotto = function ($) {
     self.image2.src = H5P.getPath(self.options.items[1].image.path, self.id);
 
     self.sliderThumb.addEventListener('mousedown', startSlide, false);
+    self.sliderTrack.addEventListener('mousedown', startSlide, false);
     document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mouseup', stopSlide, false);
+
+    function startSlide (e) {
+      e = e || window.event;
+      moveThumb(e);
+      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', moveThumb, false);
+    };
+
+    function stopSlide (e) {
+      e = e || window.event;
+      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', moveThumb, false);
+      snap();
+    };
 
     // Event Listeners for Touch Interface
     this.sliderContainer.addEventListener('touchstart', function (e) {
@@ -240,18 +253,6 @@ H5P.Agamotto = function ($) {
         pointerX = e.clientX;
       }
       return pointerX;
-    };
-
-    function startSlide (e) {
-      e = e || window.event;
-      moveThumb(e);
-      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', moveThumb, false);
-    };
-
-    function stopSlide (e) {
-      e = e || window.event;
-      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', moveThumb, false);
-      snap();
     };
 
     function snap () {
