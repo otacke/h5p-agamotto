@@ -29,7 +29,7 @@
           "importance": "low",
           "type": "image",
           "optional": false,
-          "description": "The image to be used. Please make sure that all images have the same dimensions."
+          "description": "The image to be used. Make sure all images have the same dimensions"
         },
         {
           "name": "description",
@@ -61,7 +61,7 @@
     "importance": "medium",
     "type": "boolean",
     "label": "Snap slider",
-    "description": "If activated, the slider will snap to fixed positions.",
+    "description": "If set to true, the slider will snap to fixed positions",
     "default": true
   }
 ]

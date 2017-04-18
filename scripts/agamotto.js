@@ -1,5 +1,8 @@
 /*
- * Info
+ * TODO: smooth snapping
+ * TODO: aria
+ * TODO: refactoring
+ * TODO: more refactoring
  */
 var H5P = H5P || {};
 
@@ -34,6 +37,12 @@ H5P.Agamotto = function ($) {
 
     this.image1, this.image2 = undefined;
     this.description1, this.description2 = undefined;
+
+    // TODO: include other variables
+
+    this.sliderTrackWidth = 0;
+    this.sliderThumbPosition = 0;
+
     this.index = 0;
     this.opacity = 1;
 
@@ -139,8 +148,15 @@ H5P.Agamotto = function ($) {
     if (self.options.title) {
       $container.append('<div class="h5p-agamotto-title"><h2>' + self.options.title + '</h2></div>');
     }
-    $container.append('<div id="h5p-agamotto-images"><img id="h5p-agamotto-image1" src="#"/><img id="h5p-agamotto-image2" src="#"/></div>');
-    $container.append('<div class="h5p-agamotto-slider-container"><input id="h5p-agamotto-slider" type="range" value="0" min="0" max="100"/></div>');
+    $container.append('<div id="h5p-agamotto-images"><img id="h5p-agamotto-image1" src="#" draggable="false"/><img id="h5p-agamotto-image2" src="#" draggable="false"/></div>');
+    $container.append('<div id="h5p-agamotto-slider-container"><div id="h5p-agamotto-slider-track"></div><div id="h5p-agamotto-slider-thumb"></div></div>');
+
+    self.sliderContainer = document.getElementById('h5p-agamotto-slider-container');
+    self.sliderTrack = document.getElementById('h5p-agamotto-slider-track');
+    self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
+    self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
+    self.sliderThumb = document.getElementById('h5p-agamotto-slider-thumb');
+    self.sliderThumb.setAttribute('tabindex', 0);
 
     // Descriptions
     if (self.hasDescription) {
@@ -168,10 +184,101 @@ H5P.Agamotto = function ($) {
     self.image2 = document.getElementById('h5p-agamotto-image2');
     self.image2.src = H5P.getPath(self.options.items[1].image.path, self.id);
 
-    // Create slider including event handling
-    var slider = document.getElementById('h5p-agamotto-slider');
-    slider.addEventListener('input', function () {
-      this.setAttribute('value', this.value);
+    self.sliderThumb.addEventListener('mousedown', startSlide, false);
+    self.sliderThumb.addEventListener('mouseup', stopSlide, false);
+
+    // Event Listeners for Touch Interface
+    this.sliderContainer.addEventListener('touchstart', function (e) {
+      e = e || window.event;
+      e.preventDefault();
+      e.stopPropagation();
+      moveThumb(e);
+
+      this.addEventListener('touchmove', function (e) {
+        e = e || window.event;
+        e.preventDefault();
+        e.stopPropagation();
+        moveThumb(e);
+      });
+    });
+    this.sliderContainer.addEventListener('touchend', function (e) {
+      e = e || window.event;
+      e.preventDefault();
+      e.stopPropagation();
+      snap();
+    });
+
+    // Event Listeners for Keyboard on handle
+    this.sliderThumb.addEventListener('keydown', function (e) {
+      e = e || window.event;
+      var key = e.which || e.keyCode;
+
+      // handler left
+      if (key === 37) {
+        var position = Math.max(0, parseInt(self.sliderThumb.style.left) - 1);
+        moveThumb(position);
+      }
+
+      // handler right
+      if (key === 39) {
+        var position = Math.min(parseInt(self.sliderThumb.style.left) + 1, self.sliderTrack.offsetWidth);
+        moveThumb(position);
+      }
+    });
+
+    function getPointerX (e) {
+      var pointerX = 0;
+      if (e.touches) {
+        pointerX = e.touches[0].pageX;
+      } else {
+        pointerX = e.clientX;
+      }
+      return pointerX;
+    };
+
+    function startSlide (e) {
+      e = e || window.event;
+      moveThumb(e);
+      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', moveThumb, false);
+    };
+
+    function stopSlide (e) {
+      e = e || window.event;
+      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', moveThumb, false);
+      snap();
+    };
+
+    function snap () {
+      // TODO: Decide whether to snap to the closest position or the image that's visible the most
+      if (self.options.snap === true) {
+        var snapIndex = Math.round(self.index + 1 - self.opacity);
+        self.sliderThumbPosition = snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem;
+        updateThumb(true);
+        //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+        self.update(snapIndex, 1);
+      }
+    }
+
+    function updateThumb(animate) {
+      if (animate) {
+        self.sliderThumb.classList.add('h5p-agamotto-transition');
+      } else {
+        self.sliderThumb.classList.remove('h5p-agamotto-transition');
+      }
+      self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+    }
+
+    function moveThumb (to) {
+      if ((typeof to === 'string') || (typeof to === 'number')) {
+        to = parseInt(to) + 32 - 8;
+      } else if (typeof to === 'object') {
+        to = getPointerX(to);
+      } else {
+        to = 0;
+      }
+      self.sliderThumbPosition = self.constrain(to - 32, 0, self.sliderTrack.offsetWidth);
+      updateThumb(false);
+      //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to
@@ -179,13 +286,12 @@ H5P.Agamotto = function ($) {
        */
       var margin = 5;
       var mappedValue = self.map(
-        this.value,
+        self.sliderThumbPosition,
         (parseInt(this.min) || 0) + margin,
-        (parseInt(this.max) || 100) - margin,
+        (parseInt(this.max) || self.sliderTrack.offsetWidth) - margin,
         0,
         self.maxItem
       );
-
       // Account for margin change and mapping outside the image indexes
       var topIndex = self.constrain(Math.floor(mappedValue), 0, self.maxItem);
 
@@ -195,18 +301,22 @@ H5P.Agamotto = function ($) {
       self.index = topIndex;
       self.opacity = topOpacity;
       self.update(topIndex, topOpacity);
-    });
+    }
 
-    slider.addEventListener('change', function () {
-      if (self.options.snap === true) {
-        var snapIndex = Math.round(self.index + 1 - self.opacity);
-        this.value = snapIndex * parseInt(this.max) / self.maxItem;
-        self.update(snapIndex, 1);
-      }
-    });
-
-    window.addEventListener('resize', function () {
+    window.addEventListener('resize', function (e) {
       document.getElementById('h5p-agamotto-images').style.height = window.getComputedStyle(self.image1).height;
+      var ratio = self.sliderThumbPosition / self.sliderTrackWidth;
+
+      self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
+      self.sliderThumbPosition = self.sliderTrackWidth * ratio;
+
+      self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+      self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
+    });
+
+    // This is needed for Chrome to detect the mouseup outside the iframe
+    window.addEventListener('mouseup', function () {
+      self.sliderThumb.dispatchEvent(new CustomEvent('mouseup'));
     });
   };
 
