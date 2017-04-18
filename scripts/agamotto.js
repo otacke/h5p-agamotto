@@ -161,7 +161,7 @@ H5P.Agamotto = function ($) {
     // We trust the user here and believe that all images have the same height
     self.image1 = document.getElementById('h5p-agamotto-image1');
     self.image1.onload = function () {
-      document.getElementById('h5p-agamotto-images').style.height = self.image1.height + 'px';
+      document.getElementById('h5p-agamotto-images').style.height = window.getComputedStyle(self.image1).height;
       self.trigger('resize');
     }
     self.image1.src = H5P.getPath(self.options.items[0].image.path, self.id);
@@ -206,7 +206,7 @@ H5P.Agamotto = function ($) {
     });
 
     window.addEventListener('resize', function () {
-      document.getElementById('h5p-agamotto-images').style.height = self.image1.height + 'px';
+      document.getElementById('h5p-agamotto-images').style.height = window.getComputedStyle(self.image1).height;
     });
   };
 
