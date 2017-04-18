@@ -1,8 +1,9 @@
 /*
- * TODO: smooth snapping
- * TODO: aria
+ * TODO: clean up variable mess
  * TODO: refactoring
  * TODO: more refactoring
+ * TODO: proper commenting
+ * TODO: think about optional ticks
  */
 var H5P = H5P || {};
 
@@ -254,12 +255,10 @@ H5P.Agamotto = function ($) {
     };
 
     function snap () {
-      // TODO: Decide whether to snap to the closest position or the image that's visible the most
       if (self.options.snap === true) {
         var snapIndex = Math.round(self.index + 1 - self.opacity);
         self.sliderThumbPosition = snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem;
         updateThumb(true);
-        //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
         self.update(snapIndex, 1);
       }
     }
@@ -284,7 +283,6 @@ H5P.Agamotto = function ($) {
       }
       self.sliderThumbPosition = self.constrain(to - 32, 0, self.sliderTrack.offsetWidth);
       updateThumb(false);
-      //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to
@@ -301,8 +299,12 @@ H5P.Agamotto = function ($) {
       // Account for margin change and mapping outside the image indexes
       var topIndex = self.constrain(Math.floor(mappedValue), 0, self.maxItem);
 
-      // Using a power value will allow the actual image to be displayed a little longer before blending
-      var topOpacity = Math.pow(1 - self.constrain(mappedValue - topIndex, 0, 1), 2);
+      /*
+       * Using the cosine will allow an image to be displayed a little longer
+       * before blending than a linear function
+       */
+      var linearOpacity = (1 - self.constrain(mappedValue - topIndex, 0, 1));
+      var topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
 
       self.index = topIndex;
       self.opacity = topOpacity;
