@@ -1,5 +1,4 @@
 /*
- * TODO: thumb label
  * TODO: smooth snapping
  * TODO: key controls
  * TODO: aria
@@ -222,12 +221,12 @@ H5P.Agamotto = function ($) {
     function startSlide (e) {
       e = e || window.event;
       moveThumb(e);
-      self.sliderContainer.addEventListener('mousemove', moveThumb, false);
+      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', moveThumb, false);
     };
 
     function stopSlide (e) {
       e = e || window.event;
-      self.sliderContainer.removeEventListener('mousemove', moveThumb, false);
+      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', moveThumb, false);
       snap();
     };
 

@@ -1,3 +1,14 @@
+/* Only used for slider in slide-handler, should be included into H5Picons */
+@font-face {
+  font-family: H5PInteractiveVideo;
+  src: url('../fonts/H5PInteractiveVideo.eot');
+  src: url('../fonts/H5PInteractiveVideo.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/H5PInteractiveVideo.woff') format('woff'),
+  url('../fonts/H5PInteractiveVideo.ttf') format('truetype'),
+  url('../fonts/H5PInteractiveVideo.svg#H5PInteractiveVideo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 .h5p-agamotto {
   width: auto;
   margin: 0 auto;
@@ -61,6 +72,22 @@
   border: 0;
   background: #fbfbfb;
   border-radius: 4px;
+}
+#h5p-agamotto-slider-thumb:before {
+  font-family: H5PInteractiveVideo;
+  content: "\e001";
+  font-size: 26px;
+  line-height: 1;
+  position: absolute;
+  margin: -5px 0 0 -5px;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  color: #fbfbfb;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .h5p-agamotto #h5p-agamotto-slider {
   width: 100%;
