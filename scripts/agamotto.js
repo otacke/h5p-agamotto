@@ -185,7 +185,7 @@ H5P.Agamotto = function ($) {
     self.image2.src = H5P.getPath(self.options.items[1].image.path, self.id);
 
     self.sliderThumb.addEventListener('mousedown', startSlide, false);
-    self.sliderThumb.addEventListener('mouseup', stopSlide, false);
+    document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mouseup', stopSlide, false);
 
     // Event Listeners for Touch Interface
     this.sliderContainer.addEventListener('touchstart', function (e) {
@@ -316,7 +316,7 @@ H5P.Agamotto = function ($) {
 
     // This is needed for Chrome to detect the mouseup outside the iframe
     window.addEventListener('mouseup', function () {
-      self.sliderThumb.dispatchEvent(new CustomEvent('mouseup'));
+      document.getElementsByClassName('h5p-agamotto')[0].dispatchEvent(new CustomEvent('mouseup'));
     });
   };
 
