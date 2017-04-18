@@ -152,6 +152,11 @@ H5P.Agamotto = function ($) {
     $container.append('<div id="h5p-agamotto-slider-container"><div id="h5p-agamotto-slider-track"></div><div id="h5p-agamotto-slider-thumb"></div></div>');
 
     self.sliderContainer = document.getElementById('h5p-agamotto-slider-container');
+    self.sliderContainer.setAttribute('role', 'slider');
+    self.sliderContainer.setAttribute('aria-valuenow', 0);
+    self.sliderContainer.setAttribute('aria-valuemin', 0);
+    self.sliderContainer.setAttribute('aria-valuemax', 100);
+
     self.sliderTrack = document.getElementById('h5p-agamotto-slider-track');
     self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
     self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
@@ -266,6 +271,7 @@ H5P.Agamotto = function ($) {
         self.sliderThumb.classList.remove('h5p-agamotto-transition');
       }
       self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+      self.sliderContainer.setAttribute('aria-valuenow', Math.round(self.sliderThumbPosition / self.sliderTrack.offsetWidth * 100));
     }
 
     function moveThumb (to) {
