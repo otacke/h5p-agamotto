@@ -1,6 +1,5 @@
 /*
  * TODO: smooth snapping
- * TODO: key controls
  * TODO: aria
  * TODO: refactoring
  * TODO: more refactoring
@@ -157,6 +156,7 @@ H5P.Agamotto = function ($) {
     self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
     self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
     self.sliderThumb = document.getElementById('h5p-agamotto-slider-thumb');
+    self.sliderThumb.setAttribute('tabindex', 0);
 
     // Descriptions
     if (self.hasDescription) {
@@ -208,6 +208,24 @@ H5P.Agamotto = function ($) {
       snap();
     });
 
+    // Event Listeners for Keyboard on handle
+    this.sliderThumb.addEventListener('keydown', function (e) {
+      e = e || window.event;
+      var key = e.which || e.keyCode;
+
+      // handler left
+      if (key === 37) {
+        var position = Math.max(0, parseInt(self.sliderThumb.style.left) - 1);
+        moveThumb(position);
+      }
+
+      // handler right
+      if (key === 39) {
+        var position = Math.min(parseInt(self.sliderThumb.style.left) + 1, self.sliderTrack.offsetWidth);
+        moveThumb(position);
+      }
+    });
+
     function getPointerX (e) {
       var pointerX = 0;
       if (e.touches) {
@@ -231,19 +249,36 @@ H5P.Agamotto = function ($) {
     };
 
     function snap () {
+      // TODO: Decide whether to snap to the closest position or the image that's visible the most
       if (self.options.snap === true) {
         var snapIndex = Math.round(self.index + 1 - self.opacity);
         self.sliderThumbPosition = snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem;
-        self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+        updateThumb(true);
+        //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
         self.update(snapIndex, 1);
       }
     }
 
-    function moveThumb (e) {
-      // TODO: Also allow position directy instead of an using an event
-      e = e || window.event;
-      self.sliderThumbPosition = self.constrain(getPointerX(e) - 32, 0, self.sliderTrack.offsetWidth);
+    function updateThumb(animate) {
+      if (animate) {
+        self.sliderThumb.classList.add('h5p-agamotto-transition');
+      } else {
+        self.sliderThumb.classList.remove('h5p-agamotto-transition');
+      }
       self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+    }
+
+    function moveThumb (to) {
+      if ((typeof to === 'string') || (typeof to === 'number')) {
+        to = parseInt(to) + 32 - 8;
+      } else if (typeof to === 'object') {
+        to = getPointerX(to);
+      } else {
+        to = 0;
+      }
+      self.sliderThumbPosition = self.constrain(to - 32, 0, self.sliderTrack.offsetWidth);
+      updateThumb(false);
+      //self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to

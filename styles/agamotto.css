@@ -73,6 +73,12 @@
   background: #fbfbfb;
   border-radius: 4px;
 }
+.h5p-agamotto-transition {
+  transition: left .5s ease;
+}
+#h5p-agamotto-slider-thumb:focus {
+  background: #123456;
+}
 #h5p-agamotto-slider-thumb:before {
   font-family: H5PInteractiveVideo;
   content: "\e001";
