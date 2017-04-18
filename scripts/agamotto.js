@@ -221,13 +221,13 @@ H5P.Agamotto = function ($) {
 
       // handler left
       if (key === 37) {
-        var position = Math.max(0, parseInt(self.sliderThumb.style.left) - 1);
+        var position = parseInt(self.sliderThumb.style.left) - 1;
         moveThumb(position);
       }
 
       // handler right
       if (key === 39) {
-        var position = Math.min(parseInt(self.sliderThumb.style.left) + 1, self.sliderTrack.offsetWidth);
+        var position = parseInt(self.sliderThumb.style.left) + 1;
         moveThumb(position);
       }
     });
