@@ -178,6 +178,7 @@ H5P.Agamotto = function ($) {
       self.description2.innerHTML = self.options.items[1].description;
 
       document.getElementById('h5p-agamotto-descriptions').style.height = self.getMaxDescriptionHeight() + 'px';
+      this.sliderContainer.style.marginBottom = 0;
       self.trigger('resize');
     }
 
