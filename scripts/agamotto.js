@@ -183,6 +183,9 @@ H5P.Agamotto = function ($) {
       document.getElementById('h5p-agamotto-images').style.margin = 0;
       this.sliderContainer.style.margin = 0;
       self.trigger('resize');
+    } else {
+      this.sliderContainer.style.marginBottom = '16px';
+      self.trigger('resize');
     }
 
     // We trust the user here and believe that all images have the same height
