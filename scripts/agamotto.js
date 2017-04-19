@@ -170,6 +170,7 @@ H5P.Agamotto = function ($) {
 
       self.description1 = document.getElementById('h5p-agamotto-description1');
       self.description1.style.opacity = 1;
+      self.description1.setAttribute('tabindex', 0);
       self.description1.innerHTML = self.options.items[0].description;
 
       self.description2 = document.getElementById('h5p-agamotto-description2');
@@ -187,6 +188,7 @@ H5P.Agamotto = function ($) {
       self.trigger('resize');
     }
     self.image1.src = H5P.getPath(self.options.items[0].image.path, self.id);
+    self.image1.setAttribute('tabindex', 0);
     self.image2 = document.getElementById('h5p-agamotto-image2');
     self.image2.src = H5P.getPath(self.options.items[1].image.path, self.id);
 
@@ -234,13 +236,13 @@ H5P.Agamotto = function ($) {
 
       // handler left
       if (key === 37) {
-        var position = parseInt(self.sliderThumb.style.left) - 1;
+        var position = parseInt(self.sliderThumb.style.left) - 0.01 * self.sliderTrack.offsetWidth;
         moveThumb(position);
       }
 
       // handler right
       if (key === 39) {
-        var position = parseInt(self.sliderThumb.style.left) + 1;
+        var position = parseInt(self.sliderThumb.style.left) + 0.01 * self.sliderTrack.offsetWidth;
         moveThumb(position);
       }
     });
