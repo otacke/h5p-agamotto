@@ -61,7 +61,15 @@
     "importance": "medium",
     "type": "boolean",
     "label": "Snap slider",
-    "description": "If set to true, the slider will snap to fixed positions",
+    "description": "If activated, the slider will snap to an image's position.",
     "default": true
+  },
+  {
+    "name": "ticks",
+    "importance": "medium",
+    "type": "boolean",
+    "label": "Display ticks",
+    "description": "If activated, the slider bar will display a tick for each image.",
+    "default": false
   }
 ]

@@ -189,6 +189,18 @@ H5P.Agamotto = function ($) {
     self.sliderTrack.classList.add('h5p-agamotto-disabled');
     self.sliderThumb.classList.add('h5p-agamotto-disabled');
 
+    if (self.options.ticks) {
+      self.sliderTicks = [];
+      for (var i = 0; i <= self.maxItem; i++) {
+        self.sliderTicks[i] = document.createElement('div');
+        self.sliderTicks[i].className = 'h5p-agamotto-tick';
+        self.sliderTicks[i].onclick = function() {
+          update(parseInt(this.style.left) - C.TRACK_OFFSET, true);
+        };
+        self.sliderContainer.appendChild(self.sliderTicks[i]);
+      }
+    }
+
     // Descriptions
     if (self.hasDescription) {
       self.descriptionTop = document.createElement('div');
@@ -264,13 +276,13 @@ H5P.Agamotto = function ($) {
         e = e || window.event;
         e.preventDefault();
         e.stopPropagation();
-        update(e);
+        update(e, false);
 
         this.addEventListener('touchmove', function (e) {
           e = e || window.event;
           e.preventDefault();
           e.stopPropagation();
-          update(e);
+          update(e, false);
         });
       });
 
@@ -289,14 +301,19 @@ H5P.Agamotto = function ($) {
         // handler left
         if (key === 37) {
           update(parseInt(self.sliderThumb.style.left) - 0.01 *
-            self.sliderTrack.offsetWidth - C.THUMB_OFFSET);
+            self.sliderTrack.offsetWidth - C.THUMB_OFFSET, false);
         }
 
         // handler right
         if (key === 39) {
           update(parseInt(self.sliderThumb.style.left) + 0.01 *
-            self.sliderTrack.offsetWidth - C.THUMB_OFFSET);
+            self.sliderTrack.offsetWidth - C.THUMB_OFFSET, false);
         }
+
+        this.addEventListener('keyup', function (e) {
+          e = e || window.event;
+          snap();
+        });
       });
 
       // Resize handler
@@ -310,6 +327,14 @@ H5P.Agamotto = function ($) {
         self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
         updateThumb(self.sliderThumbPosition, true);
 
+        // Update ticks
+        if (self.options.ticks) {
+          for (var i = 0; i <= self.maxItem; i++) {
+            self.sliderTicks[i].style.left = C.TRACK_OFFSET + i * self.sliderTrackWidth / self.maxItem + 'px';
+          }
+        }
+
+        // Update spinner if still there
         if (self.imagesLoaded !== self.maxItem) {
           self.spinner.style.marginTop = (parseInt(self.imagesContainer.style.height) -
             parseInt(window.getComputedStyle(self.spinner).height)) / 2 + 'px';
@@ -342,7 +367,7 @@ H5P.Agamotto = function ($) {
      */
     function startSlide (e) {
       e = e || window.event;
-      update(e);
+      update(e, false);
       document.querySelector('.h5p-agamotto').addEventListener('mousemove', update, false);
     }
 
@@ -388,7 +413,7 @@ H5P.Agamotto = function ($) {
      * Update the slider thumb position on the slider track.
      *
      * @param {number} position - Position to set the thumb to.
-     * @param {boolean} animane - If true, the slider will move gently in a transition.
+     * @param {boolean} animate - If true, the slider will move gently in a transition.
      */
     function updateThumb(position, animate) {
       if (animate) {
@@ -413,8 +438,9 @@ H5P.Agamotto = function ($) {
      * pointer positions from events
      *
      * @param {string|number|object} position - New slider thumb position on slider track.
+     * @param {boolean} animate - If true, the slider will move gently in a transition.
      */
-    function update (position) {
+    function update (position, animate) {
       if (self.sliderThumb.classList.contains('h5p-agamotto-disabled')) {
         return;
       }
@@ -430,7 +456,7 @@ H5P.Agamotto = function ($) {
       // Sanitization
       position = self.constrain(position, 0, self.sliderTrack.offsetWidth);
 
-      updateThumb(position, false);
+      updateThumb(position, animate);
 
       /*
        * Map the slider value to the image indexes. Since we might not

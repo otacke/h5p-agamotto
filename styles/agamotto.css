@@ -82,7 +82,7 @@
 	top:14px;
 	left:16px;
 	position:absolute;
-  z-index:2;
+  z-index:1;
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-track.h5p-agamotto-disabled {
   cursor: default;
@@ -127,6 +127,20 @@
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:hover:before {
   color: #dbd7d1;
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick {
+  position: absolute;
+  top: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  background: #1d5cff;
+  z-index: 2;
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick:hover {
+  background: #3d7cff;
 }
 .h5p-agamotto .h5p-agamotto-descriptions-container {
   position: relative;
