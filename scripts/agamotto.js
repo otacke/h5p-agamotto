@@ -139,12 +139,6 @@ H5P.Agamotto = function ($) {
     }
 
     // Images
-    self.spinner = document.createElement('div');
-    self.spinner.className = 'h5p-agamotto-spinner';
-    self.spinnerContainer = document.createElement('div');
-    self.spinnerContainer.className = 'h5p-agamotto-spinner-container';
-    self.spinnerContainer.appendChild(self.spinner);
-
     self.imageTop = document.createElement('img');
     self.imageTop.className = 'h5p-agamotto-image-top';
     self.src = '#';
@@ -157,7 +151,6 @@ H5P.Agamotto = function ($) {
 
     self.imagesContainer = document.createElement('div');
     self.imagesContainer.className = 'h5p-agamotto-images-container';
-    self.imagesContainer.appendChild(self.spinnerContainer);
     self.imagesContainer.appendChild(self.imageTop);
     self.imagesContainer.appendChild(self.imageBottom);
 
@@ -253,8 +246,6 @@ H5P.Agamotto = function ($) {
       // We trust the user here and believe that all images have the same height
       self.imageTop.onload = function () {
         self.imagesContainer.style.height = window.getComputedStyle(self.imageTop).height;
-        self.spinner.style.marginTop = (parseInt(self.imagesContainer.style.height) -
-          parseInt(window.getComputedStyle(self.spinner).height)) / 2 + 'px';
         self.trigger('resize');
       };
       self.imageTop.src = self.images[0].src;
@@ -333,12 +324,6 @@ H5P.Agamotto = function ($) {
             self.sliderTicks[i].style.left = C.TRACK_OFFSET + i * self.sliderTrackWidth / self.maxItem + 'px';
           }
         }
-
-        // Update spinner if still there
-        if (self.imagesLoaded !== self.maxItem) {
-          self.spinner.style.marginTop = (parseInt(self.imagesContainer.style.height) -
-            parseInt(window.getComputedStyle(self.spinner).height)) / 2 + 'px';
-        }
       });
 
       // This is needed for Chrome to detect the mouseup outside the iframe
@@ -355,8 +340,6 @@ H5P.Agamotto = function ($) {
       if (self.imagesLoaded === self.maxItem) {
         self.sliderThumb.classList.remove('h5p-agamotto-disabled');
         self.sliderTrack.classList.remove('h5p-agamotto-disabled');
-        self.spinnerContainer.classList.add('h5p-agamotto-hidden');
-        self.imagesContainer.removeChild(self.spinnerContainer);
       }
     }
 
