@@ -155,6 +155,7 @@ H5P.Agamotto = function ($) {
     self.imagesContainer.appendChild(self.imageBottom);
 
     $container.append(self.imagesContainer);
+    initImages();
 
     // Slider (TODO: Make this a class?)
     self.sliderTrack = document.createElement('div');
@@ -227,13 +228,12 @@ H5P.Agamotto = function ($) {
       self.trigger('resize');
     }
 
-    init();
     addEventListeners();
 
     /**
      * Initialize the images
      */
-    function init() {
+    function initImages() {
       // Load images and show spinning animation until all images have been loaded
       self.images = [];
       self.imagesLoaded = 0;
