@@ -30,26 +30,52 @@
   width: auto;
   margin: 0 16px;
 }
-.h5p-agamotto #h5p-agamotto-images {
+.h5p-agamotto .h5p-agamotto-images-container {
   position: relative;
   margin: 16px 16px 0 16px;
 }
-.h5p-agamotto #h5p-agamotto-image1 {
+.h5p-agamotto .h5p-agamotto-spinner-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: black;
+  opacity: 0.3;
+}
+.h5p-agamotto .h5p-agamotto-spinner {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #a3a3a3;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
+  margin: auto;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.h5p-agamotto .h5p-agamotto-image-top {
   position: absolute;
   width: 100%;
   z-index: 1;
 }
-.h5p-agamotto #h5p-agamotto-image2 {
+.h5p-agamotto .h5p-agamotto-image-bottom {
   position: absolute;
   width: 100%;
 }
-.h5p-agamotto #h5p-agamotto-slider-container {
+.h5p-agamotto .h5p-agamotto-slider-container {
   margin: 0 16px;
   height: 36px;
   background: #2c2c2c;
   position: relative;
 }
-.h5p-agamotto #h5p-agamotto-slider-container #h5p-agamotto-slider-track {
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-track {
   cursor: pointer;
   height:8px;
 	background-color:#0b0d0c;
@@ -58,7 +84,10 @@
 	position:absolute;
   z-index:2;
 }
-.h5p-agamotto #h5p-agamotto-slider-container #h5p-agamotto-slider-thumb {
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-track.h5p-agamotto-disabled {
+  cursor: default;
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb {
   position: absolute;
   speak: none;
   color: #fbfbfb;
@@ -74,10 +103,14 @@
   background: #fbfbfb;
   border-radius: 4px;
 }
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb.h5p-agamotto-disabled {
+  color: #dbd7d1;
+  cursor: default;
+}
 .h5p-agamotto-transition {
   transition: left .5s ease;
 }
-.h5p-agamotto #h5p-agamotto-slider-container #h5p-agamotto-slider-thumb:before {
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:before {
   font-family: H5PInteractiveVideo;
   content: "\e001";
   font-size: 26px;
@@ -89,25 +122,24 @@
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
-  color: #fbfbfb;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.h5p-agamotto #h5p-agamotto-slider-container #h5p-agamotto-slider-thumb:hover:before {
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:hover:before {
   color: #dbd7d1;
 }
-.h5p-agamotto #h5p-agamotto-descriptions {
+.h5p-agamotto .h5p-agamotto-descriptions-container {
   position: relative;
   margin: 0 16px;
 }
-.h5p-agamotto #h5p-agamotto-description1 {
+.h5p-agamotto .h5p-agamotto-description-top{
   position: absolute;
   z-index: 1;
   width: 100%;
   height: inherit;
   overflow-y: auto;
 }
-.h5p-agamotto #h5p-agamotto-description2 {
+.h5p-agamotto .h5p-agamotto-description-bottom {
   position: absolute;
   width: 100%;
 }
