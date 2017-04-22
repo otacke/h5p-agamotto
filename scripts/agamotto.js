@@ -32,9 +32,6 @@ H5P.Agamotto = function ($) {
     this.options = options;
 
     this.maxItem = this.options.items.length - 1;
-    if (this.maxItem > 100) {
-      console.log('You have more than 100 images. This will not work well.');
-    }
 
     this.image1, this.image2 = undefined;
     this.description1, this.description2 = undefined;
@@ -159,7 +156,7 @@ H5P.Agamotto = function ($) {
     self.sliderContainer.setAttribute('aria-valuemax', 100);
 
     self.sliderTrack = document.getElementById('h5p-agamotto-slider-track');
-    self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
+    self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 2 * C.TRACK_OFFSET;
     self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
     self.sliderThumb = document.getElementById('h5p-agamotto-slider-thumb');
     self.sliderThumb.setAttribute('tabindex', 0);
@@ -279,19 +276,19 @@ H5P.Agamotto = function ($) {
       } else {
         self.sliderThumb.classList.remove('h5p-agamotto-transition');
       }
-      self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+      self.sliderThumb.style.left = self.sliderThumbPosition + C.THUMB_OFFSET + 'px';
       self.sliderContainer.setAttribute('aria-valuenow', Math.round(self.sliderThumbPosition / self.sliderTrack.offsetWidth * 100));
     }
 
     function moveThumb (to) {
       if ((typeof to === 'string') || (typeof to === 'number')) {
-        to = parseInt(to) + 32 - 8;
+        to = parseInt(to) + 2 * C.TRACK_OFFSET - C.THUMB_OFFSET;
       } else if (typeof to === 'object') {
         to = getPointerX(to);
       } else {
         to = 0;
       }
-      self.sliderThumbPosition = self.constrain(to - 32, 0, self.sliderTrack.offsetWidth);
+      self.sliderThumbPosition = self.constrain(to - 2 * C.TRACK_OFFSET, 0, self.sliderTrack.offsetWidth);
       updateThumb(false);
       /*
        * Map the slider value to the image indexes. Since we might not
@@ -325,10 +322,10 @@ H5P.Agamotto = function ($) {
       document.getElementById('h5p-agamotto-images').style.height = window.getComputedStyle(self.image1).height;
       var ratio = self.sliderThumbPosition / self.sliderTrackWidth;
 
-      self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 32;
+      self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 2 * C.TRACK_OFFSET;
       self.sliderThumbPosition = self.sliderTrackWidth * ratio;
 
-      self.sliderThumb.style.left = self.sliderThumbPosition + 8 + 'px';
+      self.sliderThumb.style.left = self.sliderThumbPosition + C.THUMB_OFFSET + 'px';
       self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
     });
 
@@ -337,6 +334,12 @@ H5P.Agamotto = function ($) {
       document.getElementsByClassName('h5p-agamotto')[0].dispatchEvent(new CustomEvent('mouseup'));
     });
   };
+
+  // Slider Layout
+  /** @constant {number} */
+  C.TRACK_OFFSET = 16;
+  /** @constant {number} */
+  C.THUMB_OFFSET = 8;
 
   return C;
 }(H5P.jQuery);
