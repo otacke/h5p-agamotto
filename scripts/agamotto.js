@@ -33,14 +33,7 @@ H5P.Agamotto = function ($) {
 
     this.maxItem = this.options.items.length - 1;
 
-    this.image1, this.image2 = undefined;
-    this.description1, this.description2 = undefined;
-
-    // TODO: include other variables
-
-    this.sliderTrackWidth = 0;
     this.sliderThumbPosition = 0;
-
     this.index = 0;
     this.opacity = 1;
 
@@ -101,8 +94,8 @@ H5P.Agamotto = function ($) {
      * @param {Number} index - index of top image.
      * @param {Number} opacity - opacity of top image.
      */
-    this.update = function (index, opacity) {
-      bottomIndex = this.constrain(index + 1, 0, this.maxItem);
+    this.updateContent = function (index, opacity) {
+      var bottomIndex = this.constrain(index + 1, 0, this.maxItem);
 
       // Update images
       this.image1.src = H5P.getPath(this.options.items[index].image.path, this.id);
@@ -190,7 +183,7 @@ H5P.Agamotto = function ($) {
     self.image1.onload = function () {
       document.getElementById('h5p-agamotto-images').style.height = window.getComputedStyle(self.image1).height;
       self.trigger('resize');
-    }
+    };
     self.image1.src = H5P.getPath(self.options.items[0].image.path, self.id);
     self.image1.setAttribute('tabindex', 0);
     self.image2 = document.getElementById('h5p-agamotto-image2');
@@ -202,28 +195,28 @@ H5P.Agamotto = function ($) {
 
     function startSlide (e) {
       e = e || window.event;
-      moveThumb(e);
-      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', moveThumb, false);
-    };
+      update(e);
+      document.getElementsByClassName('h5p-agamotto')[0].addEventListener('mousemove', update, false);
+    }
 
     function stopSlide (e) {
       e = e || window.event;
-      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', moveThumb, false);
+      document.getElementsByClassName('h5p-agamotto')[0].removeEventListener('mousemove', update, false);
       snap();
-    };
+    }
 
     // Event Listeners for Touch Interface
     this.sliderContainer.addEventListener('touchstart', function (e) {
       e = e || window.event;
       e.preventDefault();
       e.stopPropagation();
-      moveThumb(e);
+      update(e);
 
       this.addEventListener('touchmove', function (e) {
         e = e || window.event;
         e.preventDefault();
         e.stopPropagation();
-        moveThumb(e);
+        update(e);
       });
     });
     this.sliderContainer.addEventListener('touchend', function (e) {
@@ -233,21 +226,19 @@ H5P.Agamotto = function ($) {
       snap();
     });
 
-    // Event Listeners for Keyboard on handle
+    // Event Listeners for Keyboard on handle to move in percentage steps
     this.sliderThumb.addEventListener('keydown', function (e) {
       e = e || window.event;
       var key = e.which || e.keyCode;
 
       // handler left
       if (key === 37) {
-        var position = parseInt(self.sliderThumb.style.left) - 0.01 * self.sliderTrack.offsetWidth;
-        moveThumb(position);
+        update(parseInt(self.sliderThumb.style.left) - 0.01 * self.sliderTrack.offsetWidth - C.THUMB_OFFSET);
       }
 
       // handler right
       if (key === 39) {
-        var position = parseInt(self.sliderThumb.style.left) + 0.01 * self.sliderTrack.offsetWidth;
-        moveThumb(position);
+        update(parseInt(self.sliderThumb.style.left) + 0.01 * self.sliderTrack.offsetWidth - C.THUMB_OFFSET);
       }
     });
 
@@ -259,37 +250,49 @@ H5P.Agamotto = function ($) {
         pointerX = e.clientX;
       }
       return pointerX;
-    };
+    }
 
     function snap () {
       if (self.options.snap === true) {
         var snapIndex = Math.round(self.index + 1 - self.opacity);
-        self.sliderThumbPosition = snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem;
-        updateThumb(true);
-        self.update(snapIndex, 1);
+        updateThumb(snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem, true);
+        self.updateContent(snapIndex, 1);
       }
     }
 
-    function updateThumb(animate) {
+    function updateThumb(position, animate) {
       if (animate) {
         self.sliderThumb.classList.add('h5p-agamotto-transition');
       } else {
         self.sliderThumb.classList.remove('h5p-agamotto-transition');
       }
-      self.sliderThumb.style.left = self.sliderThumbPosition + C.THUMB_OFFSET + 'px';
-      self.sliderContainer.setAttribute('aria-valuenow', Math.round(self.sliderThumbPosition / self.sliderTrack.offsetWidth * 100));
+      // Sanitize position
+      position = self.constrain(position, 0, self.sliderTrack.offsetWidth);
+
+      // Store the old position for resize
+      self.sliderThumbPosition = position;
+
+      self.sliderThumb.style.left = position + C.THUMB_OFFSET + 'px';
+      self.sliderContainer.setAttribute('aria-valuenow', Math.round(position / self.sliderTrack.offsetWidth * 100));
     }
 
-    function moveThumb (to) {
-      if ((typeof to === 'string') || (typeof to === 'number')) {
-        to = parseInt(to) + 2 * C.TRACK_OFFSET - C.THUMB_OFFSET;
-      } else if (typeof to === 'object') {
-        to = getPointerX(to);
+
+    /**
+     * Update all elements image, slider, and description)
+     *
+     * @param {Number} position - new slider thumb position on slider track
+     */
+    function update (position) {
+      // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
+      if ((typeof position === 'string') || (typeof position === 'number')) {
+        position = parseInt(position);
+      } else if (typeof position === 'object') {
+        position = getPointerX(position) - C.TRACK_OFFSET;
       } else {
-        to = 0;
+        position = 0;
       }
-      self.sliderThumbPosition = self.constrain(to - 2 * C.TRACK_OFFSET, 0, self.sliderTrack.offsetWidth);
-      updateThumb(false);
+      position = self.constrain(position, 0, self.sliderTrack.offsetWidth);
+      updateThumb(position, false);
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to
@@ -297,7 +300,7 @@ H5P.Agamotto = function ($) {
        */
       var margin = 5;
       var mappedValue = self.map(
-        self.sliderThumbPosition,
+        position,
         (parseInt(this.min) || 0) + margin,
         (parseInt(this.max) || self.sliderTrack.offsetWidth) - margin,
         0,
@@ -315,7 +318,7 @@ H5P.Agamotto = function ($) {
 
       self.index = topIndex;
       self.opacity = topOpacity;
-      self.update(topIndex, topOpacity);
+      self.updateContent(topIndex, topOpacity);
     }
 
     window.addEventListener('resize', function (e) {
