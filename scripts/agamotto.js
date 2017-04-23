@@ -1,6 +1,3 @@
-/*
- * TODO: Make the code nice: refactoring, e.g. using a Slider class
- */
 var H5P = H5P || {};
 
 H5P.Agamotto = function ($) {
@@ -14,15 +11,11 @@ H5P.Agamotto = function ($) {
     if (!options.items) {
       return;
     }
-
     this.options = options;
     this.options.items = sanitizeItems(this.options.items);
 
     this.maxItem = this.options.items.length - 1;
-
-    this.sliderThumbPosition = 0;
-    this.index = 0;
-    this.opacity = 1;
+    this.selector = '.h5p-agamotto';
 
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = false;
@@ -41,8 +34,6 @@ H5P.Agamotto = function ($) {
      * @param {Number} opacity - Opacity of top image.
      */
     this.updateContent = function (index, opacity) {
-      var bottomIndex = constrain(index + 1, 0, this.maxItem);
-
       // Update images
       this.imageObject.setImage(index, opacity);
 
@@ -65,10 +56,10 @@ H5P.Agamotto = function ($) {
    *
    * @param {Object} images - An array containing the images
    */
-  var Images = function (paths, id, parent) {
+  var Images = function (paths, id, selector) {
     this.paths = paths;
     this.id = id;
-    this.parent = parent;
+    this.selector = selector;
 
     this.images = [];
     this.imagesLoaded = 0;
@@ -84,15 +75,15 @@ H5P.Agamotto = function ($) {
     this.imageBottom.src = '#';
     this.imageBottom.setAttribute('draggable', 'false');
 
-    this.imagesContainer = document.createElement('div');
-    this.imagesContainer.className = 'h5p-agamotto-images-container';
-    this.imagesContainer.appendChild(this.imageTop);
-    this.imagesContainer.appendChild(this.imageBottom);
-  }
+    this.container = document.createElement('div');
+    this.container.className = 'h5p-agamotto-images-container';
+    this.container.appendChild(this.imageTop);
+    this.container.appendChild(this.imageBottom);
+  };
 
   Images.prototype = {
     getDOM: function getDOM () {
-      return this.imagesContainer;
+      return this.container;
     },
     setImage: function setImage (index, opacity) {
       this.imageTop.src = this.images[index].src;
@@ -100,43 +91,47 @@ H5P.Agamotto = function ($) {
       this.imageTop.style.opacity = opacity;
     },
     resize: function resize () {
-      this.imagesContainer.style.height = window.getComputedStyle(this.imageTop).height;
+      this.container.style.height = window.getComputedStyle(this.imageTop).height;
     },
     loadImages: function loadImages() {
-      that = this;
+      var that = this;
       for (var i = 0; i < this.paths.length; i++) {
         this.images[i] = new Image();
+
+        // Wait for images to be loaded before triggering some stuff
         this.images[i].onload = function () {
           that.imagesLoaded++;
           if (that.imagesLoaded === 1) {
             // We can now determine the render height
             that.imageTop.src = that.images[0].src;
-            that.imagesContainer.style.height = window.getComputedStyle(that.imageTop).height;
-            that.parent.trigger('resize');
+            that.container.style.height = window.getComputedStyle(that.imageTop).height;
+            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded first'));
           }
           else if (that.imagesLoaded === 2) {
             // We can now set the bottom image
             that.imageBottom.src = that.images[1].src;
           }
-          else if (that.imagesLoaded === that.paths.length) {
+          if (that.imagesLoaded === that.paths.length) {
             // We can now activate the slider
-            // TODO: Replace!
-            that.parent.sliderThumb.classList.remove('h5p-agamotto-disabled');
-            that.parent.sliderTrack.classList.remove('h5p-agamotto-disabled');
+            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded all'));
           }
         };
         this.images[i].src = H5P.getPath(this.paths[i], this.id);
       }
+    },
+    setMargin: function setMargin (margin) {
+      this.container.style.margin = margin;
     }
-  }
+  };
 
   /**
    * Descriptions object
    *
    * @param {Object} texts - An array containing the texts for the images
    */
-  var Descriptions = function (texts) {
+  var Descriptions = function (texts, selector) {
     this.texts = texts;
+    this.selector = selector;
 
     this.descriptionTop = document.createElement('div');
     this.descriptionTop.className = 'h5p-agamotto-description-top';
@@ -174,223 +169,182 @@ H5P.Agamotto = function ($) {
       }
       this.descriptionsContainer.style.height = height + 'px';
     }
-  }
+  };
 
-  /**
-   * Attach function called by H5P framework to insert H5P content into page.
-   *
-   * @param {jQuery} container - Container to attach to.
-   */
-  C.prototype.attach = function ($container) {
-    var self = this;
+  var Slider = function (options, selector) {
+    var that = this;
 
-    // Setup HTML DOM
-    $container.addClass("h5p-agamotto");
-    if (!self.options.items || self.maxItem < 1) {
-      $container.append('<div class="h5p-agamotto-warning">I really need at least two images :-)</div>');
-      self.trigger('resize');
-      return;
-    }
+    options.snap = options.snap || true;
+    options.ticks = options.ticks || false;
 
-    // Title
-    if (self.options.title) {
-      $container.append('<div class="h5p-agamotto-title">' +
-        '<h2>' + self.options.title + '</h2>' +
-        '</div>');
-    }
+    this.options = options;
+    this.selector = selector;
 
-    var paths = [];
-    for (var i = 0; i <= self.maxItem; i++) {
-      paths[i] = self.options.items[i].image.path;
-    }
-    self.imageObject = new Images(paths, self.id, this);
-    $container.append(self.imageObject.getDOM());
-    self.imageObject.loadImages();
+    this.mousedown = false;
+    this.trackWidth = 0;
+    this.thumbPosition = 0;
+    this.ratio = 0;
+    this.ticks = [];
 
+    this.track = document.createElement('div');
+    this.track.className = 'h5p-agamotto-slider-track';
 
-    // Slider (TODO: Make this a class?)
-    self.sliderTrack = document.createElement('div');
-    self.sliderTrack.className = 'h5p-agamotto-slider-track';
+    this.thumb = document.createElement('div');
+    this.thumb.className = 'h5p-agamotto-slider-thumb';
+    this.thumb.setAttribute('tabindex', 0);
 
-    self.sliderThumb = document.createElement('div');
-    self.sliderThumb.className = 'h5p-agamotto-slider-thumb';
-    self.sliderThumb.setAttribute('tabindex', 0);
+    this.container = document.createElement('div');
+    this.container.className = ('h5p-agamotto-slider-container');
+    this.container.setAttribute('role', 'slider');
+    this.container.setAttribute('aria-valuenow', 0);
+    this.container.setAttribute('aria-valuemin', 0);
+    this.container.setAttribute('aria-valuemax', 100);
+    this.container.appendChild(this.track);
+    this.container.appendChild(this.thumb);
 
-    self.sliderContainer = document.createElement('div');
-    self.sliderContainer.className = ('h5p-agamotto-slider-container');
-    self.sliderContainer.setAttribute('role', 'slider');
-    self.sliderContainer.setAttribute('aria-valuenow', 0);
-    self.sliderContainer.setAttribute('aria-valuemin', 0);
-    self.sliderContainer.setAttribute('aria-valuemax', 100);
-    self.sliderContainer.appendChild(self.sliderTrack);
-    self.sliderContainer.appendChild(self.sliderThumb);
-
-    $container.append(self.sliderContainer);
-
-    self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 2 * C.TRACK_OFFSET;
-    self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
-
-    // Deactivate the slider on start, will be activated as soon as all images have loaded
-    self.sliderTrack.classList.add('h5p-agamotto-disabled');
-    self.sliderThumb.classList.add('h5p-agamotto-disabled');
-
-    if (self.options.ticks) {
-      self.sliderTicks = [];
-      for (var i = 0; i <= self.maxItem; i++) {
-        self.sliderTicks[i] = document.createElement('div');
-        self.sliderTicks[i].className = 'h5p-agamotto-tick';
-        self.sliderTicks[i].onclick = function() {
-          update(parseInt(this.style.left) - C.TRACK_OFFSET, true);
-        };
-        self.sliderContainer.appendChild(self.sliderTicks[i]);
+    if (this.options.ticks === true) {
+      for (var i = 0; i <= this.options.size; i++) {
+        this.ticks[i] = document.createElement('div');
+        this.ticks[i].className = 'h5p-agamotto-tick';
+        this.ticks[i].addEventListener('click', function() {
+          that.setPosition(parseInt(this.style.left) - Slider.TRACK_OFFSET, true);
+        });
+        this.container.appendChild(this.ticks[i]);
       }
     }
 
-    // Descriptions
-    if (self.hasDescription) {
+    // Event Listeners for Mouse Interface
+    document.addEventListener('mousemove', function(e) {
+      that.setPosition(e, false);
+    });
+    document.addEventListener('mouseup', function() {
+      that.mousedown = false;
+      that.snap();
+    });
+    this.track.addEventListener('mousedown', function (e) {
+      e = e || window.event;
+      that.mousedown = true;
+      that.setPosition(e, false);
+    });
+    this.thumb.addEventListener('mousedown', function (e) {
+      e = e || window.event;
+      that.mousedown = true;
+      that.setPosition(e, false);
+    });
 
-      var descriptionTexts = [];
-      for (var i = 0; i <= self.maxItem; i++) {
-        descriptionTexts[i] = self.options.items[i].description;
-      }
+    // Event Listeners for Touch Interface
+    this.container.addEventListener('touchstart', function (e) {
+      e = e || window.event;
+      e.preventDefault();
+      e.stopPropagation();
+      that.setPosition(e, false);
 
-      // TODO: Don't use global
-      self.descriptions = new Descriptions(descriptionTexts);
-      $container.append(self.descriptions.getDOM());
-      self.descriptions.setHeight();
-      self.trigger('resize');
-    } else if (!self.options.title) {
-      // No passepartout if no title and no descriptions
-      self.imagesContainer.style.margin = '0px';
-      self.sliderContainer.style.margin = '0px';
-      self.trigger('resize');
-    } else {
-      // Add passepartout to the bottom;
-      self.sliderContainer.style.marginBottom = '16px';
-      self.trigger('resize');
-    }
-
-    addEventListeners();
-
-    /**
-     * Add all EventListeners
-     */
-    function addEventListeners() {
-      // Event Listeners for Mouse
-      self.sliderThumb.addEventListener('mousedown', startSlide, false);
-      self.sliderTrack.addEventListener('mousedown', startSlide, false);
-      document.querySelector('.h5p-agamotto').addEventListener('mouseup', stopSlide, false);
-
-      // Event Listeners for Touch Interface
-      self.sliderContainer.addEventListener('touchstart', function (e) {
+      this.addEventListener('touchmove', function (e) {
         e = e || window.event;
         e.preventDefault();
         e.stopPropagation();
-        update(e, false);
-
-        this.addEventListener('touchmove', function (e) {
-          e = e || window.event;
-          e.preventDefault();
-          e.stopPropagation();
-          update(e, false);
-        });
+        that.setPosition(e, false);
       });
+    });
+    this.container.addEventListener('touchend', function (e) {
+      e = e || window.event;
+      e.preventDefault();
+      e.stopPropagation();
+      that.snap();
+    });
 
-      self.sliderContainer.addEventListener('touchend', function (e) {
-        e = e || window.event;
-        e.preventDefault();
-        e.stopPropagation();
-        snap();
-      });
-
-      // Event Listeners for Keyboard on handle to move in percentage steps
-      self.sliderThumb.addEventListener('keydown', function (e) {
-        e = e || window.event;
-        var key = e.which || e.keyCode;
-
-        // handler left
-        if (key === 37) {
-          update(parseInt(self.sliderThumb.style.left) - 0.01 *
-            self.sliderTrack.offsetWidth - C.THUMB_OFFSET, false);
-        }
-
-        // handler right
-        if (key === 39) {
-          update(parseInt(self.sliderThumb.style.left) + 0.01 *
-            self.sliderTrack.offsetWidth - C.THUMB_OFFSET, false);
-        }
-
-        this.addEventListener('keyup', function (e) {
-          e = e || window.event;
-          snap();
-        });
-      });
-
-      // Resize handler
-      window.addEventListener('resize', function (e) {
-        self.imageObject.resize();
-        var ratio = self.sliderThumbPosition / self.sliderTrackWidth;
-
-        self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 2 * C.TRACK_OFFSET;
-        self.sliderThumbPosition = self.sliderTrackWidth * ratio;
-
-        self.sliderTrack.style.width = self.sliderTrackWidth + 'px';
-        updateThumb(self.sliderThumbPosition, true);
-
-        // Update ticks
-        if (self.options.ticks) {
-          for (var i = 0; i <= self.maxItem; i++) {
-            self.sliderTicks[i].style.left = C.TRACK_OFFSET + i * self.sliderTrackWidth / self.maxItem + 'px';
-          }
-        }
-      });
-
-      // This is needed for Chrome to detect the mouseup outside the iframe
-      window.addEventListener('mouseup', function () {
-        document.querySelector('.h5p-agamotto').dispatchEvent(new CustomEvent('mouseup'));
-      });
-    }
-
-    /**
-     * Will enable the slider if all images have been loaded.
-     */
-    function enableSlider() {
-      self.imagesLoaded ++;
-      if (self.imagesLoaded === self.maxItem) {
-        self.sliderThumb.classList.remove('h5p-agamotto-disabled');
-        self.sliderTrack.classList.remove('h5p-agamotto-disabled');
+    // Event Listeners for Keyboard on handle to move in percentage steps
+    this.thumb.addEventListener('keydown', function (e) {
+      e = e || window.event;
+      var key = e.which || e.keyCode;
+      // handler left
+      if (key === 37) {
+        that.setPosition(that.getPosition() - 0.01 * parseInt(that.getWidth()), false);
       }
-    }
+      // handler right
+      if (key === 39) {
+        that.setPosition(that.getPosition() + 0.01 * parseInt(that.getWidth()), false);
+      }
+      this.addEventListener('keyup', function (e) {
+        e = e || window.event;
+        that.snap();
+      });
+    });
 
-    /**
-     * Start sliding on mousedown.
-     *
-     * @param {object} e - Mousedown event.
-     */
-    function startSlide (e) {
-      e = e || window.event;
-      update(e, false);
-      document.querySelector('.h5p-agamotto').addEventListener('mousemove', update, false);
-    }
+    // Slider Layout
+    /** @constant {number} */
+    Slider.TRACK_OFFSET = 16;
+    /** @constant {number} */
+    Slider.THUMB_OFFSET = 8;
+  };
 
-    /**
-     * Stop sliding on mouseup.
-     *
-     * @param {object} e - Mouseup event.
-     */
-    function stopSlide (e) {
-      e = e || window.event;
-      document.querySelector('.h5p-agamotto').removeEventListener('mousemove', update, false);
-      snap();
-    }
+  Slider.prototype = {
+    getDOM: function getDOM () {
+      return this.container;
+    },
+    disable: function disable () {
+      this.track.classList.add('h5p-agamotto-disabled');
+      this.thumb.classList.add('h5p-agamotto-disabled');
+    },
+    enable: function enable () {
+      this.track.classList.remove('h5p-agamotto-disabled');
+      this.thumb.classList.remove('h5p-agamotto-disabled');
+    },
+    setWidth: function setWidth(value) {
+      this.trackWidth = value;
+      this.track.style.width = value + 'px';
+    },
+    getWidth: function getWidth() {
+      return this.trackWidth;
+    },
+    getPosition: function getPosition() {
+      return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
+    },
+    setPosition: function setPosition (position, animate, resize) {
+      if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
+        return;
+      }
+      // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
+      if ((typeof position === 'string') || (typeof position === 'number')) {
+        position = parseInt(position);
+      }
+      else if (typeof position === 'object') {
+        if ((this.mousedown === false) && (position.type === 'mousemove')) {
+          return;
+        }
+        position = this.getPointerX(position) - Slider.TRACK_OFFSET - parseInt(window.getComputedStyle(this.container).marginLeft);
+      }
+      else {
+        position = 0;
+      }
+      // Sanitize position
+      position = constrain(position, 0, this.getWidth());
 
-    /**
-     * Get the x position from a "pointer" event.
-     *
-     * @param {object} e - Event.
-     * @return {number} X position from the event.
-     */
-    function getPointerX (e) {
+      if (animate === true) {
+        this.thumb.classList.add('h5p-agamotto-transition');
+      } else {
+        this.thumb.classList.remove('h5p-agamotto-transition');
+      }
+
+      // We need to keep a fixed ratio not influenced by resizing
+      if (!resize) {
+        this.ratio = position / this.getWidth();
+      }
+
+      // Update DOM
+      this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
+      this.container.setAttribute('aria-valuenow',
+        Math.round(position / this.getWidth * 100));
+
+      document.querySelector(this.selector).dispatchEvent(new CustomEvent('update'));
+    },
+    snap: function snap () {
+      if (this.options.snap === true) {
+        var snapIndex = Math.round(map(this.ratio, 0, 1, 0, this.options.size));
+        this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
+      }
+    },
+    getPointerX: function getPointerX (e) {
       var pointerX = 0;
       if (e.touches) {
         pointerX = e.touches[0].pageX;
@@ -398,68 +352,99 @@ H5P.Agamotto = function ($) {
         pointerX = e.clientX;
       }
       return pointerX;
+    },
+    resize: function resize() {
+      this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
+      this.setPosition(this.getWidth() * this.ratio, false, true);
+
+      // Update ticks
+      if (this.options.ticks === true) {
+        for (var i = 0; i < this.ticks.length; i++) {
+          this.ticks[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+        }
+      }
+    },
+    setMargin: function setMargin (margin) {
+      this.container.style.margin = margin;
+    }
+  };
+
+  /**
+   * Attach function called by H5P framework to insert H5P content into page.
+   *
+   * @param {jQuery} container - Container to attach to.
+   */
+  C.prototype.attach = function ($container) {
+    var that = this;
+
+    // Setup HTML DOM
+    $container.addClass('h5p-agamotto');
+    if (!this.options.items || this.maxItem < 1) {
+      $container.append('<div class="h5p-agamotto-warning">I really need at least two images :-)</div>');
+      this.trigger('resize');
+      return;
     }
 
-    /**
-     * Snap the slider to a fixed position
-     */
-    function snap () {
-      if (self.options.snap === true) {
-        var snapIndex = Math.round(self.index + 1 - self.opacity);
-        updateThumb(snapIndex * parseInt(self.sliderTrack.offsetWidth) / self.maxItem, true);
-        self.updateContent(snapIndex, 1);
-      }
+    // Title
+    if (this.options.title) {
+      $container.append('<div class="h5p-agamotto-title"><h2>' + this.options.title + '</h2></div>');
     }
 
-    /**
-     * Update the slider thumb position on the slider track.
-     *
-     * @param {number} position - Position to set the thumb to.
-     * @param {boolean} animate - If true, the slider will move gently in a transition.
-     */
-    function updateThumb(position, animate) {
-      if (animate) {
-        self.sliderThumb.classList.add('h5p-agamotto-transition');
-      } else {
-        self.sliderThumb.classList.remove('h5p-agamotto-transition');
+    // Images
+    var paths = [];
+    for (var i = 0; i <= this.maxItem; i++) {
+      paths[i] = this.options.items[i].image.path;
+    }
+    this.imageObject = new Images(paths, this.id, this.selector);
+    $container.append(this.imageObject.getDOM());
+    this.imageObject.loadImages();
+
+    // Slider
+    this.slider = new Slider({
+      snap: this.options.snap,
+      ticks: this.options.ticks,
+      size: this.maxItem
+    }, this.selector);
+
+    $container.append(this.slider.getDOM());
+
+    // Deactivate the slider on start, will be activated as soon as all images have loaded
+    this.slider.disable();
+
+    // Descriptions
+    if (this.hasDescription) {
+
+      var descriptionTexts = [];
+      for (var i = 0; i <= this.maxItem; i++) {
+        descriptionTexts[i] = this.options.items[i].description;
       }
-      // Sanitize position
-      position = constrain(position, 0, self.sliderTrack.offsetWidth);
-
-      // Store the position for resize
-      self.sliderThumbPosition = position;
-
-      self.sliderThumb.style.left = position + C.THUMB_OFFSET + 'px';
-      self.sliderContainer.setAttribute('aria-valuenow',
-        Math.round(position / self.sliderTrack.offsetWidth * 100));
+      this.descriptions = new Descriptions(descriptionTexts, this.selector);
+      $container.append(this.descriptions.getDOM());
+      this.descriptions.setHeight();
+      this.trigger('resize');
+    }
+    else if (!this.options.title) {
+      // No passepartout if no title and no descriptions
+      this.imageObject.setMargin('0px');
+      this.slider.setMargin('0px');
+      this.trigger('resize');
+    }
+    else {
+      // Add passepartout to the bottom;
+      this.slider.setMargin('0 16px 16px 16px');
+      this.trigger('resize');
     }
 
-    /**
-     * Update all elements image, slider, and description).
-     * This function can handle strings such as 1px from CSS, numbers and also
-     * pointer positions from events
-     *
-     * @param {string|number|object} position - New slider thumb position on slider track.
-     * @param {boolean} animate - If true, the slider will move gently in a transition.
-     */
-    function update (position, animate) {
-      if (self.sliderThumb.classList.contains('h5p-agamotto-disabled')) {
-        return;
-      }
-      // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
-      if ((typeof position === 'string') || (typeof position === 'number')) {
-        position = parseInt(position);
-      } else if (typeof position === 'object') {
-        position = getPointerX(position) - C.TRACK_OFFSET -
-          parseInt(window.getComputedStyle(self.sliderContainer).marginLeft);
-      } else {
-        position = 0;
-      }
-      // Sanitization
-      position = constrain(position, 0, self.sliderTrack.offsetWidth);
-
-      updateThumb(position, animate);
-
+    // First image loaded, we can set the height of the container
+    document.querySelector(that.selector).addEventListener('loaded first', function() {
+      that.trigger('resize');
+    });
+    // All images loaded, we can enable the slider
+    document.querySelector(that.selector).addEventListener('loaded all', function() {
+      that.slider.enable();
+    });
+    // Slider was updated
+    document.querySelector(that.selector).addEventListener('update', function() {
       /*
        * Map the slider value to the image indexes. Since we might not
        * want to initiate opacity shifts right away, we can add a margin to
@@ -467,14 +452,14 @@ H5P.Agamotto = function ($) {
        */
       var margin = 5;
       var mappedValue = map(
-        position,
-        (parseInt(this.min) || 0) + margin,
-        (parseInt(this.max) || self.sliderTrack.offsetWidth) - margin,
+        that.slider.getPosition(),
+        0 + margin,
+        that.slider.getWidth() - margin,
         0,
-        self.maxItem
+        that.maxItem
       );
       // Account for margin change and mapping outside the image indexes
-      var topIndex = constrain(Math.floor(mappedValue), 0, self.maxItem);
+      var topIndex = constrain(Math.floor(mappedValue), 0, that.maxItem);
 
       /*
        * Using the cosine will allow an image to be displayed a little longer
@@ -483,10 +468,15 @@ H5P.Agamotto = function ($) {
       var linearOpacity = (1 - constrain(mappedValue - topIndex, 0, 1));
       var topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
 
-      self.index = topIndex;
-      self.opacity = topOpacity;
-      self.updateContent(topIndex, topOpacity);
-    }
+      that.updateContent(topIndex, topOpacity);
+    });
+
+    // Add Resize Handler
+    window.addEventListener('resize', function (e) {
+      that.imageObject.resize();
+      that.slider.resize();
+      // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
+    });
   };
 
   /**
