@@ -1,3 +1,5 @@
+"use strict";
+
 var H5P = H5P || {};
 
 H5P.Agamotto = function ($) {
@@ -11,6 +13,7 @@ H5P.Agamotto = function ($) {
     if (!options.items) {
       return;
     }
+
     this.options = options;
     this.options.items = sanitizeItems(this.options.items);
 
@@ -35,7 +38,7 @@ H5P.Agamotto = function ($) {
      */
     this.updateContent = function (index, opacity) {
       // Update images
-      this.imageObject.setImage(index, opacity);
+      this.images.setImage(index, opacity);
 
       // Update descriptions
       if (this.hasDescription) {
@@ -54,7 +57,9 @@ H5P.Agamotto = function ($) {
   /**
    * Images object
    *
-   * @param {Object} images - An array containing the images
+   * @param {Object} images - Array containing the images.
+   * @param {number} id - ID of this H5P content.
+   * @param {string} selector - Class name of parent node.
    */
   var Images = function (paths, id, selector) {
     this.paths = paths;
@@ -95,27 +100,29 @@ H5P.Agamotto = function ($) {
     },
     loadImages: function loadImages() {
       var that = this;
+
+      // Wait for images to be loaded before triggering some stuff
+      var loadImagesDispatcher = function () {
+        that.imagesLoaded++;
+        if (that.imagesLoaded === 1) {
+          // We can now determine the render height
+          that.imageTop.src = that.images[0].src;
+          that.container.style.height = window.getComputedStyle(that.imageTop).height;
+          document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded first'));
+        }
+        else if (that.imagesLoaded === 2) {
+          // We can now set the bottom image
+          that.imageBottom.src = that.images[1].src;
+        }
+        if (that.imagesLoaded === that.paths.length) {
+          // We can now activate the slider
+          document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded all'));
+        }
+      };
+
       for (var i = 0; i < this.paths.length; i++) {
         this.images[i] = new Image();
-
-        // Wait for images to be loaded before triggering some stuff
-        this.images[i].onload = function () {
-          that.imagesLoaded++;
-          if (that.imagesLoaded === 1) {
-            // We can now determine the render height
-            that.imageTop.src = that.images[0].src;
-            that.container.style.height = window.getComputedStyle(that.imageTop).height;
-            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded first'));
-          }
-          else if (that.imagesLoaded === 2) {
-            // We can now set the bottom image
-            that.imageBottom.src = that.images[1].src;
-          }
-          if (that.imagesLoaded === that.paths.length) {
-            // We can now activate the slider
-            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded all'));
-          }
-        };
+        this.images[i].onload = loadImagesDispatcher;
         this.images[i].src = H5P.getPath(this.paths[i], this.id);
       }
     },
@@ -125,9 +132,10 @@ H5P.Agamotto = function ($) {
   };
 
   /**
-   * Descriptions object
+   * Descriptions object.
    *
-   * @param {Object} texts - An array containing the texts for the images
+   * @param {Object} texts - An array containing the texts for the images.
+   * @param {string} selector - Class name of parent node
    */
   var Descriptions = function (texts, selector) {
     this.texts = texts;
@@ -171,6 +179,12 @@ H5P.Agamotto = function ($) {
     }
   };
 
+  /**
+   * Descriptions object.
+   *
+   * @param {Object} options - Options for the slider.
+   * @param {string} selector - Class name of parent node
+   */
   var Slider = function (options, selector) {
     var that = this;
 
@@ -202,13 +216,16 @@ H5P.Agamotto = function ($) {
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
+    // Place ticks
     if (this.options.ticks === true) {
+      // Function used here to avoid creating it in the upcoming loop
+      var placeTicks = function() {
+        that.setPosition(parseInt(this.style.left) - Slider.TRACK_OFFSET, true);
+      };
       for (var i = 0; i <= this.options.size; i++) {
         this.ticks[i] = document.createElement('div');
         this.ticks[i].className = 'h5p-agamotto-tick';
-        this.ticks[i].addEventListener('click', function() {
-          that.setPosition(parseInt(this.style.left) - Slider.TRACK_OFFSET, true);
-        });
+        this.ticks[i].addEventListener('click', placeTicks);
         this.container.appendChild(this.ticks[i]);
       }
     }
@@ -297,13 +314,18 @@ H5P.Agamotto = function ($) {
     getWidth: function getWidth() {
       return this.trackWidth;
     },
-    getPosition: function getPosition() {
-      return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
-    },
+    /**
+     * Will set the position of the thumb on the slider track.
+     *
+     * @param {number} position - Position on the slider track from 0 to max.
+     * @param {boolean} animate - If true, slide instead of jumping.
+     * @param {boolean} resize - If true, won't recompute position/width ratio.
+     */
     setPosition: function setPosition (position, animate, resize) {
       if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
         return;
       }
+
       // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
       if ((typeof position === 'string') || (typeof position === 'number')) {
         position = parseInt(position);
@@ -312,14 +334,16 @@ H5P.Agamotto = function ($) {
         if ((this.mousedown === false) && (position.type === 'mousemove')) {
           return;
         }
-        position = this.getPointerX(position) - Slider.TRACK_OFFSET - parseInt(window.getComputedStyle(this.container).marginLeft);
+        position = this.getPointerX(position) -
+          Slider.TRACK_OFFSET -
+          parseInt(window.getComputedStyle(this.container).marginLeft);
       }
       else {
         position = 0;
       }
-      // Sanitize position
       position = constrain(position, 0, this.getWidth());
 
+      // Transition control
       if (animate === true) {
         this.thumb.classList.add('h5p-agamotto-transition');
       } else {
@@ -336,7 +360,11 @@ H5P.Agamotto = function ($) {
       this.container.setAttribute('aria-valuenow',
         Math.round(position / this.getWidth * 100));
 
+      // Inform parent node
       document.querySelector(this.selector).dispatchEvent(new CustomEvent('update'));
+    },
+    getPosition: function getPosition() {
+      return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
     },
     snap: function snap () {
       if (this.options.snap === true) {
@@ -395,9 +423,9 @@ H5P.Agamotto = function ($) {
     for (var i = 0; i <= this.maxItem; i++) {
       paths[i] = this.options.items[i].image.path;
     }
-    this.imageObject = new Images(paths, this.id, this.selector);
-    $container.append(this.imageObject.getDOM());
-    this.imageObject.loadImages();
+    this.images = new Images(paths, this.id, this.selector);
+    $container.append(this.images.getDOM());
+    this.images.loadImages();
 
     // Slider
     this.slider = new Slider({
@@ -425,7 +453,7 @@ H5P.Agamotto = function ($) {
     }
     else if (!this.options.title) {
       // No passepartout if no title and no descriptions
-      this.imageObject.setMargin('0px');
+      this.images.setMargin('0px');
       this.slider.setMargin('0px');
       this.trigger('resize');
     }
@@ -473,7 +501,7 @@ H5P.Agamotto = function ($) {
 
     // Add Resize Handler
     window.addEventListener('resize', function (e) {
-      that.imageObject.resize();
+      that.images.resize();
       that.slider.resize();
       // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
     });
