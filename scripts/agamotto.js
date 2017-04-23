@@ -15,17 +15,8 @@ H5P.Agamotto = function ($) {
       return;
     }
 
-    // Remove items with missing image
-    for (var i = 0; i < options.items.length; i++) {
-      if (options.items[i].image === undefined) {
-        console.log('An image is missing. I will continue without it, but please check your settings.');
-        options.items.splice(i, 1);
-        i--;
-      }
-    }
-    // Restrict to 50 images
-    options.items = options.items.splice(0, 50);
     this.options = options;
+    this.options.items = sanitizeItems(this.options.items);
 
     this.maxItem = this.options.items.length - 1;
 
@@ -44,66 +35,20 @@ H5P.Agamotto = function ($) {
     this.id = id;
 
     /**
-     * Get maximum height of all descriptions.
-     * Expects the DOM to be already setup.
-     *
-     * @return {number} - Maximum height of all descriptions.
-     */
-    this.getMaxDescriptionHeight = function() {
-      var maxDescriptionHeight = 0;
-      for (var i = 0; i < this.maxItem + 1; i++) {
-        this.descriptionBottom.innerHTML = this.options.items[i].description;
-        maxDescriptionHeight = Math.max(maxDescriptionHeight, this.descriptionBottom.offsetHeight);
-      }
-      return maxDescriptionHeight;
-    };
-
-    /**
-     * Map a value from one range to another.
-     *
-     * @param {number} value - Value to me remapped.
-     * @param {number} lo1 - Lower boundary of first range.
-     * @param {number} hi1 - Upper boundary of first range.
-     * @param {number} lo2 - Lower boundary of second range.
-     * @param {number} hi2 - Upper boundary of second range.
-     * @return {number} - Remapped value.
-     */
-    this.map = function (value, lo1, hi1, lo2, hi2) {
-      return lo2 + (hi2 - lo2) * (value - lo1) / (hi1 - lo1);
-    };
-
-    /**
-     * Constrain a number value within a range.
-     *
-     * @param {number} value - Value to be constrained.
-     * @param {number} lo - Lower boundary of the range.
-     * @param {number} hi - Upper boundary of the range.
-     * @returns {number} - Constrained value.
-     */
-    this.constrain = function (value, lo, hi) {
-      return Math.min(hi, Math.max(lo, value));
-    };
-
-    /**
      * Update images and descriptions.
      *
      * @param {Number} index - Index of top image.
      * @param {Number} opacity - Opacity of top image.
      */
     this.updateContent = function (index, opacity) {
-      var bottomIndex = this.constrain(index + 1, 0, this.maxItem);
+      var bottomIndex = constrain(index + 1, 0, this.maxItem);
 
       // Update images
-      this.imageTop.src = this.images[index].src;
-      this.imageBottom.src = this.images[bottomIndex].src;
-      this.imageTop.style.opacity = opacity;
+      this.imageObject.setImage(index, opacity);
 
       // Update descriptions
       if (this.hasDescription) {
-        this.descriptionTop.innerHTML = this.options.items[index].description;
-        this.descriptionBottom.innerHTML = this.options.items[bottomIndex].description;
-        this.descriptionTop.style.opacity = opacity;
-        this.descriptionBottom.style.opacity = 1 - opacity;
+        this.descriptions.setText(index, opacity);
       }
     };
 
@@ -114,6 +59,122 @@ H5P.Agamotto = function ($) {
   // Extends the event dispatcher
   C.prototype = Object.create(H5P.EventDispatcher.prototype);
   C.prototype.constructor = C;
+
+  /**
+   * Images object
+   *
+   * @param {Object} images - An array containing the images
+   */
+  var Images = function (paths, id, parent) {
+    this.paths = paths;
+    this.id = id;
+    this.parent = parent;
+
+    this.images = [];
+    this.imagesLoaded = 0;
+
+    this.imageTop = document.createElement('img');
+    this.imageTop.className = 'h5p-agamotto-image-top';
+    this.imageTop.src = '#';
+    this.imageTop.setAttribute('draggable', 'false');
+    this.imageTop.setAttribute('tabindex', 0);
+
+    this.imageBottom = document.createElement('img');
+    this.imageBottom.className = 'h5p-agamotto-image-bottom';
+    this.imageBottom.src = '#';
+    this.imageBottom.setAttribute('draggable', 'false');
+
+    this.imagesContainer = document.createElement('div');
+    this.imagesContainer.className = 'h5p-agamotto-images-container';
+    this.imagesContainer.appendChild(this.imageTop);
+    this.imagesContainer.appendChild(this.imageBottom);
+  }
+
+  Images.prototype = {
+    getDOM: function getDOM () {
+      return this.imagesContainer;
+    },
+    setImage: function setImage (index, opacity) {
+      this.imageTop.src = this.images[index].src;
+      this.imageBottom.src = this.images[constrain(index + 1, 0, this.images.length - 1)].src;
+      this.imageTop.style.opacity = opacity;
+    },
+    resize: function resize () {
+      this.imagesContainer.style.height = window.getComputedStyle(this.imageTop).height;
+    },
+    loadImages: function loadImages() {
+      that = this;
+      for (var i = 0; i < this.paths.length; i++) {
+        this.images[i] = new Image();
+        this.images[i].onload = function () {
+          that.imagesLoaded++;
+          if (that.imagesLoaded === 1) {
+            // We can now determine the render height
+            that.imageTop.src = that.images[0].src;
+            that.imagesContainer.style.height = window.getComputedStyle(that.imageTop).height;
+            that.parent.trigger('resize');
+          }
+          else if (that.imagesLoaded === 2) {
+            // We can now set the bottom image
+            that.imageBottom.src = that.images[1].src;
+          }
+          else if (that.imagesLoaded === that.paths.length) {
+            // We can now activate the slider
+            // TODO: Replace!
+            that.parent.sliderThumb.classList.remove('h5p-agamotto-disabled');
+            that.parent.sliderTrack.classList.remove('h5p-agamotto-disabled');
+          }
+        };
+        this.images[i].src = H5P.getPath(this.paths[i], this.id);
+      }
+    }
+  }
+
+  /**
+   * Descriptions object
+   *
+   * @param {Object} texts - An array containing the texts for the images
+   */
+  var Descriptions = function (texts) {
+    this.texts = texts;
+
+    this.descriptionTop = document.createElement('div');
+    this.descriptionTop.className = 'h5p-agamotto-description-top';
+    this.descriptionTop.style.opacity = 1;
+    this.descriptionTop.setAttribute('tabindex', 0);
+    this.descriptionTop.innerHTML = texts[0];
+
+    this.descriptionBottom = document.createElement('div');
+    this.descriptionBottom.className = 'h5p-agamotto-description-bottom';
+    this.descriptionBottom.style.opacity = 0;
+    this.descriptionBottom.innerHTML = texts[1];
+
+    this.descriptionsContainer = document.createElement('div');
+    this.descriptionsContainer.className = 'h5p-agamotto-descriptions-container';
+    this.descriptionsContainer.appendChild(this.descriptionTop);
+    this.descriptionsContainer.appendChild(this.descriptionBottom);
+  };
+
+  Descriptions.prototype = {
+    getDOM: function getDOM () {
+      return this.descriptionsContainer;
+    },
+    setText: function setText (index, opacity) {
+      this.descriptionTop.innerHTML = this.texts[index];
+      this.descriptionBottom.innerHTML = this.texts[constrain(index + 1, 0, this.texts.length)];
+      this.descriptionTop.style.opacity = opacity;
+      this.descriptionBottom.style.opacity = 1 - opacity;
+    },
+    setHeight: function setHeight () {
+      // We need to determine the highest description text for resizing
+      var height = 0;
+      for (var i = 0; i <= this.texts.length; i++) {
+        this.descriptionBottom.innerHTML = this.texts[i];
+        height = Math.max(height, this.descriptionBottom.offsetHeight);
+      }
+      this.descriptionsContainer.style.height = height + 'px';
+    }
+  }
 
   /**
    * Attach function called by H5P framework to insert H5P content into page.
@@ -138,24 +199,14 @@ H5P.Agamotto = function ($) {
         '</div>');
     }
 
-    // Images
-    self.imageTop = document.createElement('img');
-    self.imageTop.className = 'h5p-agamotto-image-top';
-    self.src = '#';
-    self.imageTop.setAttribute('draggable', 'false');
+    var paths = [];
+    for (var i = 0; i <= self.maxItem; i++) {
+      paths[i] = self.options.items[i].image.path;
+    }
+    self.imageObject = new Images(paths, self.id, this);
+    $container.append(self.imageObject.getDOM());
+    self.imageObject.loadImages();
 
-    self.imageBottom = document.createElement('img');
-    self.imageBottom.className = 'h5p-agamotto-image-bottom';
-    self.src = '#';
-    self.imageBottom.setAttribute('draggable', 'false');
-
-    self.imagesContainer = document.createElement('div');
-    self.imagesContainer.className = 'h5p-agamotto-images-container';
-    self.imagesContainer.appendChild(self.imageTop);
-    self.imagesContainer.appendChild(self.imageBottom);
-
-    $container.append(self.imagesContainer);
-    initImages();
 
     // Slider (TODO: Make this a class?)
     self.sliderTrack = document.createElement('div');
@@ -197,25 +248,16 @@ H5P.Agamotto = function ($) {
 
     // Descriptions
     if (self.hasDescription) {
-      self.descriptionTop = document.createElement('div');
-      self.descriptionTop.className = 'h5p-agamotto-description-top';
-      self.descriptionTop.style.opacity = 1;
-      self.descriptionTop.setAttribute('tabindex', 0);
-      self.descriptionTop.innerHTML = self.options.items[0].description;
 
-      self.descriptionBottom = document.createElement('div');
-      self.descriptionBottom.className = 'h5p-agamotto-description-bottom';
-      self.descriptionBottom.style.opacity = 0;
-      self.descriptionBottom.innerHTML = self.options.items[1].description;
+      var descriptionTexts = [];
+      for (var i = 0; i <= self.maxItem; i++) {
+        descriptionTexts[i] = self.options.items[i].description;
+      }
 
-      self.descriptionsContainer = document.createElement('div');
-      self.descriptionsContainer.className = 'h5p-agamotto-descriptions-container';
-      self.descriptionsContainer.appendChild(self.descriptionTop);
-      self.descriptionsContainer.appendChild(self.descriptionBottom);
-
-      $container.append(self.descriptionsContainer);
-
-      self.descriptionsContainer.style.height = self.getMaxDescriptionHeight() + 'px';
+      // TODO: Don't use global
+      self.descriptions = new Descriptions(descriptionTexts);
+      $container.append(self.descriptions.getDOM());
+      self.descriptions.setHeight();
       self.trigger('resize');
     } else if (!self.options.title) {
       // No passepartout if no title and no descriptions
@@ -229,29 +271,6 @@ H5P.Agamotto = function ($) {
     }
 
     addEventListeners();
-
-    /**
-     * Initialize the images
-     */
-    function initImages() {
-      // Load images and show spinning animation until all images have been loaded
-      self.images = [];
-      self.imagesLoaded = 0;
-      for (var i = 0; i <= self.maxItem; i++) {
-        self.images[i] = new Image();
-        self.images[i].onload = enableSlider;
-        self.images[i].src = H5P.getPath(self.options.items[i].image.path, self.id);
-      }
-
-      // We trust the user here and believe that all images have the same height
-      self.imageTop.onload = function () {
-        self.imagesContainer.style.height = window.getComputedStyle(self.imageTop).height;
-        self.trigger('resize');
-      };
-      self.imageTop.src = self.images[0].src;
-      self.imageTop.setAttribute('tabindex', 0);
-      self.imageBottom.src = self.images[1].src;
-    }
 
     /**
      * Add all EventListeners
@@ -309,7 +328,7 @@ H5P.Agamotto = function ($) {
 
       // Resize handler
       window.addEventListener('resize', function (e) {
-        self.imagesContainer.style.height = window.getComputedStyle(self.imageTop).height;
+        self.imageObject.resize();
         var ratio = self.sliderThumbPosition / self.sliderTrackWidth;
 
         self.sliderTrackWidth = parseInt(self.sliderContainer.offsetWidth) - 2 * C.TRACK_OFFSET;
@@ -405,7 +424,7 @@ H5P.Agamotto = function ($) {
         self.sliderThumb.classList.remove('h5p-agamotto-transition');
       }
       // Sanitize position
-      position = self.constrain(position, 0, self.sliderTrack.offsetWidth);
+      position = constrain(position, 0, self.sliderTrack.offsetWidth);
 
       // Store the position for resize
       self.sliderThumbPosition = position;
@@ -437,7 +456,7 @@ H5P.Agamotto = function ($) {
         position = 0;
       }
       // Sanitization
-      position = self.constrain(position, 0, self.sliderTrack.offsetWidth);
+      position = constrain(position, 0, self.sliderTrack.offsetWidth);
 
       updateThumb(position, animate);
 
@@ -447,7 +466,7 @@ H5P.Agamotto = function ($) {
        * the left and right of the slider where nothing happens
        */
       var margin = 5;
-      var mappedValue = self.map(
+      var mappedValue = map(
         position,
         (parseInt(this.min) || 0) + margin,
         (parseInt(this.max) || self.sliderTrack.offsetWidth) - margin,
@@ -455,19 +474,66 @@ H5P.Agamotto = function ($) {
         self.maxItem
       );
       // Account for margin change and mapping outside the image indexes
-      var topIndex = self.constrain(Math.floor(mappedValue), 0, self.maxItem);
+      var topIndex = constrain(Math.floor(mappedValue), 0, self.maxItem);
 
       /*
        * Using the cosine will allow an image to be displayed a little longer
        * before blending than a linear function
        */
-      var linearOpacity = (1 - self.constrain(mappedValue - topIndex, 0, 1));
+      var linearOpacity = (1 - constrain(mappedValue - topIndex, 0, 1));
       var topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
 
       self.index = topIndex;
       self.opacity = topOpacity;
       self.updateContent(topIndex, topOpacity);
     }
+  };
+
+  /**
+   * Remove missing items and limit amount.
+   *
+   * @param {Object} items - Items defined in semantics.org.
+   * @return {Object} Sanitized items.
+   */
+  var sanitizeItems = function(items) {
+    // Remove items with missing image
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].image === undefined) {
+        console.log('An image is missing. I will continue without it, but please check your settings.');
+        items.splice(i, 1);
+        i--;
+      }
+    }
+    // Restrict to 50 images
+    items = items.splice(0, 50);
+
+    return items;
+  };
+
+  /**
+   * Map a value from one range to another.
+   *
+   * @param {number} value - Value to me remapped.
+   * @param {number} lo1 - Lower boundary of first range.
+   * @param {number} hi1 - Upper boundary of first range.
+   * @param {number} lo2 - Lower boundary of second range.
+   * @param {number} hi2 - Upper boundary of second range.
+   * @return {number} - Remapped value.
+   */
+  var map = function (value, lo1, hi1, lo2, hi2) {
+    return lo2 + (hi2 - lo2) * (value - lo1) / (hi1 - lo1);
+  };
+
+  /**
+   * Constrain a number value within a range.
+   *
+   * @param {number} value - Value to be constrained.
+   * @param {number} lo - Lower boundary of the range.
+   * @param {number} hi - Upper boundary of the range.
+   * @returns {number} - Constrained value.
+   */
+  var constrain = function (value, lo, hi) {
+    return Math.min(hi, Math.max(lo, value));
   };
 
   // Slider Layout
