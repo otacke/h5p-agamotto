@@ -68,8 +68,8 @@
     "name": "ticks",
     "importance": "medium",
     "type": "boolean",
-    "label": "Display ticks",
-    "description": "If activated, the slider bar will display a tick for each image.",
+    "label": "Display tick marks",
+    "description": "If activated, the slider bar will display a tick mark for each image.",
     "default": false
   }
 ]
