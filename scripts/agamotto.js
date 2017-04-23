@@ -188,8 +188,12 @@ H5P.Agamotto = function ($) {
   var Slider = function (options, selector) {
     var that = this;
 
-    options.snap = options.snap || true;
-    options.ticks = options.ticks || false;
+    if (options.snap === undefined) {
+      options.snap = true;
+    }
+    if (options.ticks === undefined) {
+      options.ticks = false;
+    }
 
     this.options = options;
     this.selector = selector;
