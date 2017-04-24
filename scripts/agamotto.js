@@ -474,6 +474,8 @@ H5P.Agamotto = function ($) {
     // All images loaded, we can enable the slider
     document.querySelector(that.selector).addEventListener('loaded all', function() {
       that.slider.enable();
+      // Just to be sure
+      that.trigger('resize');
     });
     // Slider was updated
     document.querySelector(that.selector).addEventListener('update', function() {
