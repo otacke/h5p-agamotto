@@ -362,7 +362,7 @@ H5P.Agamotto = function ($) {
       // Update DOM
       this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
       this.container.setAttribute('aria-valuenow',
-        Math.round(position / this.getWidth * 100));
+        Math.round(position / this.getWidth() * 100));
 
       // Inform parent node
       document.querySelector(this.selector).dispatchEvent(new CustomEvent('update'));
@@ -557,12 +557,6 @@ H5P.Agamotto = function ($) {
   var constrain = function (value, lo, hi) {
     return Math.min(hi, Math.max(lo, value));
   };
-
-  // Slider Layout
-  /** @constant {number} */
-  C.TRACK_OFFSET = 16;
-  /** @constant {number} */
-  C.THUMB_OFFSET = 8;
 
   // Polyfill for "the one" browser that has hiccups ...
   (function () {
