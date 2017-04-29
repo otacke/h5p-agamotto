@@ -172,18 +172,19 @@ H5P.Agamotto = function ($) {
       /*
        * Decrease the size of the content if on a mobile device in landscape
        * orientation, because it might be hard to use it otherwise.
-       * iOS devices don't switch screen.height and screen.width, but use window.orientation
+       * iOS devices don't switch screen.height and screen.width on rotation
        */
-      if (isMobileDevice()) {
-        if (Math.abs(window.orientation) === 90) {
+      if (isMobileDevice() && Math.abs(window.orientation) === 90) {
+        if (/iPhone/.test(navigator.userAgent)) {
           that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
         }
-        else if (screen.width > screen.height) {
+        else {
           that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
         }
-        else {
-          that.wrapper.style.width = 'auto';
-        }
+      }
+      else {
+        // Portrait orientation
+        that.wrapper.style.width = 'auto';
       }
 
       that.images.resize();
