@@ -20,19 +20,23 @@
   -webkit-user-select: none;
   user-select: none;
 }
+.h5p-agamotto .h5p-agamotto-wrapper {
+  width: auto;
+  margin: 0 auto;
+  padding: 16px 16px 0 16px;
+}
 .h5p-agamotto .h5p-agamotto-warning {
   width: auto;
   margin: 16px;
   font-size: 1.5em;
   text-align: center;
 }
-.h5p-agamotto .h5p-agamotto-title {
+.h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-title {
   width: auto;
-  margin: 0 16px;
+  overflow-y: auto;
 }
-.h5p-agamotto .h5p-agamotto-images-container {
+.h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-images-container {
   position: relative;
-  margin: 16px 16px 0 16px;
 }
 .h5p-agamotto .h5p-agamotto-image-top {
   position: absolute;
@@ -43,8 +47,7 @@
   position: absolute;
   width: 100%;
 }
-.h5p-agamotto .h5p-agamotto-slider-container {
-  margin: 0 16px;
+.h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-slider-container {
   height: 36px;
   background: #2c2c2c;
   position: relative;
@@ -118,7 +121,6 @@
 }
 .h5p-agamotto .h5p-agamotto-descriptions-container {
   position: relative;
-  margin: 0 16px;
 }
 .h5p-agamotto .h5p-agamotto-description-top{
   position: absolute;

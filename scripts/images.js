@@ -1,4 +1,5 @@
 (function (Agamotto) {
+  'use strict';
 
   /**
    * Images object
@@ -15,6 +16,7 @@
 
      this.images = [];
      this.imagesLoaded = 0;
+     this.ratio = 0;
 
      this.imageTop = document.createElement('img');
      this.imageTop.className = 'h5p-agamotto-image-top';
@@ -52,8 +54,9 @@
        var loadImagesDispatcher = function () {
          that.imagesLoaded++;
          if (that.imagesLoaded === 1) {
-           // We can now determine the render height
+           // We can now determine the render height and image aspect ratio
            that.imageTop.src = that.images[0].src;
+           that.ratio = that.imageTop.naturalWidth / that.imageTop.naturalHeight;
            that.container.style.height = window.getComputedStyle(that.imageTop).height;
            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded first'));
          }
@@ -73,8 +76,8 @@
          this.images[i].src = H5P.getPath(this.paths[i], this.id);
        }
      },
-     setMargin: function setMargin (margin) {
-       this.container.style.margin = margin;
+     getRatio: function getRatio() {
+       return this.ratio;
      }
    };
 

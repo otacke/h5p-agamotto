@@ -1,9 +1,10 @@
 (function (Agamotto) {
+  'use strict';
 
   /**
    * Descriptions object.
    *
-   * @param {Object} texts - An array containing the texts for the images.
+   * @param {Object} texts - Array containing the texts for the images.
    * @param {string} selector - Class name of parent node
    */
   Agamotto.Descriptions = function (texts, selector) {

@@ -1,9 +1,13 @@
 (function (Agamotto) {
+  'use strict';
 
   /**
    * Slider object.
    *
    * @param {Object} options - Options for the slider.
+   * @param {boolean} options.snap - If true, slider will snap to fixed positions.
+   * @param {boolean} options.ticks - If true, slider container will display ticks.
+   * @param {number} options.size - Number of positions/ticks.
    * @param {string} selector - Class name of parent node
    */
   Agamotto.Slider = function (options, selector) {
@@ -159,9 +163,11 @@
         if ((this.mousedown === false) && (position.type === 'mousemove')) {
           return;
         }
+
         position = this.getPointerX(position) -
           Agamotto.Slider.TRACK_OFFSET -
-          parseInt(window.getComputedStyle(this.container).marginLeft);
+          parseInt(window.getComputedStyle(this.container).marginLeft) -
+          parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
       }
       else {
         position = 0;
@@ -216,9 +222,6 @@
           this.ticks[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
         }
       }
-    },
-    setMargin: function setMargin (margin) {
-      this.container.style.margin = margin;
     }
   };
 
@@ -234,6 +237,6 @@
      }
     CustomEvent.prototype = window.Event.prototype;
     window.CustomEvent = CustomEvent;
-  })();  
+  })();
 
 })(H5P.Agamotto);
