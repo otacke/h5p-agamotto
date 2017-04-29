@@ -14,9 +14,22 @@
     "minorVersion": 0
   },
   "preloadedJs": [
-    { "path": "scripts/agamotto.js" }
+    {
+      "path": "scripts/agamotto.js"
+    },
+    {
+      "path": "scripts/images.js"
+    },
+    {
+      "path": "scripts/slider.js"
+    },
+    {
+      "path": "scripts/descriptions.js"
+    }
   ],
   "preloadedCss": [
-    { "path": "styles/agamotto.css" }
+    {
+      "path": "styles/agamotto.css"
+    }
   ]
 }
