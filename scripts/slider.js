@@ -167,7 +167,7 @@
         position = this.getPointerX(position) -
           Agamotto.Slider.TRACK_OFFSET -
           parseInt(window.getComputedStyle(this.container).marginLeft) -
-          parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
+          parseInt(window.getComputedStyle(document.querySelector(this.selector)).paddingLeft);
       }
       else {
         position = 0;
