@@ -45,7 +45,7 @@
        this.imageTop.style.opacity = opacity;
      },
      resize: function resize () {
-       this.container.style.height = window.getComputedStyle(this.imageTop).height;
+       this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
      },
      loadImages: function loadImages() {
        var that = this;
@@ -56,8 +56,8 @@
          if (that.imagesLoaded === 1) {
            // We can now determine the render height and image aspect ratio
            that.imageTop.src = that.images[0].src;
-           that.ratio = that.imageTop.naturalWidth / that.imageTop.naturalHeight;
-           that.container.style.height = window.getComputedStyle(that.imageTop).height;
+           that.ratio = that.images[0].naturalWidth / that.images[0].naturalHeight;
+           that.container.style.height = that.container.offsetWidth / that.ratio + 'px';
            document.querySelector(that.selector).dispatchEvent(new CustomEvent('loaded first'));
          }
          else if (that.imagesLoaded === 2) {
@@ -83,7 +83,7 @@
 
    // Polyfill for "the one" browser that has hiccups ...
    (function () {
-     if ( typeof window.CustomEvent === "function" ) return false;
+     if ( typeof window.CustomEvent === 'function' ) return false;
 
      function CustomEvent (event, params) {
        params = params || {bubbles: false, cancelable: false, detail: undefined};
