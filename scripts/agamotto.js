@@ -190,6 +190,14 @@ H5P.Agamotto = function ($) {
       that.images.resize();
       that.slider.resize();
       // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
+
+      // Resize iframe if image's height is too small or too high.
+      var windowHeight = window.innerHeight;
+      var wrapperHeight = that.wrapper.offsetHeight;
+      var actionBarHeight = document.querySelector('.h5p-actions').offsetHeight;
+      if (wrapperHeight + actionBarHeight + 1 !== windowHeight) {
+        that.trigger('resize');
+      }
     });
   };
 

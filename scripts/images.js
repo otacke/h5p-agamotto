@@ -50,7 +50,10 @@
      loadImages: function loadImages() {
        var that = this;
 
-       // Wait for images to be loaded before triggering some stuff
+       /*
+        * Wait for images to be loaded before triggering some stuff
+        * This could be done more nicely with Promises, but IE isn't ready for that ...
+        */
        var loadImagesDispatcher = function () {
          that.imagesLoaded++;
          if (that.imagesLoaded === 1) {
