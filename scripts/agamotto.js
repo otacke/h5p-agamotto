@@ -112,13 +112,13 @@ H5P.Agamotto = function ($) {
         var title = document.createElement('div');
         title.className = 'h5p-agamotto-title';
         title.innerHTML = '<h2>' + that.options.title + '</h2>';
-
         that.wrapper.appendChild(title);
       }
 
       // Images
       that.images = new H5P.Agamotto.Images(that.images);
       that.wrapper.appendChild(that.images.getDOM());
+      that.images.resize();
 
       // Slider
       that.slider = new H5P.Agamotto.Slider({
@@ -126,12 +126,11 @@ H5P.Agamotto = function ($) {
         ticks: that.options.ticks,
         size: that.maxItem
       }, that.selector);
-
       that.wrapper.appendChild(that.slider.getDOM());
+      that.slider.resize();
 
       // Descriptions
       if (that.hasDescription) {
-
         var descriptionTexts = [];
         for (i = 0; i <= that.maxItem; i++) {
           descriptionTexts[i] = that.options.items[i].description;
@@ -210,6 +209,7 @@ H5P.Agamotto = function ($) {
         }
       });
 
+      // DOM completed.
       that.trigger('resize');
     });
   };
