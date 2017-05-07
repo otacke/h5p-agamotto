@@ -71,133 +71,145 @@ H5P.Agamotto = function ($) {
       return;
     }
 
-    this.wrapper = document.createElement('div');
-    this.wrapper.className = 'h5p-agamotto-wrapper';
-    $container.append(this.wrapper);
-
-    // Title
-    if (this.options.title) {
-      var title = document.createElement('div');
-      title.className = 'h5p-agamotto-title';
-      title.innerHTML = '<h2>' + this.options.title + '</h2>';
-
-      this.wrapper.appendChild(title);
+    /**
+     * Load an Image.
+     *
+     * @param {string} path - Path to image.
+     * @param {number} id - H5P ID.
+     * @return {Promise} Promise for image being loaded.
+     */
+    function loadImage (path, id) {
+      return new Promise(function(resolve, reject)  {
+        var image = new Image();
+        image.onload = function() {
+          resolve(this);
+        };
+        image.onerror = function(error) {
+          reject(error);
+        };
+        image.src = H5P.getPath(path, id);
+      });
     }
 
-    // Images
-    var paths = [];
-    var i;
-    for (i = 0; i <= this.maxItem; i++) {
-      paths[i] = this.options.items[i].image.path;
+    /*
+     * Load images first before DOM is created; will help to prevent layout
+     * problems in some cases.
+     */
+    var promises = [];
+    for (var i = 0; i < that.options.items.length; i++) {
+      promises.push(loadImage(that.options.items[i].image.path, that.id));
     }
-    this.images = new H5P.Agamotto.Images(paths, this.id, this.selector);
-    this.wrapper.appendChild(this.images.getDOM());
-    this.images.loadImages();
+    Promise.all(promises).then(function(results) {
+      that.images = results;
 
-    // Slider
-    this.slider = new H5P.Agamotto.Slider({
-      snap: this.options.snap,
-      ticks: this.options.ticks,
-      size: this.maxItem
-    }, this.selector);
+      that.wrapper = document.createElement('div');
+      that.wrapper.className = 'h5p-agamotto-wrapper';
+      $container.append(that.wrapper);
 
-    this.wrapper.appendChild(this.slider.getDOM());
+      // Title
+      if (that.options.title) {
+        var title = document.createElement('div');
+        title.className = 'h5p-agamotto-title';
+        title.innerHTML = '<h2>' + that.options.title + '</h2>';
 
-    // Deactivate the slider on start, will be activated as soon as all images have loaded
-    this.slider.disable();
-
-    // Descriptions
-    if (this.hasDescription) {
-
-      var descriptionTexts = [];
-      for (i = 0; i <= this.maxItem; i++) {
-        descriptionTexts[i] = this.options.items[i].description;
+        that.wrapper.appendChild(title);
       }
-      this.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, this.selector);
-      this.wrapper.appendChild(this.descriptions.getDOM());
-      this.descriptions.setHeight();
-      this.trigger('resize');
-    }
-    else if (!this.options.title) {
-      // No passepartout if no title and no descriptions
-      this.wrapper.style.padding = '0';
-      this.trigger('resize');
-    }
-    else {
-      // Add passepartout to the bottom;
-      this.wrapper.style.padding = '0 16px 16px 16px';
-      this.trigger('resize');
-    }
 
-    // First image loaded, we can set the height of the container
-    document.querySelector(that.selector).addEventListener('loaded first', function() {
-      that.trigger('resize');
-    });
-    // All images loaded, we can enable the slider
-    document.querySelector(that.selector).addEventListener('loaded all', function() {
-      that.slider.enable();
-      // Just to be sure
-      that.trigger('resize');
-    });
-    // Slider was updated
-    document.querySelector(that.selector).addEventListener('update', function() {
-      /*
-       * Map the slider value to the image indexes. Since we might not
-       * want to initiate opacity shifts right away, we can add a margin to
-       * the left and right of the slider where nothing happens
-       */
-      var margin = 5;
-      var mappedValue = Agamotto.map(
-        that.slider.getPosition(),
-        0 + margin,
-        that.slider.getWidth() - margin,
-        0,
-        that.maxItem
-      );
-      // Account for margin change and mapping outside the image indexes
-      var topIndex = Agamotto.constrain(Math.floor(mappedValue), 0, that.maxItem);
+      // Images
+      that.images = new H5P.Agamotto.Images(that.images);
+      that.wrapper.appendChild(that.images.getDOM());
 
-      /*
-       * Using the cosine will allow an image to be displayed a little longer
-       * before blending than a linear function
-       */
-      var linearOpacity = (1 - Agamotto.constrain(mappedValue - topIndex, 0, 1));
-      var topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
+      // Slider
+      that.slider = new H5P.Agamotto.Slider({
+        snap: that.options.snap,
+        ticks: that.options.ticks,
+        size: that.maxItem
+      }, that.selector);
 
-      that.updateContent(topIndex, topOpacity);
-    });
+      that.wrapper.appendChild(that.slider.getDOM());
 
-    // Add Resize Handler
-    window.addEventListener('resize', function (e) {
-      /*
-       * Decrease the size of the content if on a mobile device in landscape
-       * orientation, because it might be hard to use it otherwise.
-       * iOS devices don't switch screen.height and screen.width on rotation
-       */
-      if (isMobileDevice() && Math.abs(window.orientation) === 90) {
-        if (/iPhone/.test(navigator.userAgent)) {
-          that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+      // Descriptions
+      if (that.hasDescription) {
+
+        var descriptionTexts = [];
+        for (i = 0; i <= that.maxItem; i++) {
+          descriptionTexts[i] = that.options.items[i].description;
         }
-        else {
-          that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
-        }
+        that.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, that.selector);
+        that.wrapper.appendChild(that.descriptions.getDOM());
+        that.descriptions.setHeight();
+      }
+      else if (!that.options.title) {
+        // No passepartout if no title and no descriptions
+        that.wrapper.style.padding = '0';
       }
       else {
-        // Portrait orientation
-        that.wrapper.style.width = 'auto';
+        // Add passepartout to the bottom;
+        that.wrapper.style.padding = '0 16px 16px 16px';
       }
 
-      that.images.resize();
-      that.slider.resize();
-      // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
+      // Slider was updated
+      document.querySelector(that.selector).addEventListener('update', function() {
+        /*
+         * Map the slider value to the image indexes. Since we might not
+         * want to initiate opacity shifts right away, we can add a margin to
+         * the left and right of the slider where nothing happens
+         */
+        var margin = 5;
+        var mappedValue = Agamotto.map(
+          that.slider.getPosition(),
+          0 + margin,
+          that.slider.getWidth() - margin,
+          0,
+          that.maxItem
+        );
+        // Account for margin change and mapping outside the image indexes
+        var topIndex = Agamotto.constrain(Math.floor(mappedValue), 0, that.maxItem);
 
-      // Resize iframe if image's height is too small or too high.
-      var windowHeight = window.innerHeight;
-      var wrapperHeight = that.wrapper.offsetHeight;
-      var actionBarHeight = document.querySelector('.h5p-actions').offsetHeight;
-      if (wrapperHeight + actionBarHeight + 1 !== windowHeight) {
-        that.trigger('resize');
-      }
+        /*
+         * Using the cosine will allow an image to be displayed a little longer
+         * before blending than a linear function
+         */
+        var linearOpacity = (1 - Agamotto.constrain(mappedValue - topIndex, 0, 1));
+        var topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
+
+        that.updateContent(topIndex, topOpacity);
+      });
+
+      // Add Resize Handler
+      window.addEventListener('resize', function (e) {
+        /*
+         * Decrease the size of the content if on a mobile device in landscape
+         * orientation, because it might be hard to use it otherwise.
+         * iOS devices don't switch screen.height and screen.width on rotation
+         */
+        if (isMobileDevice() && Math.abs(window.orientation) === 90) {
+          if (/iPhone/.test(navigator.userAgent)) {
+            that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+          }
+          else {
+            that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
+          }
+        }
+        else {
+          // Portrait orientation
+          that.wrapper.style.width = 'auto';
+        }
+
+        that.images.resize();
+        that.slider.resize();
+        // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
+
+        // Resize iframe if image's height is too small or too high.
+        var windowHeight = window.innerHeight;
+        var wrapperHeight = that.wrapper.offsetHeight;
+        var actionBarHeight = document.querySelector('.h5p-actions').offsetHeight;
+        if (wrapperHeight + actionBarHeight + 1 !== windowHeight) {
+          that.trigger('resize');
+        }
+      });
+
+      that.trigger('resize');
     });
   };
 
