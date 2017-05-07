@@ -73,6 +73,7 @@ H5P.Agamotto = function ($) {
 
     /**
      * Load an Image.
+     * TODO: Wouldn't this be better in images.js? Requires a promise here as well
      *
      * @param {string} path - Path to image.
      * @param {number} id - H5P ID.
