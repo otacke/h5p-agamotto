@@ -148,8 +148,7 @@ H5P.Agamotto = function ($) {
         that.wrapper.style.padding = '0 16px 16px 16px';
       }
 
-      // Slider was updated
-      document.querySelector(that.selector).addEventListener('update', function() {
+      that.slider.on('update', function(e) {
         /*
          * Map the slider value to the image indexes. Since we might not
          * want to initiate opacity shifts right away, we can add a margin to
@@ -157,7 +156,7 @@ H5P.Agamotto = function ($) {
          */
         var margin = 5;
         var mappedValue = Agamotto.map(
-          that.slider.getPosition(),
+          e.data.position,
           0 + margin,
           that.slider.getWidth() - margin,
           0,

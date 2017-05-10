@@ -117,12 +117,19 @@
       });
     });
 
+    // Initialize event inheritance
+    H5P.EventDispatcher.call(this);
+
     // Slider Layout
     /** @constant {number} */
     Agamotto.Slider.TRACK_OFFSET = 16;
     /** @constant {number} */
     Agamotto.Slider.THUMB_OFFSET = 8;
   };
+
+  // Extends the event dispatcher
+  Agamotto.Slider.prototype = Object.create(H5P.EventDispatcher.prototype);
+  Agamotto.Slider.prototype.constructor = Agamotto.Slider;
 
   Agamotto.Slider.prototype = {
     getDOM: function getDOM () {
@@ -189,11 +196,14 @@
 
       // Update DOM
       this.thumb.style.left = position + Agamotto.Slider.THUMB_OFFSET + 'px';
-      this.container.setAttribute('aria-valuenow',
-        Math.round(position / this.getWidth() * 100));
+      var percentage = Math.round(position / this.getWidth() * 100);
+      this.container.setAttribute('aria-valuenow', percentage);
 
       // Inform parent node
-      document.querySelector(this.selector).dispatchEvent(new CustomEvent('update'));
+      this.trigger('update', {
+        position: position,
+        percentage: percentage
+      });
     },
     getPosition: function getPosition() {
       return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Agamotto.Slider.THUMB_OFFSET : 0;
@@ -225,19 +235,5 @@
       }
     }
   };
-
-  // Polyfill for "the one" browser that has hiccups ...
-  (function () {
-    if ( typeof window.CustomEvent === "function" ) return false;
-
-    function CustomEvent (event, params) {
-      params = params || {bubbles: false, cancelable: false, detail: undefined};
-      var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-      return evt;
-     }
-    CustomEvent.prototype = window.Event.prototype;
-    window.CustomEvent = CustomEvent;
-  })();
 
 })(H5P.Agamotto);
