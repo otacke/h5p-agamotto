@@ -104,7 +104,10 @@ H5P.Agamotto = function ($) {
       that.images = results;
 
       that.wrapper = document.createElement('div');
-      that.wrapper.className = 'h5p-agamotto-wrapper';
+      that.wrapper.classList.add('h5p-agamotto-wrapper');
+      that.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
+      that.wrapper.classList.add('h5p-agamotto-passepartout-top');
+      that.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
       $container.append(that.wrapper);
 
       // Title
@@ -138,14 +141,20 @@ H5P.Agamotto = function ($) {
         that.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, that.selector);
         that.wrapper.appendChild(that.descriptions.getDOM());
         that.descriptions.setHeight();
+        // Passepartout at the bottom is not needed, because we have a description
+        that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
-      else if (!that.options.title) {
-        // No passepartout if no title and no descriptions
-        that.wrapper.style.padding = '0';
+
+      // Title
+      if (that.options.title) {
+        // Passepartout at the top is not needed, because we have a title
+        that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
       }
-      else {
-        // Add passepartout to the bottom;
-        that.wrapper.style.padding = '0 16px 16px 16px';
+      else if (!that.hasDescription) {
+        // No passepartout is needed at all, because we just have an image
+        that.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
+        that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+        that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
 
       that.slider.on('update', function(e) {
