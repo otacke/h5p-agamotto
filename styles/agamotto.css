@@ -48,6 +48,7 @@
 .h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-images-container {
   position: relative;
   overflow: hidden;
+  background: black;
 }
 .h5p-agamotto .h5p-agamotto-image-top {
   position: absolute;
