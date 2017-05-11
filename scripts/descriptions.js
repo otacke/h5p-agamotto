@@ -12,18 +12,18 @@
     this.selector = selector;
 
     this.descriptionTop = document.createElement('div');
-    this.descriptionTop.className = 'h5p-agamotto-description-top';
+    this.descriptionTop.classList.add('h5p-agamotto-description-top');
     this.descriptionTop.style.opacity = 1;
     this.descriptionTop.setAttribute('tabindex', 0);
     this.descriptionTop.innerHTML = texts[0];
 
     this.descriptionBottom = document.createElement('div');
-    this.descriptionBottom.className = 'h5p-agamotto-description-bottom';
+    this.descriptionBottom.classList.add('h5p-agamotto-description-bottom');
     this.descriptionBottom.style.opacity = 0;
     this.descriptionBottom.innerHTML = texts[1];
 
     this.descriptionsContainer = document.createElement('div');
-    this.descriptionsContainer.className = 'h5p-agamotto-descriptions-container';
+    this.descriptionsContainer.classList.add('h5p-agamotto-descriptions-container');
     this.descriptionsContainer.appendChild(this.descriptionTop);
     this.descriptionsContainer.appendChild(this.descriptionBottom);
   };

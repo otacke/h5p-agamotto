@@ -13,18 +13,18 @@
      this.ratio = this.images[0].naturalWidth / this.images[0].naturalHeight;
 
      this.imageTop = document.createElement('img');
-     this.imageTop.className = 'h5p-agamotto-image-top';
+     this.imageTop.classList.add('h5p-agamotto-image-top');
      this.imageTop.src = images[0].src;
      this.imageTop.setAttribute('draggable', 'false');
      this.imageTop.setAttribute('tabindex', 0);
 
      this.imageBottom = document.createElement('img');
-     this.imageBottom.className = 'h5p-agamotto-image-bottom';
+     this.imageBottom.classList.add('h5p-agamotto-image-bottom');
      this.imageBottom.src = images[1].src;
      this.imageBottom.setAttribute('draggable', 'false');
 
      this.container = document.createElement('div');
-     this.container.className = 'h5p-agamotto-images-container';
+     this.container.classList.add('h5p-agamotto-images-container');
      this.container.appendChild(this.imageTop);
      this.container.appendChild(this.imageBottom);
    };

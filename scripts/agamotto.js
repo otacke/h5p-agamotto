@@ -113,7 +113,7 @@ H5P.Agamotto = function ($) {
       // Title
       if (that.options.title) {
         var title = document.createElement('div');
-        title.className = 'h5p-agamotto-title';
+        title.classList.add('h5p-agamotto-title');
         title.innerHTML = '<h2>' + that.options.title + '</h2>';
         that.wrapper.appendChild(title);
       }

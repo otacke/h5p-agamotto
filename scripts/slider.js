@@ -30,14 +30,14 @@
     this.ticks = [];
 
     this.track = document.createElement('div');
-    this.track.className = 'h5p-agamotto-slider-track';
+    this.track.classList.add('h5p-agamotto-slider-track');
 
     this.thumb = document.createElement('div');
-    this.thumb.className = 'h5p-agamotto-slider-thumb';
+    this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
 
     this.container = document.createElement('div');
-    this.container.className = ('h5p-agamotto-slider-container');
+    this.container.classList.add('h5p-agamotto-slider-container');
     this.container.setAttribute('role', 'slider');
     this.container.setAttribute('aria-valuenow', 0);
     this.container.setAttribute('aria-valuemin', 0);
@@ -53,7 +53,7 @@
       };
       for (var i = 0; i <= this.options.size; i++) {
         this.ticks[i] = document.createElement('div');
-        this.ticks[i].className = 'h5p-agamotto-tick';
+        this.ticks[i].classList.add('h5p-agamotto-tick');
         this.ticks[i].addEventListener('click', placeTicks);
         this.container.appendChild(this.ticks[i]);
       }
