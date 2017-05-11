@@ -29,7 +29,7 @@
           "importance": "low",
           "type": "image",
           "optional": false,
-          "description": "The image to be used. Make sure all images have the same dimensions"
+          "description": "The image to be used"
         },
         {
           "name": "description",
