@@ -211,7 +211,8 @@ H5P.Agamotto = function ($) {
         // Resize iframe if image's height is too small or too high.
         var windowHeight = window.innerHeight;
         var wrapperHeight = that.wrapper.offsetHeight;
-        var actionBarHeight = document.querySelector('.h5p-actions').offsetHeight;
+        var actionBar = document.querySelector('.h5p-actions');
+        var actionBarHeight = actionBar ? actionBar.offsetHeight : -1;
         if (wrapperHeight + actionBarHeight + 1 !== windowHeight) {
           that.trigger('resize');
         }
