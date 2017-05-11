@@ -11,6 +11,13 @@
      this.images = images;
 
      this.ratio = this.images[0].naturalWidth / this.images[0].naturalHeight;
+     // Users might use images with different aspect ratios -- I learned that the hard way ;-)
+     for (var i = 1; i < this.images.length; i++) {
+       if (this.images[i].naturalWidth / this.images[i].naturalHeight !== this.ratio) {
+         console.log('I am doing my best, but please make sure that all your images have the same aspect ratio.');
+         break;
+       }
+     }
 
      this.imageTop = document.createElement('img');
      this.imageTop.classList.add('h5p-agamotto-image-top');
