@@ -13,7 +13,7 @@
         "fields": [
           {
             "label": "Bild",
-            "description": "Das zu verwendende Bild. Stelle bitte sicher, dass alle Bilder dieselben Maße haben."
+            "description": "Das zu verwendende Bild."
           },
           {
             "label": "Beschreibung",
