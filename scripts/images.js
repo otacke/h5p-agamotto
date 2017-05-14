@@ -15,45 +15,44 @@
      /*
       * Users might use images with different aspect ratios -- I learned that the hard way ;-)
       * Use the dimensions of the first image, resize the others and add a black border if necessary.
-      * We need the black border in the image because of the blending transition.
+      * We need the black border in the image because of the blending transition. We also need
+      * it for images with transparency.
       */
-     for (var i = 1; i < this.images.length; i++) {
-       if (this.images[i].naturalWidth / this.images[i].naturalHeight !== this.ratio) {
-         var maxX = this.images[0].naturalWidth;
-         var maxY = this.images[0].naturalHeight;
+     for (var i = 0; i < this.images.length; i++) {
+       var maxX = this.images[0].naturalWidth;
+       var maxY = this.images[0].naturalHeight;
 
-         // Scale image.
-         var imgX = images[i].naturalWidth;
-         var imgY = images[i].naturalHeight;
-         if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
-           imgY = maxY;
-           imgX *= maxY / this.images[i].naturalHeight;
-         }
-         if ((imgX / imgY > this.ratio) && (imgX > maxX)) {
-           imgX = maxX;
-           imgY *= maxX / this.images[i].naturalWidth;
-         }
-
-         // Compute offset for centering.
-         var offsetX = Agamotto.constrain((maxX - imgX) / 2, 0, maxX);
-         var offsetY = Agamotto.constrain((maxY - imgY) / 2, 0, maxY);
-
-         // Create scaled image with black border.
-         var imageCanvas = document.createElement('canvas');
-         imageCanvas.setAttribute('width', maxX);
-         imageCanvas.setAttribute('height', maxY);
-         var imageCtx = imageCanvas.getContext('2d');
-         imageCtx.beginPath();
-         imageCtx.rect(0, 0, maxX, maxY);
-         imageCtx.fillStyle = 'black';
-         imageCtx.fill();
-         imageCtx.drawImage(this.images[i], offsetX, offsetY, imgX, imgY);
-
-         // Replace the old image.
-         var image = new Image();
-         image.src = imageCanvas.toDataURL('image/jpeg');
-         this.images[i] = image;
+       // Scale image.
+       var imgX = images[i].naturalWidth;
+       var imgY = images[i].naturalHeight;
+       if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
+         imgY = maxY;
+         imgX *= maxY / this.images[i].naturalHeight;
        }
+       if ((imgX / imgY > this.ratio) && (imgX > maxX)) {
+         imgX = maxX;
+         imgY *= maxX / this.images[i].naturalWidth;
+       }
+
+       // Compute offset for centering.
+       var offsetX = Agamotto.constrain((maxX - imgX) / 2, 0, maxX);
+       var offsetY = Agamotto.constrain((maxY - imgY) / 2, 0, maxY);
+
+       // Create scaled image with black border.
+       var imageCanvas = document.createElement('canvas');
+       imageCanvas.setAttribute('width', maxX);
+       imageCanvas.setAttribute('height', maxY);
+       var imageCtx = imageCanvas.getContext('2d');
+       imageCtx.beginPath();
+       imageCtx.rect(0, 0, maxX, maxY);
+       imageCtx.fillStyle = 'black';
+       imageCtx.fill();
+       imageCtx.drawImage(this.images[i], offsetX, offsetY, imgX, imgY);
+
+       // Replace the old image.
+       var image = new Image();
+       image.src = imageCanvas.toDataURL('image/jpeg');
+       this.images[i] = image;
      }
 
      this.imageTop = document.createElement('img');
