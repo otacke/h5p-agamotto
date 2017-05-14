@@ -18,13 +18,15 @@
       * We need the black border in the image because of the blending transition. We also need
       * it for images with transparency.
       */
+     var firstMaxX = this.images[0].naturalWidth;
+     var firstMaxY = this.images[0].naturalHeight;
      for (var i = 0; i < this.images.length; i++) {
-       var maxX = this.images[0].naturalWidth;
-       var maxY = this.images[0].naturalHeight;
-
-       // Scale image.
+       var maxX = firstMaxX;
+       var maxY = firstMaxY;
        var imgX = images[i].naturalWidth;
        var imgY = images[i].naturalHeight;
+
+       // Scale image.
        if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
          imgY = maxY;
          imgX *= maxY / this.images[i].naturalHeight;
@@ -32,6 +34,10 @@
        if ((imgX / imgY > this.ratio) && (imgX > maxX)) {
          imgX = maxX;
          imgY *= maxX / this.images[i].naturalWidth;
+       }
+       if ((imgX / imgY === this.ratio)) {
+         maxX = Math.max(maxX, imgX);
+         maxY = Math.max(maxY, imgY);
        }
 
        // Compute offset for centering.
