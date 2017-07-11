@@ -26,6 +26,13 @@
     this.descriptionsContainer.classList.add('h5p-agamotto-descriptions-container');
     this.descriptionsContainer.appendChild(this.descriptionTop);
     this.descriptionsContainer.appendChild(this.descriptionBottom);
+
+    // Necessary to override the EventListener on document
+    this.descriptionsContainer.addEventListener('mouseup', function(e) {
+      if (e.target.tagName === 'A') {
+        e.stopPropagation();
+      }
+    });
   };
 
   Agamotto.Descriptions.prototype = {
