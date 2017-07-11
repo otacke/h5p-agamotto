@@ -40,10 +40,19 @@
       return this.descriptionsContainer;
     },
     setText: function setText (index, opacity) {
-      this.descriptionTop.innerHTML = this.texts[index];
-      this.descriptionBottom.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
-      this.descriptionTop.style.opacity = opacity;
-      this.descriptionBottom.style.opacity = 1 - opacity;
+      // Switch position to make selecting links possible
+      if (opacity > 0.5) {
+        this.descriptionTop.innerHTML = this.texts[index];
+        this.descriptionBottom.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
+        this.descriptionTop.style.opacity = opacity;
+        this.descriptionBottom.style.opacity = 1 - opacity;
+      }
+      else {
+        this.descriptionTop.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
+        this.descriptionBottom.innerHTML = this.texts[index];
+        this.descriptionTop.style.opacity = 1 - opacity;
+        this.descriptionBottom.style.opacity = opacity;
+      }
     },
     setHeight: function setHeight () {
       // We need to determine the highest description text for resizing
