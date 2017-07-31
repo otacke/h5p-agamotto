@@ -128,7 +128,7 @@ H5P.Agamotto = function ($) {
         snap: that.options.snap,
         ticks: that.options.ticks,
         size: that.maxItem
-      }, that.selector);
+      }, that.selector, that);
       that.wrapper.appendChild(that.slider.getDOM());
       that.slider.resize();
 
@@ -157,7 +157,7 @@ H5P.Agamotto = function ($) {
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
 
-      // xAPI triggered when viewing the content
+      // Trigger xAPI when viewing content
       that.triggerXAPI('experienced');
 
       that.slider.on('update', function(e) {

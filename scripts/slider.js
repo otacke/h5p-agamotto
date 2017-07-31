@@ -10,7 +10,7 @@
    * @param {number} options.size - Number of positions/ticks.
    * @param {string} selector - Class name of parent node
    */
-  Agamotto.Slider = function (options, selector) {
+  Agamotto.Slider = function (options, selector, parent) {
     var that = this;
 
     if (options.snap === undefined) {
@@ -22,6 +22,7 @@
 
     this.options = options;
     this.selector = selector;
+    this.parent = parent;
 
     this.mousedown = false;
     this.trackWidth = 0;
@@ -213,6 +214,8 @@
         var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
         this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
       }
+      // Trigger xAPI when interacted with content
+      this.parent.triggerXAPI('interacted');
     },
     getPointerX: function getPointerX (e) {
       var pointerX = 0;
