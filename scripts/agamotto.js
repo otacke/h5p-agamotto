@@ -31,6 +31,12 @@ H5P.Agamotto = function ($) {
     }
     this.id = id;
 
+    // Store the images that have been viewed
+    this.imagesViewed = new Set();
+
+    // Store the completed state
+    this.completed = false;
+
     /**
      * Update images and descriptions.
      *
@@ -44,6 +50,12 @@ H5P.Agamotto = function ($) {
       // Update descriptions
       if (this.hasDescription) {
         this.descriptions.setText(index, opacity);
+      }
+
+      // Remember images that have been viewed
+      if (this.completed === false) {
+        // Images count as viewed as of 50 % visibility
+        this.imagesViewed.add(Math.round(index+(1-opacity)));
       }
     };
 
@@ -157,7 +169,7 @@ H5P.Agamotto = function ($) {
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
 
-      // Trigger xAPI when viewing content
+      // Trigger xAPI when starting to view content
       that.triggerXAPI('experienced');
 
       that.slider.on('update', function(e) {
