@@ -157,6 +157,9 @@ H5P.Agamotto = function ($) {
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
 
+      // xAPI triggered when viewing the content
+      that.triggerXAPI('experienced');
+
       that.slider.on('update', function(e) {
         /*
          * Map the slider value to the image indexes. Since we might not
