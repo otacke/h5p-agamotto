@@ -31,6 +31,12 @@ H5P.Agamotto = function ($) {
     }
     this.id = id;
 
+    // Container for KeyListeners
+    this.imageContainer = undefined;
+
+    // Current visible image (index)
+    this.position = 0;
+
     // Store the images that have been viewed
     this.imagesViewed = [];
 
@@ -57,12 +63,14 @@ H5P.Agamotto = function ($) {
         this.descriptions.setText(index, opacity);
       }
 
+      // Remember current position (index)
+      this.position = Math.round(index + (1 - opacity));
+
       // Remember images that have been viewed
       if (this.completed === false) {
         // Images count as viewed as of 50 % visibility
-        var position = Math.round(index+(1-opacity));
-        if (this.imagesViewed.indexOf(position) === -1) {
-          this.imagesViewed.push(position);
+        if (this.imagesViewed.indexOf(this.position) === -1) {
+          this.imagesViewed.push(this.position);
         }
       }
     };
@@ -202,6 +210,27 @@ H5P.Agamotto = function ($) {
         that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
       }
+
+      // KeyListeners for Images that will allow to jump from one image to another
+      that.imageContainer = document.getElementsByClassName('h5p-agamotto-images-container')[0];
+      that.imageContainer.addEventListener('keydown', function(e) {
+        // Prevent repeated pressing of a key
+        if (that.imageContainer.classList.contains('h5p-agamotto-images-keydown')) {
+          return;
+        }
+        that.imageContainer.classList.add('h5p-agamotto-images-keydown');
+        e = e || window.event;
+        var key = e.which || e.keyCode;
+        if (key === 37) {
+          that.slider.setPosition(Agamotto.map(Math.max(0, that.position - 1), 0, that.maxItem, 0, that.slider.getWidth()), true);
+        }
+        if (key === 39) {
+          that.slider.setPosition(Agamotto.map(Math.min(that.position + 1, that.maxItem), 0, that.maxItem, 0, that.slider.getWidth()), true);
+        }
+      });
+      that.imageContainer.addEventListener('keyup', function(e) {
+        that.imageContainer.classList.remove('h5p-agamotto-images-keydown');
+      });
 
       // Trigger xAPI when starting to view content
       that.xAPIExperienced();
