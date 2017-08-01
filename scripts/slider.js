@@ -30,6 +30,8 @@
     this.ratio = 0;
     this.ticks = [];
 
+    this.keydown = false;
+
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
 
@@ -105,17 +107,22 @@
       e = e || window.event;
       var key = e.which || e.keyCode;
       // handler left
-      if (key === 37) {
+      if (key === 37 & (that.keydown === false | that.keydown === 37)) {
+        that.keydown = 37;
         that.setPosition(that.getPosition() - 0.01 * parseInt(that.getWidth()), false);
       }
       // handler right
-      if (key === 39) {
+      if (key === 39 & (that.keydown === false | that.keydown === 39)) {
+        that.keydown = 39;
         that.setPosition(that.getPosition() + 0.01 * parseInt(that.getWidth()), false);
       }
-      this.addEventListener('keyup', function (e) {
-        e = e || window.event;
-        that.snap();
-      });
+    });
+
+    // Event Listeners for Keyboard to stop moving
+    this.thumb.addEventListener('keyup', function (e) {
+      e = e || window.event;
+      that.snap();
+      that.keydown = false;
     });
 
     // Initialize event inheritance
