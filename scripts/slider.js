@@ -215,14 +215,9 @@
         this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
       }
       // Trigger xAPI when interacted with content
-      this.parent.triggerXAPI('interacted');
-
-      // Trigger xAPI when all images have been viewed
-      if ((this.parent.imagesViewed.size === this.parent.options.items.length) && !this.parent.completed) {
-        this.parent.triggerXAPI('completed');
-        // Only trigger this once
-        this.parent.completed = true;
-      }
+      this.parent.xAPIInteracted();
+      // Will check if interaction was completed before triggering
+      this.parent.xAPICompleted();
     },
     getPointerX: function getPointerX (e) {
       var pointerX = 0;

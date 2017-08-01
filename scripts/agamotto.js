@@ -67,6 +67,23 @@ H5P.Agamotto = function ($) {
   Agamotto.prototype = Object.create(H5P.EventDispatcher.prototype);
   Agamotto.prototype.constructor = Agamotto;
 
+  Agamotto.prototype = {
+    xAPIExperienced: function() {
+      this.triggerXAPI('experienced');
+    },
+    xAPIInteracted: function() {
+      this.triggerXAPI('interacted');
+    },
+    xAPICompleted: function() {
+      // Trigger xAPI when all images have been viewed
+      if ((this.imagesViewed.size === this.options.items.length) && !this.completed) {
+        this.triggerXAPI('completed');
+        // Only trigger this once
+        this.completed = true;
+      }
+    }
+  };
+
   /**
    * Attach function called by H5P framework to insert H5P content into page.
    *
@@ -170,7 +187,7 @@ H5P.Agamotto = function ($) {
       }
 
       // Trigger xAPI when starting to view content
-      that.triggerXAPI('experienced');
+      that.xAPIExperienced();
 
       that.slider.on('update', function(e) {
         /*
