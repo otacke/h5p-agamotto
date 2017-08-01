@@ -32,10 +32,15 @@ H5P.Agamotto = function ($) {
     this.id = id;
 
     // Store the images that have been viewed
-    this.imagesViewed = new Set();
+    this.imagesViewed = [];
 
     // Store the completed state
     this.completed = false;
+
+    // Element heights
+    this.heightTitle = 0;
+    this.heightSlider = 0;
+    this.heightDescriptions = 0;
 
     /**
      * Update images and descriptions.
@@ -55,7 +60,10 @@ H5P.Agamotto = function ($) {
       // Remember images that have been viewed
       if (this.completed === false) {
         // Images count as viewed as of 50 % visibility
-        this.imagesViewed.add(Math.round(index+(1-opacity)));
+        var position = Math.round(index+(1-opacity));
+        if (this.imagesViewed.indexOf(position) === -1) {
+          this.imagesViewed.push(position);
+        }
       }
     };
 
@@ -76,7 +84,7 @@ H5P.Agamotto = function ($) {
     },
     xAPICompleted: function() {
       // Trigger xAPI when all images have been viewed
-      if ((this.imagesViewed.size === this.options.items.length) && !this.completed) {
+      if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
         this.triggerXAPI('completed');
         // Only trigger this once
         this.completed = true;
@@ -145,6 +153,10 @@ H5P.Agamotto = function ($) {
         title.classList.add('h5p-agamotto-title');
         title.innerHTML = '<h2>' + that.options.title + '</h2>';
         that.wrapper.appendChild(title);
+        that.heightTitle = document.getElementsByClassName('h5p-agamotto-title')[0].offsetHeight;
+      }
+      else {
+        that.heightTitle = 0;
       }
 
       // Images
@@ -160,6 +172,7 @@ H5P.Agamotto = function ($) {
       }, that.selector, that);
       that.wrapper.appendChild(that.slider.getDOM());
       that.slider.resize();
+      that.heightSlider = document.getElementsByClassName('h5p-agamotto-slider-container')[0].offsetHeight;
 
       // Descriptions
       if (that.hasDescription) {
@@ -172,6 +185,10 @@ H5P.Agamotto = function ($) {
         that.descriptions.setHeight();
         // Passepartout at the bottom is not needed, because we have a description
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+        that.heightDescriptions = document.getElementsByClassName('h5p-agamotto-descriptions-container')[0].offsetHeight;
+      }
+      else {
+        that.heightDescriptions = 0;
       }
 
       // Title
@@ -236,18 +253,19 @@ H5P.Agamotto = function ($) {
           that.wrapper.style.width = 'auto';
         }
 
-        that.images.resize();
+        // Resize DOM elements
+        var resizeNecessary = that.images.resize();
         that.slider.resize();
         // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
 
-        // Resize iframe if image's height is too small or too high.
-        var windowHeight = window.innerHeight;
-        var wrapperHeight = that.wrapper.offsetHeight;
-        var actionBar = document.querySelector('.h5p-actions');
-        var actionBarHeight = actionBar ? actionBar.offsetHeight : -1;
-        if (wrapperHeight + actionBarHeight + 1 !== windowHeight) {
+        if (resizeNecessary) {
+          // Seems that Edge and IE need this retriggering
           that.trigger('resize');
         }
+
+        // Set wrapper height, some browsers need this
+        var heightImages = document.getElementsByClassName('h5p-agamotto-images-container')[0].offsetHeight;
+        that.wrapper.style.height = that.heightTitle + heightImages + that.heightSlider + that.heightDescriptions + 'px';
       });
 
       // DOM completed.

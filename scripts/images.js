@@ -88,7 +88,14 @@
        this.imageTop.style.opacity = opacity;
      },
      resize: function resize () {
+       var oldHeight = this.container.style.height;
        this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
+       if (this.container.style.height !== oldHeight) {
+         return true;
+       }
+       else {
+         return false;
+       }
      },
      getRatio: function getRatio() {
        return this.ratio;
