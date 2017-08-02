@@ -29,7 +29,9 @@
 
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', function(e) {
-      if (e.target.tagName === 'A') {
+      // Needed for allowing links to work
+      var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+      if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
       }
     });
