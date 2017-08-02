@@ -291,10 +291,6 @@ H5P.Agamotto = function ($) {
           // Seems that Edge and IE need this retriggering
           that.trigger('resize');
         }
-
-        // Set wrapper height, some browsers need this
-        var heightImages = document.getElementsByClassName('h5p-agamotto-images-container')[0].offsetHeight;
-        that.wrapper.style.height = that.heightTitle + heightImages + that.heightSlider + that.heightDescriptions + 'px';
       });
 
       // DOM completed.
