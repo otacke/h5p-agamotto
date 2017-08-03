@@ -40,13 +40,8 @@ H5P.Agamotto = function ($) {
     // Store the images that have been viewed
     this.imagesViewed = [];
 
-    // Store the completed state
+    // Store the completed state for xAPI triggering
     this.completed = false;
-
-    // Element heights that won't change after being set
-    this.heightTitle = 0;
-    this.heightSlider = 0;
-    this.heightDescriptions = 0;
 
     this.keyPressed = false;
 
@@ -163,10 +158,6 @@ H5P.Agamotto = function ($) {
         title.classList.add('h5p-agamotto-title');
         title.innerHTML = '<h2>' + that.options.title + '</h2>';
         that.wrapper.appendChild(title);
-        that.heightTitle = document.getElementsByClassName('h5p-agamotto-title')[0].offsetHeight;
-      }
-      else {
-        that.heightTitle = 0;
       }
 
       // Images
@@ -182,7 +173,6 @@ H5P.Agamotto = function ($) {
       }, that.selector, that);
       that.wrapper.appendChild(that.slider.getDOM());
       that.slider.resize();
-      that.heightSlider = document.getElementsByClassName('h5p-agamotto-slider-container')[0].offsetHeight;
 
       // Descriptions
       if (that.hasDescription) {
@@ -195,7 +185,7 @@ H5P.Agamotto = function ($) {
         that.descriptions.setHeight();
         // Passepartout at the bottom is not needed, because we have a description
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-        that.heightDescriptions = document.getElementsByClassName('h5p-agamotto-descriptions-container')[0].offsetHeight;
+        that.heightDescriptions = that.descriptions.offsetHeight;
       }
       else {
         that.heightDescriptions = 0;
@@ -215,8 +205,7 @@ H5P.Agamotto = function ($) {
 
       // KeyListeners for Images that will allow to jump from one image to another
       // TODO: Don't look for element in DOM, use get function in Images.
-      // TODO: Search other DOM lookups with [0], will break in Column
-      that.imageContainer = document.getElementsByClassName('h5p-agamotto-images-container')[0];
+      that.imageContainer = that.images.getDOM ();
       that.imageContainer.addEventListener('keydown', function(e) {
         // Prevent repeated pressing of a key
         if (that.keyPressed !== false) {
@@ -235,6 +224,7 @@ H5P.Agamotto = function ($) {
         }
       });
       that.imageContainer.addEventListener('keyup', function(e) {
+        // Only trigger xAPI if the interaction started by a particular key has ended
         e = e || window.event;
         var key = e.which || e.keyCode;
         if (key === that.keyPressed) {
@@ -242,6 +232,11 @@ H5P.Agamotto = function ($) {
           that.xAPIInteracted();
           that.xAPICompleted();
         }
+      });
+
+      // TODO: Remove when testing complete
+      H5P.externalDispatcher.on('xAPI', function (event) {
+        console.log(event.data.statement);
       });
 
       // Trigger xAPI when starting to view content
