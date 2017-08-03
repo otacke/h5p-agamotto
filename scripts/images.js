@@ -61,6 +61,7 @@
        this.images[i] = image;
      }
 
+     // Create DOM
      this.imageTop = document.createElement('img');
      this.imageTop.classList.add('h5p-agamotto-image-top');
      this.imageTop.src = images[0].src;
@@ -90,12 +91,7 @@
      resize: function resize () {
        var oldHeight = this.container.style.height;
        this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
-       if (this.container.style.height !== oldHeight) {
-         return true;
-       }
-       else {
-         return false;
-       }
+       return this.container.style.height !== oldHeight;
      },
      getRatio: function getRatio() {
        return this.ratio;

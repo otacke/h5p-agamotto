@@ -30,11 +30,11 @@
 
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', function(e) {
-      // Needed for allowing links to work
+      // Needed for allowing links to work (may contain markup such as strong)
       var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
       if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
-        // Won't pass object and context if invoked with Agamotto.prototype.xAPIInteracted()
+        // Won't pass object and context if invoked by Agamotto.prototype.xAPIInteracted()
         parent.xAPIInteracted();
       }
     });
@@ -45,7 +45,7 @@
       return this.descriptionsContainer;
     },
     setText: function setText (index, opacity) {
-      // Switch position to make selecting links possible
+      // Switch position to make selecting links possible, threshold is 0.5 opacity
       if (opacity > 0.5) {
         this.descriptionTop.innerHTML = this.texts[index];
         this.descriptionBottom.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
@@ -60,7 +60,7 @@
       }
     },
     setHeight: function setHeight () {
-      // We need to determine the highest description text for resizing
+      // We need to determine the highest of all description texts for resizing
       var height = 0;
       for (var i = 0; i <= this.texts.length; i++) {
         this.descriptionBottom.innerHTML = this.texts[i];

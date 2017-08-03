@@ -25,12 +25,12 @@
     this.selector = selector;
     this.parent = parent;
 
-    this.mousedown = false;
     this.trackWidth = 0;
     this.thumbPosition = 0;
     this.ratio = 0;
     this.ticks = [];
 
+    this.mousedown = false;
     this.keydown = false;
     this.interactionstarted = false;
 
@@ -220,6 +220,9 @@
     getPosition: function getPosition() {
       return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Agamotto.Slider.THUMB_OFFSET : 0;
     },
+    /**
+     * Snap slider to closest tick position.
+     */
     snap: function snap () {
       if (this.options.snap === true) {
         var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
@@ -227,7 +230,7 @@
       }
       // Only trigger on mouseup that was started by mousedown over slider
       if (this.sliderdown === true) {
-        // Won't pass object and context if invoked with Agamotto.prototype.xAPI...()
+        // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
         // Trigger xAPI when interacted with content
         this.parent.xAPIInteracted();
         // Will check if interaction was completed before triggering
@@ -240,11 +243,13 @@
       var pointerX = 0;
       if (e.touches) {
         pointerX = e.touches[0].pageX;
-      } else {
+      }
+      else {
         pointerX = e.clientX;
       }
       return pointerX;
     },
+    // Resize the slider.
     resize: function resize() {
       this.setWidth(parseInt(this.container.offsetWidth) - 2 * Agamotto.Slider.TRACK_OFFSET);
       this.setPosition(this.getWidth() * this.ratio, false, true);

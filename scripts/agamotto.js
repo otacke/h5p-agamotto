@@ -34,7 +34,7 @@ H5P.Agamotto = function ($) {
     // Container for KeyListeners
     this.imageContainer = undefined;
 
-    // Current visible image (index)
+    // Currently visible image (index)
     this.position = 0;
 
     // Store the images that have been viewed
@@ -43,6 +43,7 @@ H5P.Agamotto = function ($) {
     // Store the completed state for xAPI triggering
     this.completed = false;
 
+    // Store the currently pressed key if any - false otherwise
     this.keyPressed = false;
 
     /**
@@ -81,14 +82,17 @@ H5P.Agamotto = function ($) {
   Agamotto.prototype.constructor = Agamotto;
 
   Agamotto.prototype = {
+    // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/
+    // xAPI statement 'experienced' when interaction encountered
     xAPIExperienced: function() {
       this.triggerXAPI('experienced');
     },
+    // xAPI statement 'interacted' when slider moved, keys released, or link clicked
     xAPIInteracted: function() {
       this.triggerXAPI('interacted');
     },
+    // xAPI statement 'completed' when all images have been viewed
     xAPICompleted: function() {
-      // Trigger xAPI when all images have been viewed
       if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
         this.triggerXAPI('completed');
         // Only trigger this once
@@ -99,6 +103,7 @@ H5P.Agamotto = function ($) {
 
   /**
    * Attach function called by H5P framework to insert H5P content into page.
+   * TODO: Remove this jQuery dependency as soon as the H5P framework is ready
    *
    * @param {jQuery} container - Container to attach to.
    */
@@ -191,7 +196,7 @@ H5P.Agamotto = function ($) {
         that.heightDescriptions = 0;
       }
 
-      // Title
+      // Add passepartout depending on the combination of elements udes
       if (that.options.title) {
         // Passepartout at the top is not needed, because we have a title
         that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
@@ -289,7 +294,7 @@ H5P.Agamotto = function ($) {
         // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
 
         if (resizeNecessary) {
-          // Seems that Edge and IE need this retriggering
+          // Seems that at least Edge and IE need this retriggering
           that.trigger('resize');
         }
       });
@@ -314,7 +319,11 @@ H5P.Agamotto = function ($) {
         i--;
       }
     }
-    // Restrict to 50 images
+    /*
+     * Restrict to 50 images, because it might become hard to differentiate more
+     * positions on the slider - and a video to slide over might be more
+     * sensible anyway if you need more frames.
+     */
     items = items.splice(0, 50);
 
     return items;
