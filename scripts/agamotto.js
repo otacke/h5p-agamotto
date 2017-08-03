@@ -43,10 +43,12 @@ H5P.Agamotto = function ($) {
     // Store the completed state
     this.completed = false;
 
-    // Element heights
+    // Element heights that won't change after being set
     this.heightTitle = 0;
     this.heightSlider = 0;
     this.heightDescriptions = 0;
+
+    this.keyPressed = false;
 
     /**
      * Update images and descriptions.
@@ -212,24 +214,34 @@ H5P.Agamotto = function ($) {
       }
 
       // KeyListeners for Images that will allow to jump from one image to another
+      // TODO: Don't look for element in DOM, use get function in Images.
+      // TODO: Search other DOM lookups with [0], will break in Column
       that.imageContainer = document.getElementsByClassName('h5p-agamotto-images-container')[0];
       that.imageContainer.addEventListener('keydown', function(e) {
         // Prevent repeated pressing of a key
-        if (that.imageContainer.classList.contains('h5p-agamotto-images-keydown')) {
+        if (that.keyPressed !== false) {
           return;
         }
         that.imageContainer.classList.add('h5p-agamotto-images-keydown');
         e = e || window.event;
         var key = e.which || e.keyCode;
         if (key === 37) {
+          that.keyPressed = 37;
           that.slider.setPosition(Agamotto.map(Math.max(0, that.position - 1), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
         if (key === 39) {
+          that.keyPressed = 39;
           that.slider.setPosition(Agamotto.map(Math.min(that.position + 1, that.maxItem), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
       });
       that.imageContainer.addEventListener('keyup', function(e) {
-        that.imageContainer.classList.remove('h5p-agamotto-images-keydown');
+        e = e || window.event;
+        var key = e.which || e.keyCode;
+        if (key === that.keyPressed) {
+          that.keyPressed = false;
+          that.xAPIInteracted();
+          that.xAPICompleted();
+        }
       });
 
       // Trigger xAPI when starting to view content
