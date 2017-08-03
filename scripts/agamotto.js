@@ -204,7 +204,6 @@ H5P.Agamotto = function ($) {
       }
 
       // KeyListeners for Images that will allow to jump from one image to another
-      // TODO: Don't look for element in DOM, use get function in Images.
       that.imageContainer = that.images.getDOM ();
       that.imageContainer.addEventListener('keydown', function(e) {
         // Prevent repeated pressing of a key
@@ -232,11 +231,6 @@ H5P.Agamotto = function ($) {
           that.xAPIInteracted();
           that.xAPICompleted();
         }
-      });
-
-      // TODO: Remove when testing complete
-      H5P.externalDispatcher.on('xAPI', function (event) {
-        console.log(event.data.statement);
       });
 
       // Trigger xAPI when starting to view content
