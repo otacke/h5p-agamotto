@@ -5,9 +5,10 @@
    * Descriptions object.
    *
    * @param {Object} texts - Array containing the texts for the images.
-   * @param {string} selector - Class name of parent node
+   * @param {string} selector - CSS class name of parent node.
+   * @param {string} parent - Parent class Agamotto.
    */
-  Agamotto.Descriptions = function (texts, selector) {
+  Agamotto.Descriptions = function (texts, selector, parent) {
     this.texts = texts;
     this.selector = selector;
 
@@ -33,6 +34,8 @@
       var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
       if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
+        // Won't pass object and context if invoked with Agamotto.prototype.xAPIInteracted()
+        parent.xAPIInteracted();
       }
     });
   };

@@ -180,7 +180,7 @@ H5P.Agamotto = function ($) {
         for (i = 0; i <= that.maxItem; i++) {
           descriptionTexts[i] = that.options.items[i].description;
         }
-        that.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, that.selector);
+        that.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, that.selector, that);
         that.wrapper.appendChild(that.descriptions.getDOM());
         that.descriptions.setHeight();
         // Passepartout at the bottom is not needed, because we have a description

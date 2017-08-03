@@ -8,7 +8,8 @@
    * @param {boolean} options.snap - If true, slider will snap to fixed positions.
    * @param {boolean} options.ticks - If true, slider container will display ticks.
    * @param {number} options.size - Number of positions/ticks.
-   * @param {string} selector - Class name of parent node
+   * @param {string} selector - CSS class name of parent node.
+   * @param {string} parent - Parent class Agamotto.
    */
   Agamotto.Slider = function (options, selector, parent) {
     var that = this;
@@ -31,6 +32,7 @@
     this.ticks = [];
 
     this.keydown = false;
+    this.interactionstarted = false;
 
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
@@ -73,11 +75,13 @@
     this.track.addEventListener('mousedown', function (e) {
       e = e || window.event;
       that.mousedown = true;
+      that.sliderdown = true;
       that.setPosition(e, false);
     });
     this.thumb.addEventListener('mousedown', function (e) {
       e = e || window.event;
       that.mousedown = true;
+      that.sliderdown = true;
       that.setPosition(e, false);
     });
 
@@ -221,10 +225,16 @@
         var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
         this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
       }
-      // Trigger xAPI when interacted with content
-      this.parent.xAPIInteracted();
-      // Will check if interaction was completed before triggering
-      this.parent.xAPICompleted();
+      // Only trigger on mouseup that was started by mousedown over slider
+      if (this.sliderdown === true) {
+        // Won't pass object and context if invoked with Agamotto.prototype.xAPI...()
+        // Trigger xAPI when interacted with content
+        this.parent.xAPIInteracted();
+        // Will check if interaction was completed before triggering
+        this.parent.xAPICompleted();
+        // release interaction trigger
+        this.sliderdown = false;
+      }
     },
     getPointerX: function getPointerX (e) {
       var pointerX = 0;
