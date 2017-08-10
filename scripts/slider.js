@@ -34,10 +34,10 @@
     this.trackWidth = 0;
     this.thumbPosition = 0;
     this.ratio = 0;
+
     this.ticks = [];
     this.labels = [];
     this.labelTexts = options.label_texts;
-
 
     this.mousedown = false;
     this.keydown = false;
@@ -284,11 +284,15 @@
           this.ticks[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
         }
       }
-      // Update labels
+      // Height to enlarge the slider container
       var maxLabelHeight = 0;
+
+      // Update labels
       if (this.options.labels === true) {
         for (i = 0; i < this.labels.length; i++) {
           maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
+
+          // Align the first and the last label left/right instead of centered
           switch(i) {
               case (0):
                 // First label
@@ -303,11 +307,13 @@
                 var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
                 this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
           }
-          // TODO: limit labels to height of one line
-
-          this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT = 36 + maxLabelHeight) + 'px';
         }
-      }
+        // If there are no ticks, put the labels a little closer to the track
+        var buffer = (this.options.ticks === true) ? 0 : -7;
+
+        // Update slider height
+        // We only need this once right now, but possible more often if we make the label height dynamic
+        this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
     }
   };
 

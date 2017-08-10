@@ -60,6 +60,7 @@
   width: 100%;
 }
 .h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-slider-container {
+  height: 36px;
   background: #2c2c2c;
   position: relative;
 }
@@ -129,6 +130,7 @@
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick-label {
   position: absolute;
+  font-size: 0.8em;
   top: 2px;
   color: white;
   z-index: 2;
