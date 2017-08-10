@@ -7,6 +7,9 @@
    * @param {Object} options - Options for the slider.
    * @param {boolean} options.snap - If true, slider will snap to fixed positions.
    * @param {boolean} options.ticks - If true, slider container will display ticks.
+   * @param {boolean} options.labels - If true, slider container will display tick labels.
+   * @param {Object} options.label_texts - Tick labels.
+   * @param {string} options.label_texts.text - Tick label.
    * @param {number} options.size - Number of positions/ticks.
    * @param {string} selector - CSS class name of parent node.
    * @param {string} parent - Parent class Agamotto.
@@ -20,6 +23,9 @@
     if (options.ticks === undefined) {
       options.ticks = false;
     }
+    if (options.labels === undefined) {
+      options.labels = false;
+    }
 
     this.options = options;
     this.selector = selector;
@@ -29,6 +35,9 @@
     this.thumbPosition = 0;
     this.ratio = 0;
     this.ticks = [];
+    this.labels = [];
+    this.labelTexts = options.label_texts;
+
 
     this.mousedown = false;
     this.keydown = false;
@@ -50,17 +59,29 @@
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
+    var i = 0;
+
     // Place ticks
     if (this.options.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
       var placeTicks = function() {
         that.setPosition(parseInt(this.style.left) - Agamotto.Slider.TRACK_OFFSET, true);
       };
-      for (var i = 0; i <= this.options.size; i++) {
+      for (i = 0; i <= this.options.size; i++) {
         this.ticks[i] = document.createElement('div');
         this.ticks[i].classList.add('h5p-agamotto-tick');
         this.ticks[i].addEventListener('click', placeTicks);
         this.container.appendChild(this.ticks[i]);
+      }
+    }
+
+    // Place labels
+    if (this.options.labels === true) {
+      for (i = 0; i <= this.options.size; i++) {
+        this.labels[i] = document.createElement('div');
+        this.labels[i].classList.add('h5p-agamotto-tick-label');
+        this.labels[i].innerHTML = this.labelTexts[i];
+        this.container.appendChild(this.labels[i]);
       }
     }
 
@@ -133,6 +154,8 @@
     H5P.EventDispatcher.call(this);
 
     // Slider Layout
+    /** @constant {number} */
+    Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT = 36;
     /** @constant {number} */
     Agamotto.Slider.TRACK_OFFSET = 16;
     /** @constant {number} */
@@ -254,10 +277,35 @@
       this.setWidth(parseInt(this.container.offsetWidth) - 2 * Agamotto.Slider.TRACK_OFFSET);
       this.setPosition(this.getWidth() * this.ratio, false, true);
 
+      var i = 0;
       // Update ticks
       if (this.options.ticks === true) {
-        for (var i = 0; i < this.ticks.length; i++) {
+        for (i = 0; i < this.ticks.length; i++) {
           this.ticks[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+        }
+      }
+      // Update labels
+      var maxLabelHeight = 0;
+      if (this.options.labels === true) {
+        for (i = 0; i < this.labels.length; i++) {
+          maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
+          switch(i) {
+              case (0):
+                // First label
+                this.labels[i].style.left = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+                break;
+              case (this.labels.length - 1):
+                // Last label
+                this.labels[i].style.right = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+                break;
+              default:
+                // Centered over tick mark position
+                var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
+                this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
+          }
+          // TODO: limit labels to height of one line
+
+          this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT = 36 + maxLabelHeight) + 'px';
         }
       }
     }

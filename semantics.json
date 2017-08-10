@@ -32,6 +32,14 @@
           "description": "The image to be used"
         },
         {
+          "name": "label_text",
+          "label": "Label",
+          "importance": "low",
+          "type": "text",
+          "optional": true,
+          "description": "Optional label for a tick"
+        },
+        {
           "name": "description",
           "type": "text",
           "importance": "low",
@@ -70,6 +78,14 @@
     "type": "boolean",
     "label": "Display tick marks",
     "description": "If activated, the slider bar will display a tick mark for each image.",
+    "default": false
+  },
+  {
+    "name": "labels",
+    "importance": "medium",
+    "type": "boolean",
+    "label": "Display labels",
+    "description": "If activated, the slider bar will display a label instead of/in addition to tick marks.",
     "default": false
   }
 ]

@@ -60,7 +60,6 @@
   width: 100%;
 }
 .h5p-agamotto .h5p-agamotto-wrapper .h5p-agamotto-slider-container {
-  height: 36px;
   background: #2c2c2c;
   position: relative;
 }
@@ -68,7 +67,7 @@
   cursor: pointer;
   height:8px;
 	background-color:#0b0d0c;
-	top:14px;
+  bottom:14px;
 	left:16px;
 	position:absolute;
   z-index:1;
@@ -81,7 +80,7 @@
   speak: none;
   color: #fbfbfb;
   z-index: 3;
-  top: 10px;
+  bottom: 10px;
   left: 8px;
   cursor: pointer;
   width: 16px;
@@ -119,13 +118,19 @@
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick {
   position: absolute;
-  top: 4px;
+  bottom: 25px;
   width: 7px;
   height: 7px;
   border-radius: 50%;
   transform: translateX(-50%);
   cursor: pointer;
   background: #1d5cff;
+  z-index: 2;
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick-label {
+  position: absolute;
+  top: 2px;
+  color: white;
   z-index: 2;
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick:hover {

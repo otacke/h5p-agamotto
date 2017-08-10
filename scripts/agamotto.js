@@ -171,9 +171,15 @@ H5P.Agamotto = function ($) {
       that.images.resize();
 
       // Slider
+      var labelTexts = [];
+      for (i = 0; i <= that.maxItem; i++) {
+        labelTexts[i] = that.options.items[i].label_text || '';
+      }
       that.slider = new H5P.Agamotto.Slider({
         snap: that.options.snap,
         ticks: that.options.ticks,
+        labels: that.options.labels,
+        label_texts: labelTexts,
         size: that.maxItem
       }, that.selector, that);
       that.wrapper.appendChild(that.slider.getDOM());
