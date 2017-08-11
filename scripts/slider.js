@@ -37,7 +37,6 @@
 
     this.ticks = [];
     this.labels = [];
-    this.labelTexts = options.label_texts;
 
     this.mousedown = false;
     this.keydown = false;
@@ -59,8 +58,12 @@
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
+    /*
+     * We could put the next two blocks in one loop and check for ticks/labels
+     * within the loop, but then we would always loop all images even without
+     * ticks and labels. Would be slower (with many images).
+     */
     var i = 0;
-
     // Place ticks
     if (this.options.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
@@ -80,7 +83,7 @@
       for (i = 0; i <= this.options.size; i++) {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
-        this.labels[i].innerHTML = this.labelTexts[i];
+        this.labels[i].innerHTML = this.options.label_texts[i];
         this.container.appendChild(this.labels[i]);
       }
     }
@@ -109,20 +112,17 @@
     // Event Listeners for Touch Interface
     this.container.addEventListener('touchstart', function (e) {
       e = e || window.event;
-      e.preventDefault();
       e.stopPropagation();
       that.setPosition(e, false);
 
       this.addEventListener('touchmove', function (e) {
         e = e || window.event;
-        e.preventDefault();
         e.stopPropagation();
         that.setPosition(e, false);
       });
-    });
+    }, {passive: true});
     this.container.addEventListener('touchend', function (e) {
       e = e || window.event;
-      e.preventDefault();
       e.stopPropagation();
       that.snap();
     });
@@ -132,12 +132,12 @@
       e = e || window.event;
       var key = e.which || e.keyCode;
       // handler left
-      if (key === 37 & (that.keydown === false | that.keydown === 37)) {
+      if (key === 37 && (that.keydown === false || that.keydown === 37)) {
         that.keydown = 37;
         that.setPosition(that.getPosition() - 0.01 * parseInt(that.getWidth()), false);
       }
       // handler right
-      if (key === 39 & (that.keydown === false | that.keydown === 39)) {
+      if (key === 39 && (that.keydown === false || that.keydown === 39)) {
         that.keydown = 39;
         that.setPosition(that.getPosition() + 0.01 * parseInt(that.getWidth()), false);
       }
