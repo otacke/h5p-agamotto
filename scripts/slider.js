@@ -109,20 +109,29 @@
       that.setPosition(e, false);
     });
 
-    // Event Listeners for Touch Interface
+    /*
+     * Event Listeners for Touch Interface
+     * Using preventDefault here causes Chrome to throw a "violation". Blocking
+     * the default behavior for touch is said to cause performance issues.
+     * However, if you don't use preventDefault, people will also slide the
+     * screen when using the slider which would be weird.
+     */
     this.container.addEventListener('touchstart', function (e) {
       e = e || window.event;
+      e.preventDefault();
       e.stopPropagation();
       that.setPosition(e, false);
 
       this.addEventListener('touchmove', function (e) {
         e = e || window.event;
+        e.preventDefault();
         e.stopPropagation();
         that.setPosition(e, false);
       });
-    }, {passive: true});
+    });
     this.container.addEventListener('touchend', function (e) {
       e = e || window.event;
+      e.preventDefault();
       e.stopPropagation();
       that.snap();
     });
