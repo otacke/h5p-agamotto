@@ -105,7 +105,7 @@ H5P.Agamotto = function ($) {
    * Attach function called by H5P framework to insert H5P content into page.
    * TODO: Remove this jQuery dependency as soon as the H5P framework is ready
    *
-   * @param {jQuery} container - Container to attach to.
+   * @param {jQuery} $container - Container to attach to.
    */
   Agamotto.prototype.attach = function ($container) {
     var that = this;
