@@ -16,6 +16,10 @@
             "description": "Das zu verwendende Bild."
           },
           {
+            "label": "Beschriftung",
+            "description": "Optionale Beschriftung für eine Bildposition"
+          },
+          {
             "label": "Beschreibung",
             "placeholder": "Meine Bildbeschreibung ...",
             "description": "Optionale Beschreibung für das Bild"
@@ -30,6 +34,10 @@
     {
       "label": "Bildpositionen anzeigen",
       "description": "Wenn diese Option aktiviert ist, werden die Bildpositionen am Schieberegler markiert."
+    },
+    {
+      "label": "Beschriftungen anzeigen",
+      "description": "Wenn diese Option aktiviert ist, werden beim Slider Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
     }
   ]
 }
