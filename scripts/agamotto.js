@@ -84,23 +84,30 @@ H5P.Agamotto = function ($) {
   Agamotto.prototype = Object.create(H5P.EventDispatcher.prototype);
   Agamotto.prototype.constructor = Agamotto;
 
-  Agamotto.prototype = {
-    // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/
-    // xAPI statement 'experienced' when interaction encountered
-    xAPIExperienced: function() {
-      this.triggerXAPI('experienced');
-    },
-    // xAPI statement 'interacted' when slider moved, keys released, or link clicked
-    xAPIInteracted: function() {
-      this.triggerXAPI('interacted');
-    },
-    // xAPI statement 'completed' when all images have been viewed
-    xAPICompleted: function() {
-      if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
-        this.triggerXAPI('completed');
-        // Only trigger this once
-        this.completed = true;
-      }
+  // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/
+
+  /**
+   * Trigger xAPI statement 'experienced' (when interaction encountered).
+   */
+  Agamotto.prototype.xAPIExperienced = function () {
+    this.triggerXAPI('experienced');
+  };
+
+  /**
+   * Trigger xAPI statement 'interacted' (when slider moved, keys released, or link clicked).
+   */
+  Agamotto.prototype.xAPIInteracted = function () {
+    this.triggerXAPI('interacted');
+  };
+
+  /**
+   * Trigger xAPI statement 'completed' (when all images have been viewed).
+   */
+  Agamotto.prototype.xAPICompleted = function () {
+    if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
+      this.triggerXAPI('completed');
+      // Only trigger this once
+      this.completed = true;
     }
   };
 
@@ -196,7 +203,7 @@ H5P.Agamotto = function ($) {
         }
         that.descriptions = new H5P.Agamotto.Descriptions(descriptionTexts, that.selector, that);
         that.wrapper.appendChild(that.descriptions.getDOM());
-        that.descriptions.setHeight();
+        that.descriptions.adjustHeight();
         // Passepartout at the bottom is not needed, because we have a description
         that.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
         that.heightDescriptions = that.descriptions.offsetHeight;

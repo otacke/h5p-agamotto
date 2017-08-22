@@ -80,19 +80,36 @@
    };
 
    Agamotto.Images.prototype = {
+     /**
+      * Get the DOM elements.
+      * @return {object} The DOM elements.
+      */
      getDOM: function getDOM () {
        return this.container;
      },
+     /**
+      * Set the visible image combination.
+      * @param {number} index - Image index.
+      * @param {number} opacity - Image opacity, [0..1].
+      */
      setImage: function setImage (index, opacity) {
        this.imageTop.src = this.images[index].src;
        this.imageBottom.src = this.images[Agamotto.constrain(index + 1, 0, this.images.length - 1)].src;
        this.imageTop.style.opacity = opacity;
      },
+     /**
+      * Resize the images.
+      * @return {boolean} True if the height of the container changed.
+      */
      resize: function resize () {
        var oldHeight = this.container.style.height;
        this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
        return this.container.style.height !== oldHeight;
      },
+     /**
+      * Get the image ratio.
+      * @return {number} Image ratio.
+      */
      getRatio: function getRatio() {
        return this.ratio;
      }

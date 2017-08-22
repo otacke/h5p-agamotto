@@ -1,6 +1,8 @@
 (function (Agamotto) {
   'use strict';
 
+  var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+
   /**
    * Descriptions object.
    *
@@ -31,7 +33,7 @@
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', function(e) {
       // Needed for allowing links to work (may contain markup such as strong)
-      var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+      //this.TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
       if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
         // Won't pass object and context if invoked by Agamotto.prototype.xAPIInteracted()
@@ -41,9 +43,19 @@
   };
 
   Agamotto.Descriptions.prototype = {
+    /**
+     * Get DOM elements.
+     * @return {object} DOM elements.
+     */
     getDOM: function getDOM () {
       return this.descriptionsContainer;
     },
+
+    /**
+     * Set the description text.
+     * @param {number} index - Description (image) index.
+     * @param {number} opacity - Description (image) opacity, [0..1].
+     */
     setText: function setText (index, opacity) {
       // Switch position to make selecting links possible, threshold is 0.5 opacity
       if (opacity > 0.5) {
@@ -59,7 +71,10 @@
         this.descriptionBottom.style.opacity = opacity;
       }
     },
-    setHeight: function setHeight () {
+    /**
+     * Adjust the height of the description area.
+     */
+    adjustHeight: function adjustHeight () {
       var that = this;
       // We need to determine the highest of all description texts for resizing
       var height = 0;

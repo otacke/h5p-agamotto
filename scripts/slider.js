@@ -17,6 +17,14 @@
   Agamotto.Slider = function (options, selector, parent) {
     var that = this;
 
+    // Slider Layout
+    /** @constant {number} */
+    Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT = 36;
+    /** @constant {number} */
+    Agamotto.Slider.TRACK_OFFSET = 16;
+    /** @constant {number} */
+    Agamotto.Slider.THUMB_OFFSET = 8;
+
     if (options.snap === undefined) {
       options.snap = true;
     }
@@ -161,169 +169,196 @@
 
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
-
-    // Slider Layout
-    /** @constant {number} */
-    Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT = 36;
-    /** @constant {number} */
-    Agamotto.Slider.TRACK_OFFSET = 16;
-    /** @constant {number} */
-    Agamotto.Slider.THUMB_OFFSET = 8;
   };
 
   // Extends the event dispatcher
   Agamotto.Slider.prototype = Object.create(H5P.EventDispatcher.prototype);
   Agamotto.Slider.prototype.constructor = Agamotto.Slider;
 
-  Agamotto.Slider.prototype = {
-    getDOM: function getDOM () {
-      return this.container;
-    },
-    disable: function disable () {
-      this.track.classList.add('h5p-agamotto-disabled');
-      this.thumb.classList.add('h5p-agamotto-disabled');
-    },
-    enable: function enable () {
-      this.track.classList.remove('h5p-agamotto-disabled');
-      this.thumb.classList.remove('h5p-agamotto-disabled');
-    },
-    setWidth: function setWidth(value) {
-      this.trackWidth = value;
-      this.track.style.width = value + 'px';
-    },
-    getWidth: function getWidth() {
-      return this.trackWidth;
-    },
-    /**
-     * Will set the position of the thumb on the slider track.
-     *
-     * @param {number} position - Position on the slider track from 0 to max.
-     * @param {boolean} animate - If true, slide instead of jumping.
-     * @param {boolean} resize - If true, won't recompute position/width ratio.
-     */
-    setPosition: function setPosition (position, animate, resize) {
-      if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
+  /**
+   * Get the DOM elements.
+   * @return {object} The DOM elements.
+   */
+  Agamotto.Slider.prototype.getDOM = function () {
+    return this.container;
+  };
+
+  /**
+   * Disable the slider
+   */
+  Agamotto.Slider.prototype.disable = function () {
+    this.track.classList.add('h5p-agamotto-disabled');
+    this.thumb.classList.add('h5p-agamotto-disabled');
+  };
+
+  /**
+   * Enable the slider.
+   */
+  Agamotto.Slider.prototype.enable = function () {
+    this.track.classList.remove('h5p-agamotto-disabled');
+    this.thumb.classList.remove('h5p-agamotto-disabled');
+  };
+
+  /**
+   * Set the slider's width.
+   * @param {number} value - Slider's width.
+   */
+  Agamotto.Slider.prototype.setWidth = function (value) {
+    this.trackWidth = value;
+    this.track.style.width = value + 'px';
+  };
+
+  /**
+   * Get the slider's width.
+   * @return {number} Slider's width.
+   */
+  Agamotto.Slider.prototype.getWidth = function () {
+    return this.trackWidth;
+  };
+
+  /**
+   * Set the position of the thumb on the slider track.
+   * @param {number} position - Position on the slider track from 0 to max.
+   * @param {boolean} animate - If true, slide instead of jumping.
+   * @param {boolean} resize - If true, won't recompute position/width ratio.
+   */
+  Agamotto.Slider.prototype.setPosition = function setPosition (position, animate, resize) {
+    if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
+      return;
+    }
+
+    // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
+    if ((typeof position === 'string') || (typeof position === 'number')) {
+      position = parseInt(position);
+    }
+    else if (typeof position === 'object') {
+      if ((this.mousedown === false) && (position.type === 'mousemove')) {
         return;
       }
 
-      // Compute position from string (e.g. 1px), from number (e.g. 1), or from event
-      if ((typeof position === 'string') || (typeof position === 'number')) {
-        position = parseInt(position);
-      }
-      else if (typeof position === 'object') {
-        if ((this.mousedown === false) && (position.type === 'mousemove')) {
-          return;
-        }
-
-        position = this.getPointerX(position) -
-          Agamotto.Slider.TRACK_OFFSET -
-          parseInt(window.getComputedStyle(this.container).marginLeft) -
-          parseInt(window.getComputedStyle(document.querySelector(this.selector)).paddingLeft) -
-          parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
-      }
-      else {
-        position = 0;
-      }
-      position = Agamotto.constrain(position, 0, this.getWidth());
-
-      // Transition control
-      if (animate === true) {
-        this.thumb.classList.add('h5p-agamotto-transition');
-      } else {
-        this.thumb.classList.remove('h5p-agamotto-transition');
-      }
-
-      // We need to keep a fixed ratio not influenced by resizing
-      if (!resize) {
-        this.ratio = position / this.getWidth();
-      }
-
-      // Update DOM
-      this.thumb.style.left = position + Agamotto.Slider.THUMB_OFFSET + 'px';
-      var percentage = Math.round(position / this.getWidth() * 100);
-      this.container.setAttribute('aria-valuenow', percentage);
-
-      // Inform parent node
-      this.trigger('update', {
-        position: position,
-        percentage: percentage
-      });
-    },
-    getPosition: function getPosition() {
-      return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Agamotto.Slider.THUMB_OFFSET : 0;
-    },
-    /**
-     * Snap slider to closest tick position.
-     */
-    snap: function snap () {
-      if (this.options.snap === true) {
-        var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
-        this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
-      }
-      // Only trigger on mouseup that was started by mousedown over slider
-      if (this.sliderdown === true) {
-        // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
-        // Trigger xAPI when interacted with content
-        this.parent.xAPIInteracted();
-        // Will check if interaction was completed before triggering
-        this.parent.xAPICompleted();
-        // release interaction trigger
-        this.sliderdown = false;
-      }
-    },
-    getPointerX: function getPointerX (e) {
-      var pointerX = 0;
-      if (e.touches) {
-        pointerX = e.touches[0].pageX;
-      }
-      else {
-        pointerX = e.clientX;
-      }
-      return pointerX;
-    },
-    // Resize the slider.
-    resize: function resize() {
-      this.setWidth(parseInt(this.container.offsetWidth) - 2 * Agamotto.Slider.TRACK_OFFSET);
-      this.setPosition(this.getWidth() * this.ratio, false, true);
-
-      var i = 0;
-      // Update ticks
-      if (this.options.ticks === true) {
-        for (i = 0; i < this.ticks.length; i++) {
-          this.ticks[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
-        }
-      }
-      // Height to enlarge the slider container
-      var maxLabelHeight = 0;
-
-      // Update labels
-      if (this.options.labels === true) {
-        for (i = 0; i < this.labels.length; i++) {
-          maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
-
-          // Align the first and the last label left/right instead of centered
-          switch(i) {
-              case (0):
-                // First label
-                this.labels[i].style.left = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
-                break;
-              case (this.labels.length - 1):
-                // Last label
-                this.labels[i].style.right = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
-                break;
-              default:
-                // Centered over tick mark position
-                var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-                this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
-          }
-        }
-        // If there are no ticks, put the labels a little closer to the track
-        var buffer = (this.options.ticks === true) ? 0 : -7;
-
-        // Update slider height
-        // We only need this once right now, but possible more often if we make the label height dynamic
-        this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
+      position = this.getPointerX(position) -
+        Agamotto.Slider.TRACK_OFFSET -
+        parseInt(window.getComputedStyle(this.container).marginLeft) -
+        parseInt(window.getComputedStyle(document.querySelector(this.selector)).paddingLeft) -
+        parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
     }
+    else {
+      position = 0;
+    }
+    position = Agamotto.constrain(position, 0, this.getWidth());
+
+    // Transition control
+    if (animate === true) {
+      this.thumb.classList.add('h5p-agamotto-transition');
+    } else {
+      this.thumb.classList.remove('h5p-agamotto-transition');
+    }
+
+    // We need to keep a fixed ratio not influenced by resizing
+    if (!resize) {
+      this.ratio = position / this.getWidth();
+    }
+
+    // Update DOM
+    this.thumb.style.left = position + Agamotto.Slider.THUMB_OFFSET + 'px';
+    var percentage = Math.round(position / this.getWidth() * 100);
+    this.container.setAttribute('aria-valuenow', percentage);
+
+    // Inform parent node
+    this.trigger('update', {
+      position: position,
+      percentage: percentage
+    });
+  };
+
+  /**
+   * Get the current slider position.
+   * @return {number} Current slider position.
+   */
+  Agamotto.Slider.prototype.getPosition = function () {
+    return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Agamotto.Slider.THUMB_OFFSET : 0;
+  };
+
+  /**
+   * Snap slider to closest tick position.
+   */
+  Agamotto.Slider.prototype.snap = function () {
+    if (this.options.snap === true) {
+      var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
+      this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
+    }
+    // Only trigger on mouseup that was started by mousedown over slider
+    if (this.sliderdown === true) {
+      // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
+      // Trigger xAPI when interacted with content
+      this.parent.xAPIInteracted();
+      // Will check if interaction was completed before triggering
+      this.parent.xAPICompleted();
+      // release interaction trigger
+      this.sliderdown = false;
+    }
+  };
+
+  /**
+   * Get the horizontal position of the pointer/finger.
+   * @param {Event} e - Delivering event.
+   * @return {number} Horizontal pointer/finger position.
+   */
+  Agamotto.Slider.prototype.getPointerX = function (e) {
+    var pointerX = 0;
+    if (e.touches) {
+      pointerX = e.touches[0].pageX;
+    }
+    else {
+      pointerX = e.clientX;
+    }
+    return pointerX;
+  };
+
+  /**
+   * Resize the slider.
+   */
+  Agamotto.Slider.prototype.resize = function () {
+    this.setWidth(parseInt(this.container.offsetWidth) - 2 * Agamotto.Slider.TRACK_OFFSET);
+    this.setPosition(this.getWidth() * this.ratio, false, true);
+
+    var i = 0;
+    // Update ticks
+    if (this.options.ticks === true) {
+      for (i = 0; i < this.ticks.length; i++) {
+        this.ticks[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+      }
+    }
+    // Height to enlarge the slider container
+    var maxLabelHeight = 0;
+
+    // Update labels
+    if (this.options.labels === true) {
+      for (i = 0; i < this.labels.length; i++) {
+        maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
+
+        // Align the first and the last label left/right instead of centered
+        switch(i) {
+            case (0):
+              // First label
+              this.labels[i].style.left = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+              break;
+            case (this.labels.length - 1):
+              // Last label
+              this.labels[i].style.right = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+              break;
+            default:
+              // Centered over tick mark position
+              var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
+              this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
+        }
+      }
+      // If there are no ticks, put the labels a little closer to the track
+      var buffer = (this.options.ticks === true) ? 0 : -7;
+
+      // Update slider height
+      // We only need this once right now, but possible more often if we make the label height dynamic
+      this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
   };
 
 })(H5P.Agamotto);
