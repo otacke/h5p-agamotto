@@ -60,12 +60,13 @@
       }
     },
     setHeight: function setHeight () {
+      var that = this;
       // We need to determine the highest of all description texts for resizing
       var height = 0;
-      for (var i = 0; i <= this.texts.length; i++) {
-        this.descriptionBottom.innerHTML = this.texts[i];
-        height = Math.max(height, this.descriptionBottom.offsetHeight);
-      }
+      this.texts.forEach(function (text) {
+        that.descriptionBottom.innerHTML = text;
+        height = Math.max(height, that.descriptionBottom.offsetHeight);
+      });
       this.descriptionsContainer.style.height = height + 'px';
     }
   };

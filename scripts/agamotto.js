@@ -11,6 +11,7 @@ H5P.Agamotto = function ($) {
    * @param {number} content - Id.
    */
   function Agamotto(options, id) {
+    var that = this;
     if (!options.items) {
       return;
     }
@@ -23,12 +24,14 @@ H5P.Agamotto = function ($) {
 
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = false;
-    for (var i = 0; i < this.maxItem + 1; i++) {
-      if (this.options.items[i].description !== '') {
-        this.hasDescription = true;
-        break;
+    this.options.items.every(function (item) {
+      if (item.description !== '') {
+        that.hasDescription = true;
+        return false;
       }
-    }
+      return true;
+    });
+
     this.id = id;
 
     // Container for KeyListeners
@@ -144,9 +147,9 @@ H5P.Agamotto = function ($) {
      * problems in some cases.
      */
     var promises = [];
-    for (var i = 0; i < that.options.items.length; i++) {
-      promises.push(loadImage(that.options.items[i].image.path, that.id));
-    }
+    that.options.items.forEach(function (item) {
+      promises.push(loadImage(item.image.path, that.id));
+    });
     Promise.all(promises).then(function(results) {
       that.images = results;
 
@@ -172,7 +175,7 @@ H5P.Agamotto = function ($) {
 
       // Slider
       var labelTexts = [];
-      for (i = 0; i <= that.maxItem; i++) {
+      for (var i = 0; i <= that.maxItem; i++) {
         labelTexts[i] = that.options.items[i].label_text || '';
       }
       that.slider = new H5P.Agamotto.Slider({
