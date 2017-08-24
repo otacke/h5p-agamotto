@@ -331,6 +331,7 @@
     }
     // Height to enlarge the slider container
     var maxLabelHeight = 0;
+    var overlapping = false;
 
     // Update labels
     if (this.options.labels === true) {
@@ -352,13 +353,43 @@
               var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
               this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
         }
+
+        // Detect overlapping labels
+        if (i < this.labels.length - 1 && !overlapping) {
+          overlapping = (this.areOverlapping(this.labels[i], this.labels[i+1]));
+        }
       }
+
+      // Hide labels if some of them overlap and remove their vertical space
+      if (overlapping) {
+        this.labels.forEach(function (label) {
+          label.classList.add('h5p-agamotto-hidden');
+        });
+        maxLabelHeight = 0;
+      }
+      else {
+        this.labels.forEach(function (label) {
+          label.classList.remove('h5p-agamotto-hidden');
+        });
+      }
+
       // If there are no ticks, put the labels a little closer to the track
-      var buffer = (this.options.ticks === true) ? 0 : -7;
+      var buffer = (this.options.ticks === true || overlapping) ? 0 : -7;
 
       // Update slider height
-      // We only need this once right now, but possible more often if we make the label height dynamic
       this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
+  };
+
+  /**
+   * Detect overlapping labels
+   * @param {object} label1 - Label 1.
+   * @param {object} label2 - Label 2.
+   * @return {boolean} True if labels are overlapping.
+   */
+  Agamotto.Slider.prototype.areOverlapping = function (label1, label2) {
+    var rect1 = label1.getBoundingClientRect();
+    var rect2 = label2.getBoundingClientRect();
+    return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
   };
 
 })(H5P.Agamotto);
