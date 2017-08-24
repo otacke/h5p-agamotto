@@ -8,8 +8,8 @@
    * @param {boolean} options.snap - If true, slider will snap to fixed positions.
    * @param {boolean} options.ticks - If true, slider container will display ticks.
    * @param {boolean} options.labels - If true, slider container will display tick labels.
-   * @param {Object} options.label_texts - Tick labels.
-   * @param {string} options.label_texts.text - Tick label.
+   * @param {Object} options.labelTexts - Tick labels.
+   * @param {string} options.labelTexts.text - Tick label.
    * @param {number} options.size - Number of positions/ticks.
    * @param {string} selector - CSS class name of parent node.
    * @param {string} parent - Parent class Agamotto.
@@ -91,7 +91,7 @@
       for (i = 0; i <= this.options.size; i++) {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
-        this.labels[i].innerHTML = this.options.label_texts[i];
+        this.labels[i].innerHTML = this.options.labelTexts[i];
         this.container.appendChild(this.labels[i]);
       }
     }

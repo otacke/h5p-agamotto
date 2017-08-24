@@ -32,7 +32,7 @@
           "description": "The image to be used"
         },
         {
-          "name": "label_text",
+          "name": "labelText",
           "label": "Label",
           "importance": "low",
           "type": "text",

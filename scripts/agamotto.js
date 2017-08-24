@@ -23,13 +23,8 @@ H5P.Agamotto = function ($) {
     this.selector = '.h5p-agamotto-wrapper';
 
     // Set hasDescription = true if at least one item has a description
-    this.hasDescription = false;
-    this.options.items.every(function (item) {
-      if (item.description !== '') {
-        that.hasDescription = true;
-        return false;
-      }
-      return true;
+    this.hasDescription = this.options.items.some(function (item) {
+      return item.description !== '';
     });
 
     this.id = id;
@@ -183,13 +178,13 @@ H5P.Agamotto = function ($) {
       // Slider
       var labelTexts = [];
       for (var i = 0; i <= that.maxItem; i++) {
-        labelTexts[i] = that.options.items[i].label_text || '';
+        labelTexts[i] = that.options.items[i].labelText || '';
       }
       that.slider = new H5P.Agamotto.Slider({
         snap: that.options.snap,
         ticks: that.options.ticks,
         labels: that.options.labels,
-        label_texts: labelTexts,
+        labelTexts: labelTexts,
         size: that.maxItem
       }, that.selector, that);
       that.wrapper.appendChild(that.slider.getDOM());
