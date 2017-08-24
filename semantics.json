@@ -37,7 +37,7 @@
           "importance": "low",
           "type": "text",
           "optional": true,
-          "description": "Optional label for a tick"
+          "description": "Optional label for a tick. Please make sure it's not too long, or it will be hidden."
         },
         {
           "name": "description",

@@ -17,7 +17,7 @@
           },
           {
             "label": "Beschriftung",
-            "description": "Optionale Beschriftung für eine Bildposition"
+            "description": "Optionale Beschriftung für eine Bildposition. Bitte stelle sicher, dass sie nicht zu lang ist, sonst wird sie nicht angezeigt."
           },
           {
             "label": "Beschreibung",
