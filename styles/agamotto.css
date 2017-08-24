@@ -78,7 +78,8 @@
   text-shadow: 0 0 2px #666;
   outline: none;
   border: 0;
-  background: #fbfbfb url('../gui/slider_thumb.svg') no-repeat;
+  background: url('../gui/slider_thumb.svg');
+  background-color: #fbfbfb;
   background-size:contain;
   border-radius: 2px;
 }
@@ -90,8 +91,7 @@
   transition: left .5s ease;
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:hover {
-  background: #dbd7d1 url('../gui/slider_thumb.svg') no-repeat;
-  background-size:contain;
+  background-color: #dbd7d1;
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-tick {
   position: absolute;
