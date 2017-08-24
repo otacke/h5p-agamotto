@@ -87,6 +87,9 @@
   color: #dbd7d1;
   cursor: default;
 }
+.h5p-agamotto-hidden {
+  visibility: collapse;
+}
 .h5p-agamotto-transition {
   transition: left .5s ease;
 }
