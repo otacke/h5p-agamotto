@@ -374,7 +374,7 @@
       }
 
       // If there are no ticks, put the labels a little closer to the track
-      var buffer = (this.options.ticks === true || overlapping) ? 0 : -7;
+      var buffer = (this.options.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
 
       // Update slider height
       this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }

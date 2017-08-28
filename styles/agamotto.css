@@ -88,7 +88,7 @@
   cursor: default;
 }
 .h5p-agamotto-hidden {
-  visibility: collapse;
+  visibility: hidden;
 }
 .h5p-agamotto-transition {
   transition: left .5s ease;
