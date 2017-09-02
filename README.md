@@ -4,8 +4,10 @@ Present a sequence of images and explanations in an interactive way
 
 A free HTML5-based content type that allows users to compare and explore a sequence of images interactively. Authors can decide to add a short explanatory text for each image. Tell your image stories with H5P and Image Blender (Agamotto) on WordPress, Moodle or Drupal.
 
-About this repository
----------------------
+## Support me at patreon!
+If you like what I do, please consider to become my supporter at patreon: https://www.patreon.com/otacke
+
+## About this repository
 If you want to download the sourcecode, you can choose from three main branches:
 
 - __release:__ Will contain the latest official release.
