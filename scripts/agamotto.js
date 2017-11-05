@@ -228,13 +228,14 @@ H5P.Agamotto = function ($) {
         }
         that.imageContainer.classList.add('h5p-agamotto-images-keydown');
         e = e || window.event;
+        e.preventDefault();
         var key = e.which || e.keyCode;
-        if (key === 37) {
-          that.keyPressed = 37;
+        if (key === 37 || key === 33) {
+          that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.max(0, that.position - 1), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
-        if (key === 39) {
-          that.keyPressed = 39;
+        if (key === 39 || key === 34) {
+          that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.min(that.position + 1, that.maxItem), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
       });
