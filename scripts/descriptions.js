@@ -1,7 +1,7 @@
 (function (Agamotto) {
   'use strict';
 
-  var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+  const TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
 
   /**
    * Descriptions object.
@@ -33,7 +33,6 @@
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', function(e) {
       // Needed for allowing links to work (may contain markup such as strong)
-      //this.TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
       if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
         // Won't pass object and context if invoked by Agamotto.prototype.xAPIInteracted()
@@ -75,9 +74,9 @@
      * Adjust the height of the description area.
      */
     adjustHeight: function adjustHeight () {
-      var that = this;
+      let that = this;
       // We need to determine the highest of all description texts for resizing
-      var height = 0;
+      let height = 0;
       this.texts.forEach(function (text) {
         that.descriptionBottom.innerHTML = text;
         height = Math.max(height, that.descriptionBottom.offsetHeight);
