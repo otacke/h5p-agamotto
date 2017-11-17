@@ -13,6 +13,12 @@
     "type": "list",
     "label": "Items",
     "entity": "item",
+    "widgets": [
+      {
+        "name": "VerticalTabs",
+        "label": "Default"
+      }
+    ],
     "importance": "medium",
     "min": 2,
     "max": 50,

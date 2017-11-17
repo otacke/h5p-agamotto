@@ -34,5 +34,12 @@
     {
       "path": "styles/agamotto.css"
     }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.VerticalTabs",
+      "majorVersion": 1,
+      "minorVersion": 3
+    }
   ]
 }
