@@ -1,7 +1,9 @@
+var H5P = H5P || {};
+
 (function (Agamotto) {
   'use strict';
 
-  const TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+  var TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
 
   /**
    * Descriptions object.
@@ -74,9 +76,9 @@
      * Adjust the height of the description area.
      */
     adjustHeight: function adjustHeight () {
-      let that = this;
+      var that = this;
       // We need to determine the highest of all description texts for resizing
-      let height = 0;
+      var height = 0;
       this.texts.forEach(function (text) {
         that.descriptionBottom.innerHTML = text;
         height = Math.max(height, that.descriptionBottom.offsetHeight);

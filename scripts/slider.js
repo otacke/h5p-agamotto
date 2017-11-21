@@ -1,3 +1,5 @@
+var H5P = H5P || {};
+
 (function (Agamotto) {
   'use strict';
 
@@ -15,7 +17,7 @@
    * @param {string} parent - Parent class Agamotto.
    */
   Agamotto.Slider = function (options, selector, parent) {
-    let that = this;
+    var that = this;
 
     // Slider Layout
     /** @constant {number} */
@@ -71,11 +73,11 @@
      * within the loop, but then we would always loop all images even without
      * ticks and labels. Would be slower (with many images).
      */
-    let i = 0;
+    var i = 0;
     // Place ticks
     if (this.options.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
-      let placeTicks = function() {
+      var placeTicks = function() {
         that.setPosition(parseInt(this.style.left) - Agamotto.Slider.TRACK_OFFSET, true);
       };
       for (i = 0; i <= this.options.size; i++) {
@@ -147,7 +149,7 @@
     // Event Listeners for Keyboard on handle to move in percentage steps
     this.thumb.addEventListener('keydown', function (e) {
       e = e || window.event;
-      let key = e.which || e.keyCode;
+      var key = e.which || e.keyCode;
       // handler left
       if (key === 37 && (that.keydown === false || that.keydown === 37)) {
         that.keydown = 37;
@@ -261,7 +263,7 @@
 
     // Update DOM
     this.thumb.style.left = position + Agamotto.Slider.THUMB_OFFSET + 'px';
-    let percentage = Math.round(position / this.getWidth() * 100);
+    var percentage = Math.round(position / this.getWidth() * 100);
     this.container.setAttribute('aria-valuenow', percentage);
 
     // Inform parent node
@@ -284,7 +286,7 @@
    */
   Agamotto.Slider.prototype.snap = function () {
     if (this.options.snap === true) {
-      let snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
+      var snapIndex = Math.round(Agamotto.map(this.ratio, 0, 1, 0, this.options.size));
       this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
     }
     // Only trigger on mouseup that was started by mousedown over slider
@@ -305,7 +307,7 @@
    * @return {number} Horizontal pointer/finger position.
    */
   Agamotto.Slider.prototype.getPointerX = function (e) {
-    let pointerX = 0;
+    var pointerX = 0;
     if (e.touches) {
       pointerX = e.touches[0].pageX;
     }
@@ -322,7 +324,7 @@
     this.setWidth(parseInt(this.container.offsetWidth) - 2 * Agamotto.Slider.TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
 
-    let i = 0;
+    var i = 0;
     // Update ticks
     if (this.options.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
@@ -330,8 +332,8 @@
       }
     }
     // Height to enlarge the slider container
-    let maxLabelHeight = 0;
-    let overlapping = false;
+    var maxLabelHeight = 0;
+    var overlapping = false;
 
     // Update labels
     if (this.options.labels === true) {
@@ -350,7 +352,7 @@
               break;
             default:
               // Centered over tick mark position
-              let offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
+              var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
               this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
         }
 
@@ -374,7 +376,7 @@
       }
 
       // If there are no ticks, put the labels a little closer to the track
-      let buffer = (this.options.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
+      var buffer = (this.options.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
 
       // Update slider height
       this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
@@ -387,8 +389,8 @@
    * @return {boolean} True if labels are overlapping.
    */
   Agamotto.Slider.prototype.areOverlapping = function (label1, label2) {
-    let rect1 = label1.getBoundingClientRect();
-    let rect2 = label2.getBoundingClientRect();
+    var rect1 = label1.getBoundingClientRect();
+    var rect2 = label2.getBoundingClientRect();
     return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
   };
 

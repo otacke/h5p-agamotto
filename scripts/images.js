@@ -1,3 +1,5 @@
+var H5P = H5P || {};
+
 (function (Agamotto) {
   'use strict';
 
@@ -18,13 +20,13 @@
       * We need the black border in the image because of the blending transition. We also need
       * it for images with transparency.
       */
-     let firstMaxX = this.images[0].naturalWidth;
-     let firstMaxY = this.images[0].naturalHeight;
-     for (let i = 0; i < this.images.length; i++) {
-       let maxX = firstMaxX;
-       let maxY = firstMaxY;
-       let imgX = images[i].naturalWidth;
-       let imgY = images[i].naturalHeight;
+     var firstMaxX = this.images[0].naturalWidth;
+     var firstMaxY = this.images[0].naturalHeight;
+     for (var i = 0; i < this.images.length; i++) {
+       var maxX = firstMaxX;
+       var maxY = firstMaxY;
+       var imgX = images[i].naturalWidth;
+       var imgY = images[i].naturalHeight;
 
        // Scale image.
        if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
@@ -41,14 +43,14 @@
        }
 
        // Compute offset for centering.
-       let offsetX = Agamotto.constrain((maxX - imgX) / 2, 0, maxX);
-       let offsetY = Agamotto.constrain((maxY - imgY) / 2, 0, maxY);
+       var offsetX = Agamotto.constrain((maxX - imgX) / 2, 0, maxX);
+       var offsetY = Agamotto.constrain((maxY - imgY) / 2, 0, maxY);
 
        // Create scaled image with black border.
-       let imageCanvas = document.createElement('canvas');
+       var imageCanvas = document.createElement('canvas');
        imageCanvas.setAttribute('width', maxX);
        imageCanvas.setAttribute('height', maxY);
-       let imageCtx = imageCanvas.getContext('2d');
+       var imageCtx = imageCanvas.getContext('2d');
        imageCtx.beginPath();
        imageCtx.rect(0, 0, maxX, maxY);
        imageCtx.fillStyle = 'black';
@@ -56,7 +58,7 @@
        imageCtx.drawImage(this.images[i], offsetX, offsetY, imgX, imgY);
 
        // Replace the old image.
-       let image = new Image();
+       var image = new Image();
 
        // This is necessary to prevent security errors in some cases.
        image.setAttribute('crossOrigin', 'anonymous');
@@ -105,7 +107,7 @@
       * @return {boolean} True if the height of the container changed.
       */
      resize: function resize () {
-       let oldHeight = this.container.style.height;
+       var oldHeight = this.container.style.height;
        this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
        return this.container.style.height !== oldHeight;
      },
