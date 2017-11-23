@@ -133,6 +133,7 @@ H5P.Agamotto = function () {
     function loadImage (path, id) {
       return new Promise(function(resolve, reject)  {
         var image = new Image();
+        image.crossOrigin = 'Anonymous';
         image.onload = function() {
           resolve(this);
         };

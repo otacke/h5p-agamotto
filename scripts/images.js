@@ -61,7 +61,7 @@ var H5P = H5P || {};
        var image = new Image();
 
        // This is necessary to prevent security errors in some cases.
-       image.setAttribute('crossOrigin', 'anonymous');
+       image.crossOrigin = 'Anonymous';
        image.src = imageCanvas.toDataURL('image/jpeg');
        this.images[i] = image;
      }
