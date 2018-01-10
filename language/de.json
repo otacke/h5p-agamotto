@@ -2,42 +2,42 @@
   "semantics": [
     {
       "label": "Titel",
-      "placeholder": "Hier kannst du optional einen Titel einfügen.",
-      "description": "Der Titel, der über dem Bild stehen soll"
+      "placeholder": "Hier kun je optioneel een titel invullen.",
+      "description": "De titel, die boven de afbeelding komt te staan"
     },
     {
-      "label": "Elemente",
-      "entity": "Element",
+      "label": "Items",
+      "entity": "Item",
       "field": {
-        "label": "Element",
+        "label": "Item",
         "fields": [
           {
-            "label": "Bild",
-            "description": "Das zu verwendende Bild."
+            "label": "Afbeelding",
+            "description": "De te gebruiken afbeelding."
           },
           {
-            "label": "Beschriftung",
-            "description": "Optionale Beschriftung für eine Bildposition. Bitte stelle sicher, dass sie nicht zu lang ist, sonst wird sie nicht angezeigt."
+            "label": "Label",
+            "description": "Optionele beschrijving voor een afbeeldingspositie. Let op, maak deze niet te lang, want anders wordt deze niet getoond."
           },
           {
-            "label": "Beschreibung",
-            "placeholder": "Meine Bildbeschreibung ...",
-            "description": "Optionale Beschreibung für das Bild"
+            "label": "Beschrijving",
+            "placeholder": "Mijn afbeeldingsbeschrijving ...",
+            "description": "Optionele beschrijving van de afbeelding"
           }
         ]
       }
     },
     {
-      "label": "Schieberegler einrasten",
-      "description": "Wenn diese Option aktiviert ist, wird der Schieberegler an den Bildpositionen einrasten."
+      "label": "Inschakelen schuifregelaar",
+      "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar naar de dichtsbijzijnde afbeeldingspositie glijden."
     },
     {
-      "label": "Bildpositionen anzeigen",
-      "description": "Wenn diese Option aktiviert ist, werden die Bildpositionen am Schieberegler markiert."
+      "label": "Toon afbeeldingsposities",
+      "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar voor elke afbeelding de positie tonen."
     },
     {
-      "label": "Beschriftungen anzeigen",
-      "description": "Wenn diese Option aktiviert ist, werden beim Slider Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
+      "label": "Toon labels",
+      "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
     }
   ]
 }
