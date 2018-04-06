@@ -10,13 +10,14 @@ H5P.Agamotto = function () {
    * @param {boolean} options.ticks - If true, slider container will display ticks.
    * @param {number} content - Id.
    */
-  function Agamotto(options, id) {
+  function Agamotto(options, id, extras) {
     if (!options.items) {
       return;
     }
 
     this.options = options;
     this.options.items = sanitizeItems(this.options.items);
+    this.extras = extras;
 
     this.maxItem = this.options.items.length - 1;
     this.selector = '.h5p-agamotto-wrapper';
@@ -163,10 +164,10 @@ H5P.Agamotto = function () {
       $container.append(that.wrapper);
 
       // Title
-      if (that.options.title) {
+      if (that.options.showTitle) {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
-        title.innerHTML = '<h2>' + that.options.title + '</h2>';
+        title.innerHTML = '<h2>' + that.getTitle() + '</h2>';
         that.wrapper.appendChild(title);
       }
 
@@ -207,8 +208,8 @@ H5P.Agamotto = function () {
         that.heightDescriptions = 0;
       }
 
-      // Add passepartout depending on the combination of elements udes
-      if (that.options.title) {
+      // Add passepartout depending on the combination of elements
+      if (that.options.showTitle) {
         // Passepartout at the top is not needed, because we have a title
         that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
       }
@@ -314,6 +315,15 @@ H5P.Agamotto = function () {
       // DOM completed.
       that.trigger('resize');
     });
+  };
+
+  /**
+   * Get the content type title.
+   *
+   * @return {string} title.
+   */
+  Agamotto.prototype.getTitle = function () {
+    return (this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto';
   };
 
   /**
