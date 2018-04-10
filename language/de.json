@@ -1,13 +1,13 @@
 {
   "semantics": [
     {
-      "label": "Titel",
-      "placeholder": "Hier kannst du optional einen Titel einfügen.",
-      "description": "Der Titel, der über dem Bild stehen soll"
-    },
-    {
       "label": "Elemente",
       "entity": "Element",
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
       "field": {
         "label": "Element",
         "fields": [
@@ -26,6 +26,10 @@
           }
         ]
       }
+    },
+    {
+      "label": "Show title",
+      "description": "Show the title above the images"
     },
     {
       "label": "Schieberegler einrasten",
