@@ -167,7 +167,7 @@ H5P.Agamotto = function () {
       if (that.options.showTitle) {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
-        title.innerHTML = '<h2>' + that.getTitle() + '</h2>';
+        title.innerHTML = '<h2>' + ((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto') + '</h2>';
         that.wrapper.appendChild(title);
       }
 
@@ -323,7 +323,7 @@ H5P.Agamotto = function () {
    * @return {string} title.
    */
   Agamotto.prototype.getTitle = function () {
-    return (this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto';
+    return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
   };
 
   /**
