@@ -71,9 +71,10 @@ var H5P = H5P || {};
      this.imageTop.classList.add('h5p-agamotto-image-top');
      this.imageTop.src = images[0].img.src;
      this.imageTop.setAttribute('draggable', 'false');
-     this.imageTop.setAttribute('tabindex', 0);
      this.imageTop.setAttribute('alt', images[0].alt);
      this.imageTop.setAttribute('title', images[0].title);
+     this.imageTop.setAttribute('aria-live', 'polite');
+     this.imageTop.setAttribute('tabindex', 0);
 
      this.imageBottom = document.createElement('img');
      this.imageBottom.classList.add('h5p-agamotto-image-bottom');
@@ -81,6 +82,7 @@ var H5P = H5P || {};
      this.imageBottom.setAttribute('draggable', 'false');
 
      this.container = document.createElement('div');
+
      this.container.classList.add('h5p-agamotto-images-container');
      this.container.appendChild(this.imageTop);
      this.container.appendChild(this.imageBottom);
@@ -106,6 +108,7 @@ var H5P = H5P || {};
        this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
        this.imageTop.style.opacity = opacity;
        this.imageBottom.src = this.images[Agamotto.constrain(index + 1, 0, this.images.length - 1)].img.src;
+       this.imageTop.setAttribute('aria-label', this.images[visibleImageIndex].alt);
      },
      /**
       * Resize the images.

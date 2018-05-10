@@ -174,6 +174,7 @@ H5P.Agamotto = function () {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
         title.innerHTML = '<h2>' + that.options.title + '</h2>';
+        title.setAttribute('tabindex', 0);
         that.wrapper.appendChild(title);
       }
 
@@ -228,6 +229,7 @@ H5P.Agamotto = function () {
 
       // KeyListeners for Images that will allow to jump from one image to another
       that.imageContainer = that.images.getDOM ();
+      // TODO: Move this to Images class or remove alltogether
       that.imageContainer.addEventListener('keydown', function(e) {
         // Prevent repeated pressing of a key
         if (that.keyPressed !== false) {
@@ -235,13 +237,14 @@ H5P.Agamotto = function () {
         }
         that.imageContainer.classList.add('h5p-agamotto-images-keydown');
         e = e || window.event;
-        e.preventDefault();
         var key = e.which || e.keyCode;
         if (key === 37 || key === 33) {
+          e.preventDefault();
           that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.max(0, that.position - 1), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
         if (key === 39 || key === 34) {
+          e.preventDefault();
           that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.min(that.position + 1, that.maxItem), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
