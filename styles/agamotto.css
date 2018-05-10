@@ -55,9 +55,9 @@
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-track {
   cursor: pointer;
-  height:8px;
+  height:4px;
 	background-color:#0b0d0c;
-  bottom:14px;
+  bottom:16px;
 	left:16px;
 	position:absolute;
   z-index:1;
