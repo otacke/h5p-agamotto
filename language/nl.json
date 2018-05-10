@@ -1,6 +1,11 @@
 {
   "semantics": [
     {
+      "label": "Titel",
+      "placeholder": "Hier kun je optioneel een titel invullen.",
+      "description": "De titel, die boven de afbeelding komt te staan"
+    },
+    {
       "label": "Items",
       "entity": "Item",
       "widgets": [
@@ -12,8 +17,7 @@
         "label": "Item",
         "fields": [
           {
-            "label": "Afbeelding",
-            "description": "De te gebruiken afbeelding."
+            "label": "Afbeelding"
           },
           {
             "label": "Label",
@@ -26,10 +30,6 @@
           }
         ]
       }
-    },
-    {
-      "label": "Show title",
-      "description": "Show the title above the images"
     },
     {
       "label": "Inschakelen schuifregelaar",

@@ -1,5 +1,14 @@
 [
   {
+    "name": "title",
+    "label": "Title",
+    "importance": "high",
+    "type": "text",
+    "optional": true,
+    "placeholder": "Here you can add an optional title.",
+    "description": "The title you'd like to show above the image"
+  },
+  {
     "name": "items",
     "type": "list",
     "label": "Items",
@@ -22,11 +31,13 @@
       "fields": [
         {
           "name": "image",
+          "type": "library",
           "label": "Image",
           "importance": "low",
-          "type": "image",
-          "optional": false,
-          "description": "The image to be used"
+          "options": [
+            "H5P.Image 1.0"
+          ],
+          "optional": false
         },
         {
           "name": "labelText",
@@ -60,14 +71,6 @@
         }
       ]
     }
-  },
-  {
-    "name": "showTitle",
-    "importance": "medium",
-    "type": "boolean",
-    "label": "Show title",
-    "description": "Show the title above the images",
-    "default": false
   },
   {
     "name": "snap",

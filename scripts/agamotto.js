@@ -127,12 +127,12 @@ H5P.Agamotto = function () {
      * Load an Image.
      * TODO: Wouldn't this be better in images.js? Requires a promise here as well
      *
-     * @param {string} path - Path to image.
+     * @param {string} imageObject - Image object.
      * @param {number} id - H5P ID.
      * @return {Promise} Promise for image being loaded.
      */
-    function loadImage (path, id) {
-      return new Promise(function(resolve, reject)  {
+    function loadImage (imageObject, id) {
+      return new Promise(function (resolve, reject) {
         var image = new Image();
         image.crossOrigin = 'Anonymous';
         image.onload = function() {
@@ -141,7 +141,7 @@ H5P.Agamotto = function () {
         image.onerror = function(error) {
           reject(error);
         };
-        image.src = H5P.getPath(path, id);
+        image.src = H5P.getPath(imageObject.params.file.path, id);
       });
     }
 
@@ -151,10 +151,16 @@ H5P.Agamotto = function () {
      */
     var promises = [];
     that.options.items.forEach(function (item) {
-      promises.push(loadImage(item.image.path, that.id));
+      promises.push(loadImage(item.image, that.id));
     });
     Promise.all(promises).then(function(results) {
-      that.images = results;
+      that.images = results.map(function (item, index) {
+        return {
+          img: item,
+          alt: that.options.items[index].image.params.alt,
+          title: that.options.items[index].image.params.title
+        };
+      });
 
       that.wrapper = document.createElement('div');
       that.wrapper.classList.add('h5p-agamotto-wrapper');
@@ -164,10 +170,10 @@ H5P.Agamotto = function () {
       $container.append(that.wrapper);
 
       // Title
-      if (that.options.showTitle) {
+      if (that.options.title) {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
-        title.innerHTML = '<h2>' + that.getTitle() + '</h2>';
+        title.innerHTML = '<h2>' + that.options.title + '</h2>';
         that.wrapper.appendChild(title);
       }
 
@@ -209,7 +215,7 @@ H5P.Agamotto = function () {
       }
 
       // Add passepartout depending on the combination of elements
-      if (that.options.showTitle) {
+      if (that.options.title) {
         // Passepartout at the top is not needed, because we have a title
         that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
       }
@@ -318,35 +324,32 @@ H5P.Agamotto = function () {
   };
 
   /**
-   * Get the content type title.
-   *
-   * @return {string} title.
-   */
-  Agamotto.prototype.getTitle = function () {
-    return (this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto';
-  };
-
-  /**
    * Remove missing items and limit amount.
    *
    * @param {Object} items - Items defined in semantics.org.
    * @return {Object} Sanitized items.
    */
-  var sanitizeItems = function(items) {
-    // Remove items with missing image
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].image === undefined) {
-        console.log('An image is missing. I will continue without it, but please check your settings.');
-        items.splice(i, 1);
-        i--;
-      }
-    }
+  var sanitizeItems = function (items) {
     /*
-     * Restrict to 50 images, because it might become hard to differentiate more
-     * positions on the slider - and a video to slide over might be more
-     * sensible anyway if you need more frames.
+     * Remove items with missing image an restrict to 50 images, because it
+     * might become hard to differentiate more positions on the slider - and
+     * a video to slide over might be more sensible anyway if you need more
+     * frames.
      */
-    items = items.splice(0, 50);
+     items = items
+      .filter(function (item) {
+        if (!item.image || !item.image.params || !item.image.params.file) {
+          console.log('An image is missing. I will continue without it, but please check your settings.');
+          return false;
+        }
+        return true;
+      })
+      .splice(0, 50)
+      .map(function (item) {
+        item.image.params.alt = item.image.params.alt || '';
+        item.image.params.title = item.image.params.title || '';
+        return item;
+      });
 
     return items;
   };
