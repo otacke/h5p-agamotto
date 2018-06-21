@@ -27,15 +27,9 @@ var H5P = H5P || {};
     /** @constant {number} */
     Agamotto.Slider.THUMB_OFFSET = 8;
 
-    if (options.snap === undefined) {
-      options.snap = true;
-    }
-    if (options.ticks === undefined) {
-      options.ticks = false;
-    }
-    if (options.labels === undefined) {
-      options.labels = false;
-    }
+    options.snap = options.snap || true;
+    options.ticks = options.ticks || false;
+    options.labels = options.labels || false;
 
     this.options = options;
     this.selector = selector;

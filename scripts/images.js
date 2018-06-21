@@ -102,7 +102,7 @@ var H5P = H5P || {};
       * @param {number} opacity - Image opacity, [0..1].
       */
      setImage: function setImage (index, opacity) {
-       var visibleImageIndex = index + Math.round((1 - opacity));
+       var visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
        this.imageTop.src = this.images[index].img.src;
        this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
        this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);

@@ -58,15 +58,16 @@ var H5P = H5P || {};
      * @param {number} opacity - Description (image) opacity, [0..1].
      */
     setText: function setText (index, opacity) {
+
       // Switch position to make selecting links possible, threshold is 0.5 opacity
       if (opacity > 0.5) {
         this.descriptionTop.innerHTML = this.texts[index];
-        this.descriptionBottom.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
+        this.descriptionBottom.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length - 1)];
         this.descriptionTop.style.opacity = opacity;
         this.descriptionBottom.style.opacity = 1 - opacity;
       }
       else {
-        this.descriptionTop.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length)];
+        this.descriptionTop.innerHTML = this.texts[Agamotto.constrain(index + 1, 0, this.texts.length - 1)];
         this.descriptionBottom.innerHTML = this.texts[index];
         this.descriptionTop.style.opacity = 1 - opacity;
         this.descriptionBottom.style.opacity = opacity;
