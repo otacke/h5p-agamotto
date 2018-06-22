@@ -22,11 +22,13 @@
       "fields": [
         {
           "name": "image",
+          "type": "library",
           "label": "Image",
           "importance": "low",
-          "type": "image",
-          "optional": false,
-          "description": "The image to be used"
+          "options": [
+            "H5P.Image 1.0"
+          ],
+          "optional": false
         },
         {
           "name": "labelText",

@@ -12,8 +12,7 @@
         "label": "Element",
         "fields": [
           {
-            "label": "Bild",
-            "description": "Das zu verwendende Bild."
+            "label": "Bild"
           },
           {
             "label": "Beschriftung",

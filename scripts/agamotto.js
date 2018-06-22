@@ -127,21 +127,21 @@ H5P.Agamotto = function () {
      * Load an Image.
      * TODO: Wouldn't this be better in images.js? Requires a promise here as well
      *
-     * @param {string} path - Path to image.
+     * @param {string} imageObject - Image object.
      * @param {number} id - H5P ID.
      * @return {Promise} Promise for image being loaded.
      */
-    function loadImage (path, id) {
-      return new Promise(function(resolve, reject)  {
+    function loadImage (imageObject, id) {
+      return new Promise(function (resolve, reject) {
         var image = new Image();
-        image.crossOrigin = 'Anonymous';
+        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin() : 'Anonymous');
         image.onload = function() {
           resolve(this);
         };
         image.onerror = function(error) {
           reject(error);
         };
-        image.src = H5P.getPath(path, id);
+        image.src = H5P.getPath(imageObject.params.file.path, id);
       });
     }
 
@@ -151,10 +151,16 @@ H5P.Agamotto = function () {
      */
     var promises = [];
     that.options.items.forEach(function (item) {
-      promises.push(loadImage(item.image.path, that.id));
+      promises.push(loadImage(item.image, that.id));
     });
     Promise.all(promises).then(function(results) {
-      that.images = results;
+      that.images = results.map(function (item, index) {
+        return {
+          img: item,
+          alt: that.options.items[index].image.params.alt,
+          title: that.options.items[index].image.params.title
+        };
+      });
 
       that.wrapper = document.createElement('div');
       that.wrapper.classList.add('h5p-agamotto-wrapper');
@@ -168,6 +174,7 @@ H5P.Agamotto = function () {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
         title.innerHTML = '<h2>' + ((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto') + '</h2>';
+        title.setAttribute('tabindex', 0);
         that.wrapper.appendChild(title);
       }
 
@@ -222,6 +229,7 @@ H5P.Agamotto = function () {
 
       // KeyListeners for Images that will allow to jump from one image to another
       that.imageContainer = that.images.getDOM ();
+      // TODO: Move this to Images class or remove alltogether
       that.imageContainer.addEventListener('keydown', function(e) {
         // Prevent repeated pressing of a key
         if (that.keyPressed !== false) {
@@ -229,13 +237,14 @@ H5P.Agamotto = function () {
         }
         that.imageContainer.classList.add('h5p-agamotto-images-keydown');
         e = e || window.event;
-        e.preventDefault();
         var key = e.which || e.keyCode;
         if (key === 37 || key === 33) {
+          e.preventDefault();
           that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.max(0, that.position - 1), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
         if (key === 39 || key === 34) {
+          e.preventDefault();
           that.keyPressed = key;
           that.slider.setPosition(Agamotto.map(Math.min(that.position + 1, that.maxItem), 0, that.maxItem, 0, that.slider.getWidth()), true);
         }
@@ -283,33 +292,38 @@ H5P.Agamotto = function () {
 
       // Add Resize Handler
       window.addEventListener('resize', function () {
-        /*
-         * Decrease the size of the content if on a mobile device in landscape
-         * orientation, because it might be hard to use it otherwise.
-         * iOS devices don't switch screen.height and screen.width on rotation
-         */
-        if (isMobileDevice() && Math.abs(window.orientation) === 90) {
-          if (/iPhone/.test(navigator.userAgent)) {
-            that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+        // Prevent infinite resize loops
+        if (!that.resizeCooling) {
+          /*
+           * Decrease the size of the content if on a mobile device in landscape
+           * orientation, because it might be hard to use it otherwise.
+           * iOS devices don't switch screen.height and screen.width on rotation
+           */
+          if (isMobileDevice() && Math.abs(window.orientation) === 90) {
+            if (/iPhone/.test(navigator.userAgent)) {
+              that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+            }
+            else {
+              that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
+            }
           }
           else {
-            that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
+            // Portrait orientation
+            that.wrapper.style.width = 'auto';
           }
-        }
-        else {
-          // Portrait orientation
-          that.wrapper.style.width = 'auto';
-        }
 
-        // Resize DOM elements
-        var resizeNecessary = that.images.resize();
-        that.slider.resize();
-        // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
-
-        if (resizeNecessary) {
-          // Seems that at least Edge and IE need this retriggering
+          // Resize DOM elements
+          that.images.resize();
+          that.slider.resize();
+          // The descriptions will get a scroll bar via CSS if necessary, no resize needed
           that.trigger('resize');
+
+          that.resizeCooling = setTimeout(function () {
+            that.resizeCooling = null;
+          }, RESIZE_COOLING_PERIOD);
+
         }
+
       });
 
       // DOM completed.
@@ -332,21 +346,27 @@ H5P.Agamotto = function () {
    * @param {Object} items - Items defined in semantics.org.
    * @return {Object} Sanitized items.
    */
-  var sanitizeItems = function(items) {
-    // Remove items with missing image
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].image === undefined) {
-        console.log('An image is missing. I will continue without it, but please check your settings.');
-        items.splice(i, 1);
-        i--;
-      }
-    }
+  var sanitizeItems = function (items) {
     /*
-     * Restrict to 50 images, because it might become hard to differentiate more
-     * positions on the slider - and a video to slide over might be more
-     * sensible anyway if you need more frames.
+     * Remove items with missing image an restrict to 50 images, because it
+     * might become hard to differentiate more positions on the slider - and
+     * a video to slide over might be more sensible anyway if you need more
+     * frames.
      */
-    items = items.splice(0, 50);
+     items = items
+      .filter(function (item) {
+        if (!item.image || !item.image.params || !item.image.params.file) {
+          console.log('An image is missing. I will continue without it, but please check your settings.');
+          return false;
+        }
+        return true;
+      })
+      .splice(0, 50)
+      .map(function (item) {
+        item.image.params.alt = item.image.params.alt || '';
+        item.image.params.title = item.image.params.title || '';
+        return item;
+      });
 
     return items;
   };
@@ -388,6 +408,9 @@ H5P.Agamotto = function () {
   Agamotto.constrain = function (value, lo, hi) {
     return Math.min(hi, Math.max(lo, value));
   };
+
+  // Cooldown period in ms to prevent infinite resizing
+  const RESIZE_COOLING_PERIOD = 50;
 
   return Agamotto;
 }();

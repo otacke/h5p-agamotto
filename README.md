@@ -7,6 +7,9 @@ A free HTML5-based content type that allows users to compare and explore a seque
 ## Support me at patreon!
 If you like what I do, please consider to become my supporter at patreon: https://www.patreon.com/otacke
 
+## Example
+!["Agamotto for H5P"](https://ibin.co/w800/3s38Wcrata19.png "Agamotto for H5P")
+
 ## About this repository
 If you want to download the sourcecode, you can choose from three main branches:
 

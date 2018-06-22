@@ -12,7 +12,7 @@ var H5P = H5P || {};
    Agamotto.Images = function (images) {
      this.images = images;
 
-     this.ratio = this.images[0].naturalWidth / this.images[0].naturalHeight;
+     this.ratio = this.images[0].img.naturalWidth / this.images[0].img.naturalHeight;
 
      /*
       * Users might use images with different aspect ratios -- I learned that the hard way ;-)
@@ -20,22 +20,22 @@ var H5P = H5P || {};
       * We need the black border in the image because of the blending transition. We also need
       * it for images with transparency.
       */
-     var firstMaxX = this.images[0].naturalWidth;
-     var firstMaxY = this.images[0].naturalHeight;
+     var firstMaxX = this.images[0].img.naturalWidth;
+     var firstMaxY = this.images[0].img.naturalHeight;
      for (var i = 0; i < this.images.length; i++) {
        var maxX = firstMaxX;
        var maxY = firstMaxY;
-       var imgX = images[i].naturalWidth;
-       var imgY = images[i].naturalHeight;
+       var imgX = images[i].img.naturalWidth;
+       var imgY = images[i].img.naturalHeight;
 
        // Scale image.
        if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
          imgY = maxY;
-         imgX *= maxY / this.images[i].naturalHeight;
+         imgX *= maxY / this.images[i].img.naturalHeight;
        }
        if ((imgX / imgY > this.ratio) && (imgX > maxX)) {
          imgX = maxX;
-         imgY *= maxX / this.images[i].naturalWidth;
+         imgY *= maxX / this.images[i].img.naturalWidth;
        }
        if ((imgX / imgY === this.ratio)) {
          maxX = Math.max(maxX, imgX);
@@ -55,30 +55,34 @@ var H5P = H5P || {};
        imageCtx.rect(0, 0, maxX, maxY);
        imageCtx.fillStyle = 'black';
        imageCtx.fill();
-       imageCtx.drawImage(this.images[i], offsetX, offsetY, imgX, imgY);
+       imageCtx.drawImage(this.images[i].img, offsetX, offsetY, imgX, imgY);
 
        // Replace the old image.
        var image = new Image();
 
        // This is necessary to prevent security errors in some cases.
-       image.crossOrigin = 'Anonymous';
+       image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin() : 'Anonymous');
        image.src = imageCanvas.toDataURL('image/jpeg');
-       this.images[i] = image;
+       this.images[i].img = image;
      }
 
      // Create DOM
      this.imageTop = document.createElement('img');
      this.imageTop.classList.add('h5p-agamotto-image-top');
-     this.imageTop.src = images[0].src;
+     this.imageTop.src = images[0].img.src;
      this.imageTop.setAttribute('draggable', 'false');
+     this.imageTop.setAttribute('alt', images[0].alt);
+     this.imageTop.setAttribute('title', images[0].title);
+     this.imageTop.setAttribute('aria-live', 'polite');
      this.imageTop.setAttribute('tabindex', 0);
 
      this.imageBottom = document.createElement('img');
      this.imageBottom.classList.add('h5p-agamotto-image-bottom');
-     this.imageBottom.src = images[1].src;
+     this.imageBottom.src = images[1].img.src;
      this.imageBottom.setAttribute('draggable', 'false');
 
      this.container = document.createElement('div');
+
      this.container.classList.add('h5p-agamotto-images-container');
      this.container.appendChild(this.imageTop);
      this.container.appendChild(this.imageBottom);
@@ -98,9 +102,13 @@ var H5P = H5P || {};
       * @param {number} opacity - Image opacity, [0..1].
       */
      setImage: function setImage (index, opacity) {
-       this.imageTop.src = this.images[index].src;
-       this.imageBottom.src = this.images[Agamotto.constrain(index + 1, 0, this.images.length - 1)].src;
+       var visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
+       this.imageTop.src = this.images[index].img.src;
+       this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
+       this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
        this.imageTop.style.opacity = opacity;
+       this.imageBottom.src = this.images[Agamotto.constrain(index + 1, 0, this.images.length - 1)].img.src;
+       this.imageTop.setAttribute('aria-label', this.images[visibleImageIndex].alt);
      },
      /**
       * Resize the images.
