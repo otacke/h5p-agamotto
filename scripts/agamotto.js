@@ -173,7 +173,7 @@ H5P.Agamotto = function () {
       if (that.options.showTitle) {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
-        title.innerHTML = '<h2>' + ((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto') + '</h2>';
+        title.innerHTML = '<h2>' + ((that.extras.metadata && that.extras.metadata.title) ? that.extras.metadata.title : 'Agamotto') + '</h2>';
         title.setAttribute('tabindex', 0);
         that.wrapper.appendChild(title);
       }
