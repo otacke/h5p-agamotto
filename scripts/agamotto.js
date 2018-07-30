@@ -134,14 +134,15 @@ H5P.Agamotto = function () {
     function loadImage (imageObject, id) {
       return new Promise(function (resolve, reject) {
         var image = new Image();
-        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin() : 'Anonymous');
+        var src = H5P.getPath(imageObject.params.file.path, id);
+        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
         image.onload = function() {
           resolve(this);
         };
         image.onerror = function(error) {
           reject(error);
         };
-        image.src = H5P.getPath(imageObject.params.file.path, id);
+        image.src = src;
       });
     }
 
