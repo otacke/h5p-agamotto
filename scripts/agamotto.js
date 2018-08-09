@@ -134,7 +134,7 @@ H5P.Agamotto = function () {
     function loadImage (imageObject, id) {
       return new Promise(function (resolve, reject) {
         var image = new Image();
-        image.crossOrigin = 'Anonymous';
+        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin() : 'Anonymous');
         image.onload = function() {
           resolve(this);
         };
@@ -292,33 +292,38 @@ H5P.Agamotto = function () {
 
       // Add Resize Handler
       window.addEventListener('resize', function () {
-        /*
-         * Decrease the size of the content if on a mobile device in landscape
-         * orientation, because it might be hard to use it otherwise.
-         * iOS devices don't switch screen.height and screen.width on rotation
-         */
-        if (isMobileDevice() && Math.abs(window.orientation) === 90) {
-          if (/iPhone/.test(navigator.userAgent)) {
-            that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+        // Prevent infinite resize loops
+        if (!that.resizeCooling) {
+          /*
+           * Decrease the size of the content if on a mobile device in landscape
+           * orientation, because it might be hard to use it otherwise.
+           * iOS devices don't switch screen.height and screen.width on rotation
+           */
+          if (isMobileDevice() && Math.abs(window.orientation) === 90) {
+            if (/iPhone/.test(navigator.userAgent)) {
+              that.wrapper.style.width = Math.round((screen.width / 2) * that.images.getRatio()) + 'px';
+            }
+            else {
+              that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
+            }
           }
           else {
-            that.wrapper.style.width = Math.round((screen.height / 2) * that.images.getRatio()) + 'px';
+            // Portrait orientation
+            that.wrapper.style.width = 'auto';
           }
-        }
-        else {
-          // Portrait orientation
-          that.wrapper.style.width = 'auto';
-        }
 
-        // Resize DOM elements
-        var resizeNecessary = that.images.resize();
-        that.slider.resize();
-        // The descriptions will get a scroll bar via CSS if neccesary, no resize needed
-
-        if (resizeNecessary) {
-          // Seems that at least Edge and IE need this retriggering
+          // Resize DOM elements
+          that.images.resize();
+          that.slider.resize();
+          // The descriptions will get a scroll bar via CSS if necessary, no resize needed
           that.trigger('resize');
+
+          that.resizeCooling = setTimeout(function () {
+            that.resizeCooling = null;
+          }, RESIZE_COOLING_PERIOD);
+
         }
+
       });
 
       // DOM completed.
@@ -394,6 +399,9 @@ H5P.Agamotto = function () {
   Agamotto.constrain = function (value, lo, hi) {
     return Math.min(hi, Math.max(lo, value));
   };
+
+  // Cooldown period in ms to prevent infinite resizing
+  const RESIZE_COOLING_PERIOD = 50;
 
   return Agamotto;
 }();
