@@ -1,10 +1,10 @@
 /** @namespace H5PUpgrades */
 var H5PUpgrades = H5PUpgrades || {};
 
-H5PUpgrades['H5P.Agamotto'] = (function ($) {
+H5PUpgrades['H5P.Agamotto'] = (function () {
   return {
     1: {
-      3: function (parameters, finished) {
+      3: function (parameters, finished, extras) {
         // Update image items
         if (parameters.items) {
           parameters.items = parameters.items.map( function (item) {
@@ -35,8 +35,39 @@ H5PUpgrades['H5P.Agamotto'] = (function ($) {
           });
         }
 
-        finished(null, parameters);
+        // Set new show title parameter
+        if (parameters.title) {
+          parameters.showTitle = true;
+        }
+
+        // Copy title to new metadata structure if present
+        var metadata = {
+          title: parameters.title || ((extras && extras.metadata) ? extras.metadata.title : undefined)
+        };
+        extras.metadata = metadata;
+
+        // Remove old parameter
+        delete parameters.title;
+
+        finished(null, parameters, extras);
+      },
+      4: function (parameters, finished, extras) {
+        // Set new show title parameter
+        if (parameters.title) {
+          parameters.showTitle = true;
+        }
+
+        // Copy title to new metadata structure if present
+        var metadata = {
+          title: parameters.title || ((extras && extras.metadata) ? extras.metadata.title : undefined)
+        };
+        extras.metadata = metadata;
+
+        // Remove old parameter
+        delete parameters.title;
+
+        finished(null, parameters, extras);
       }
     }
   };
-})(H5P.jQuery);
+})();
