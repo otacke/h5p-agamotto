@@ -1,11 +1,6 @@
 {
   "semantics": [
     {
-      "label": "Título",
-      "placeholder": "Aquí puede opcionalmente insertar un título.",
-      "description": "El título estará encima de la imagen"
-    },
-    {
       "label": "Elemento",
       "entity": "Elemento",
       "widgets": [
@@ -30,6 +25,10 @@
           }
         ]
       }
+    },
+    {
+      "label": "Show title",
+      "description": "Show the title above the images"
     },
     {
       "label": "Deslizador ajustado a la imágen.",
