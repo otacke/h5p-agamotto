@@ -51,6 +51,7 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
 
         finished(null, parameters, extras);
       },
+      
       4: function (parameters, finished, extras) {
         // Set new show title parameter
         if (parameters.title) {
