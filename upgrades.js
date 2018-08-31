@@ -4,7 +4,7 @@ var H5PUpgrades = H5PUpgrades || {};
 H5PUpgrades['H5P.Agamotto'] = (function () {
   return {
     1: {
-      3: function (parameters, finished, extras) {
+      3: function (parameters, finished) {
         // Update image items
         if (parameters.items) {
           parameters.items = parameters.items.map( function (item) {
@@ -35,37 +35,15 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
           });
         }
 
-        // Set new show title parameter
-        if (parameters.title) {
-          parameters.showTitle = true;
-        }
-
-        // Copy title to new metadata structure if present
-        var metadata = {
-          title: parameters.title || ((extras && extras.metadata) ? extras.metadata.title : undefined)
-        };
-        extras.metadata = metadata;
-
-        // Remove old parameter
-        delete parameters.title;
-
-        finished(null, parameters, extras);
+        finished(null, parameters);
       },
-      
-      4: function (parameters, finished, extras) {
-        // Set new show title parameter
-        if (parameters.title) {
-          parameters.showTitle = true;
-        }
 
+      4: function (parameters, finished, extras) {
         // Copy title to new metadata structure if present
         var metadata = {
-          title: parameters.title || ((extras && extras.metadata) ? extras.metadata.title : undefined)
+          title: (extras && extras.metadata && extras.metadata.title) ? extras.metadata.title : parameters.title
         };
         extras.metadata = metadata;
-
-        // Remove old parameter
-        delete parameters.title;
 
         finished(null, parameters, extras);
       }

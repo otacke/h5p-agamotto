@@ -1,5 +1,14 @@
 [
   {
+    "name": "title",
+    "label": "Heading",
+    "importance": "high",
+    "type": "text",
+    "optional": true,
+    "placeholder": "Here you can add an optional heading.",
+    "description": "The heading you'd like to show above the image"
+  },
+  {
     "name": "items",
     "type": "list",
     "label": "Items",
@@ -62,14 +71,6 @@
         }
       ]
     }
-  },
-  {
-    "name": "showTitle",
-    "importance": "medium",
-    "type": "boolean",
-    "label": "Show title",
-    "description": "Show the title above the images",
-    "default": false
   },
   {
     "name": "snap",

@@ -1,6 +1,11 @@
 {
   "semantics": [
     {
+      "label": "Heading",
+      "placeholder": "Here you can add an optional heading.",
+      "description": "The heading you'd like to show above the image"
+    },
+    {
       "label": "Elemente",
       "entity": "Element",
       "widgets": [
@@ -25,10 +30,6 @@
           }
         ]
       }
-    },
-    {
-      "label": "Show title",
-      "description": "Show the title above the images"
     },
     {
       "label": "Schieberegler einrasten",

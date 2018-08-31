@@ -170,10 +170,10 @@ H5P.Agamotto = function () {
       $container.append(that.wrapper);
 
       // Title
-      if (that.options.showTitle) {
+      if (that.options.title) {
         var title = document.createElement('div');
         title.classList.add('h5p-agamotto-title');
-        title.innerHTML = '<h2>' + ((that.extras.metadata && that.extras.metadata.title) ? that.extras.metadata.title : 'Agamotto') + '</h2>';
+        title.innerHTML = '<h2>' + that.options.title + '</h2>';
         title.setAttribute('tabindex', 0);
         that.wrapper.appendChild(title);
       }
