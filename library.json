@@ -3,9 +3,11 @@
   "description": "Displays an interactive sequence of images",
   "majorVersion": 1,
   "minorVersion": 4,
-  "patchVersion": 0,
+  "patchVersion": 1,
   "runnable": 1,
-  "embedTypes": ["iframe"],
+  "embedTypes": [
+    "iframe"
+  ],
   "author": "Oliver Tacke",
   "license": "MIT",
   "machineName": "H5P.Agamotto",
