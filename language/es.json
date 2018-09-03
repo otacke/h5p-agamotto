@@ -1,0 +1,47 @@
+{
+  "semantics": [
+    {
+      "label": "Heading",
+      "placeholder": "Here you can add an optional heading.",
+      "description": "The heading you'd like to show above the image"
+    },
+    {
+      "label": "Elemento",
+      "entity": "Elemento",
+      "widgets": [
+        {
+          "label": "Predeterminado"
+        }
+      ],
+      "field": {
+        "label": "Elemento",
+        "fields": [
+          {
+            "label": "Imagen"
+          },
+          {
+            "label": "Subtítulo",
+            "description": "Texto opcional para una imágen. Por favor, asegúrese de que no sea demasiado largo, de lo contrario no se mostrará."
+          },
+          {
+            "label": "Descripción",
+            "placeholder": "Mi descripción de la imagen...",
+            "description": "Descripción opcional para la imagen"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Deslizador ajustado a la imágen.",
+      "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
+    },
+    {
+      "label": "Mostrar posicion de la imagen",
+      "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estarán resaltadas."
+    },
+    {
+      "label": "Mostrar etiquetas",
+      "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
+    }
+  ]
+}

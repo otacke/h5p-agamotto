@@ -217,7 +217,7 @@ H5P.Agamotto = function () {
       }
 
       // Add passepartout depending on the combination of elements
-      if (that.options.title) {
+      if (that.options.showTitle) {
         // Passepartout at the top is not needed, because we have a title
         that.wrapper.classList.remove('h5p-agamotto-passepartout-top');
       }
@@ -330,6 +330,15 @@ H5P.Agamotto = function () {
       // DOM completed.
       that.trigger('resize');
     });
+  };
+
+  /**
+   * Get the content type title.
+   *
+   * @return {string} title.
+   */
+  Agamotto.prototype.getTitle = function () {
+    return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
   };
 
   /**
