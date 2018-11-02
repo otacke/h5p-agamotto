@@ -1,9 +1,9 @@
 {
   "semantics": [
     {
-      "label": "Titel",
-      "placeholder": "Hier kannst du optional einen Titel einfügen.",
-      "description": "Der Titel, der über dem Bild stehen soll"
+      "label": "Heading",
+      "placeholder": "Here you can add an optional heading.",
+      "description": "The heading you'd like to show above the image"
     },
     {
       "label": "Elemente",

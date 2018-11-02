@@ -1,7 +1,7 @@
 /** @namespace H5PUpgrades */
 var H5PUpgrades = H5PUpgrades || {};
 
-H5PUpgrades['H5P.Agamotto'] = (function ($) {
+H5PUpgrades['H5P.Agamotto'] = (function () {
   return {
     1: {
       3: function (parameters, finished) {
@@ -36,7 +36,17 @@ H5PUpgrades['H5P.Agamotto'] = (function ($) {
         }
 
         finished(null, parameters);
+      },
+
+      4: function (parameters, finished, extras) {
+        // Copy title to new metadata structure if present
+        var metadata = {
+          title: (extras && extras.metadata && extras.metadata.title) ? extras.metadata.title : parameters.title
+        };
+        extras.metadata = metadata;
+
+        finished(null, parameters, extras);
       }
     }
   };
-})(H5P.jQuery);
+})();

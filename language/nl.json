@@ -1,9 +1,9 @@
 {
   "semantics": [
     {
-      "label": "Titel",
-      "placeholder": "Hier kun je optioneel een titel invullen.",
-      "description": "De titel, die boven de afbeelding komt te staan"
+      "label": "Heading",
+      "placeholder": "Here you can add an optional heading.",
+      "description": "The heading you'd like to show above the image"
     },
     {
       "label": "Items",

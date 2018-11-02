@@ -1,12 +1,12 @@
 [
   {
     "name": "title",
-    "label": "Title",
+    "label": "Heading",
     "importance": "high",
     "type": "text",
     "optional": true,
-    "placeholder": "Here you can add an optional title.",
-    "description": "The title you'd like to show above the image"
+    "placeholder": "Here you can add an optional heading.",
+    "description": "The heading you'd like to show above the image"
   },
   {
     "name": "items",
@@ -35,7 +35,7 @@
           "label": "Image",
           "importance": "low",
           "options": [
-            "H5P.Image 1.0"
+            "H5P.Image 1.1"
           ],
           "optional": false
         },
