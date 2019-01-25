@@ -352,7 +352,7 @@ var H5P = H5P || {};
 
         // Detect overlapping labels
         if (i < this.labels.length - 1 && !overlapping) {
-          overlapping = (this.areOverlapping(this.labels[i], this.labels[i+1]));
+          overlapping = (this.areOverlapping(this.labels[i], this.labels[i + 1]));
         }
       }
 
