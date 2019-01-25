@@ -71,7 +71,7 @@ var H5P = H5P || {};
     // Place ticks
     if (this.options.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
-      var placeTicks = function() {
+      var placeTicks = function () {
         that.setPosition(parseInt(this.style.left) - Agamotto.Slider.TRACK_OFFSET, true);
       };
       for (i = 0; i <= this.options.size; i++) {
@@ -93,10 +93,10 @@ var H5P = H5P || {};
     }
 
     // Event Listeners for Mouse Interface
-    document.addEventListener('mousemove', function(e) {
+    document.addEventListener('mousemove', function (e) {
       that.setPosition(e, false);
     });
-    document.addEventListener('mouseup', function() {
+    document.addEventListener('mouseup', function () {
       that.mousedown = false;
       that.snap();
     });
@@ -157,8 +157,7 @@ var H5P = H5P || {};
     });
 
     // Event Listeners for Keyboard to stop moving
-    this.thumb.addEventListener('keyup', function (e) {
-      e = e || window.event;
+    this.thumb.addEventListener('keyup', function () {
       that.snap();
       that.keydown = false;
     });
@@ -218,7 +217,7 @@ var H5P = H5P || {};
    * @param {boolean} animate - If true, slide instead of jumping.
    * @param {boolean} resize - If true, won't recompute position/width ratio.
    */
-  Agamotto.Slider.prototype.setPosition = function setPosition (position, animate, resize) {
+  Agamotto.Slider.prototype.setPosition = function setPosition(position, animate, resize) {
     if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
       return;
     }
@@ -246,7 +245,8 @@ var H5P = H5P || {};
     // Transition control
     if (animate === true) {
       this.thumb.classList.add('h5p-agamotto-transition');
-    } else {
+    }
+    else {
       this.thumb.classList.remove('h5p-agamotto-transition');
     }
 
@@ -335,19 +335,19 @@ var H5P = H5P || {};
         maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
 
         // Align the first and the last label left/right instead of centered
-        switch(i) {
-            case (0):
-              // First label
-              this.labels[i].style.left = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
-              break;
-            case (this.labels.length - 1):
-              // Last label
-              this.labels[i].style.right = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
-              break;
-            default:
-              // Centered over tick mark position
-              var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-              this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
+        switch (i) {
+          case (0):
+            // First label
+            this.labels[i].style.left = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+            break;
+          case (this.labels.length - 1):
+            // Last label
+            this.labels[i].style.right = (Agamotto.Slider.TRACK_OFFSET / 2) + 'px';
+            break;
+          default:
+            // Centered over tick mark position
+            var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
+            this.labels[i].style.left = Agamotto.Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
         }
 
         // Detect overlapping labels
@@ -373,7 +373,8 @@ var H5P = H5P || {};
       var buffer = (this.options.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
 
       // Update slider height
-      this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';      }
+      this.container.style.height = (Agamotto.Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
+    }
   };
 
   /**

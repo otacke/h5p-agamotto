@@ -33,7 +33,7 @@ var H5P = H5P || {};
     this.descriptionsContainer.appendChild(this.descriptionBottom);
 
     // Necessary to override the EventListener on document
-    this.descriptionsContainer.addEventListener('mouseup', function(e) {
+    this.descriptionsContainer.addEventListener('mouseup', function (e) {
       // Needed for allowing links to work (may contain markup such as strong)
       if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(e.target.tagName) !== -1) {
         e.stopPropagation();
@@ -48,7 +48,7 @@ var H5P = H5P || {};
      * Get DOM elements.
      * @return {object} DOM elements.
      */
-    getDOM: function getDOM () {
+    getDOM: function getDOM() {
       return this.descriptionsContainer;
     },
 
@@ -57,7 +57,7 @@ var H5P = H5P || {};
      * @param {number} index - Description (image) index.
      * @param {number} opacity - Description (image) opacity, [0..1].
      */
-    setText: function setText (index, opacity) {
+    setText: function setText(index, opacity) {
 
       // Switch position to make selecting links possible, threshold is 0.5 opacity
       if (opacity > 0.5) {
@@ -76,7 +76,7 @@ var H5P = H5P || {};
     /**
      * Adjust the height of the description area.
      */
-    adjustHeight: function adjustHeight () {
+    adjustHeight: function adjustHeight() {
       var that = this;
       // We need to determine the highest of all description texts for resizing
       var height = 0;

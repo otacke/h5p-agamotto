@@ -1,3 +1,5 @@
+/* global module, setImmediate */
+
 /*
  * taylorhakes/promise-polyfill
  * Copyright (c) 2014 Taylor Hakes
@@ -49,7 +51,8 @@
       var ret;
       try {
         ret = cb(self._value);
-      } catch (e) {
+      }
+      catch (e) {
         reject(deferred.promise, e);
         return;
       }
@@ -68,7 +71,8 @@
           self._value = newValue;
           finale(self);
           return;
-        } else if (typeof then === 'function') {
+        }
+        else if (typeof then === 'function') {
           doResolve(bind(then, newValue), self);
           return;
         }
@@ -76,7 +80,8 @@
       self._state = 1;
       self._value = newValue;
       finale(self);
-    } catch (e) {
+    }
+    catch (e) {
       reject(self, e);
     }
   }
@@ -89,7 +94,7 @@
 
   function finale(self) {
     if (self._state === 2 && self._deferreds.length === 0) {
-      Promise._immediateFn(function() {
+      Promise._immediateFn(function () {
         if (!self._handled) {
           Promise._unhandledRejectionFn(self._value);
         }
@@ -126,7 +131,8 @@
         done = true;
         reject(self, reason);
       });
-    } catch (ex) {
+    }
+    catch (ex) {
       if (done) return;
       done = true;
       reject(self, ex);
@@ -166,7 +172,8 @@
           if (--remaining === 0) {
             resolve(args);
           }
-        } catch (ex) {
+        }
+        catch (ex) {
           reject(ex);
         }
       }
@@ -202,7 +209,10 @@
   };
 
   // Use polyfill for setImmediate for performance gains
-  Promise._immediateFn = (typeof setImmediate === 'function' && function (fn) { setImmediate(fn); }) ||
+  Promise._immediateFn = (typeof setImmediate === 'function' &&
+    function (fn) {
+      setImmediate(fn);
+    }) ||
     function (fn) {
       setTimeoutFunc(fn, 0);
     };
@@ -233,7 +243,8 @@
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Promise;
-  } else if (!root.Promise) {
+  }
+  else if (!root.Promise) {
     root.Promise = Promise;
   }
 
