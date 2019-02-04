@@ -1,0 +1,384 @@
+/* global Promise */
+
+import Descriptions from './h5p-agamotto-descriptions';
+import Images from './h5p-agamotto-images';
+import Slider from './h5p-agamotto-slider';
+import Util from './h5p-agamotto-util';
+
+/** Class for Agamotto interaction */
+class Agamotto extends H5P.Question {
+  /**
+   * @constructor
+   * @param {object} params Params from semantics.json.
+   * @param {string} contentId ContentId.
+   * @param {object} contentData contentData.
+   */
+  constructor(params, contentId, contentData) {
+    super('agamotto');
+
+    if (!params.items) {
+      return;
+    }
+
+    this.options = params;
+    this.options.items = Agamotto.sanitizeItems(this.options.items);
+    this.extras = contentData;
+
+    this.maxItem = this.options.items.length - 1;
+    this.selector = '.h5p-agamotto-wrapper';
+
+    // Set hasDescription = true if at least one item has a description
+    this.hasDescription = this.options.items.some(item => item.description !== '');
+
+    this.id = contentId;
+
+    // Container for KeyListeners
+    this.imageContainer = undefined;
+
+    // Currently visible image (index)
+    this.position = 0;
+
+    // Store the images that have been viewed
+    this.imagesViewed = [];
+
+    // Store the completed state for xAPI triggering
+    this.completed = false;
+
+    // Store the currently pressed key if any - false otherwise
+    this.keyPressed = false;
+
+    /**
+     * Update images and descriptions.
+     *
+     * @param {Number} index - Index of top image.
+     * @param {Number} opacity - Opacity of top image.
+     */
+    this.updateContent = (index, opacity) => {
+      // Update images
+      this.images.setImage(index, opacity);
+
+      // Update descriptions
+      if (this.hasDescription) {
+        this.descriptions.setText(index, opacity);
+      }
+
+      // Remember current position (index)
+      this.position = Math.round(index + (1 - opacity));
+
+      // Remember images that have been viewed
+      if (this.completed === false) {
+        // Images count as viewed as of 50 % visibility
+        if (this.imagesViewed.indexOf(this.position) === -1) {
+          this.imagesViewed.push(this.position);
+        }
+      }
+    };
+
+    /**
+     * Register the DOM elements with H5P.Question.
+     */
+    this.registerDomElements = () => {
+      this.setContent(this.createDOM());
+    };
+
+    /**
+     * Create the DOM.
+     */
+    this.createDOM = () => {
+      const content = document.createElement('div');
+      content.classList.add('h5p-agamotto');
+
+      if (!this.options.items || this.maxItem < 1) {
+        const warning = document.createElement('div');
+        warning.classList.add('h5p-agamotto-warning');
+        warning.innerHTML = 'I really need at least two images :-)';
+        content.appendChild(warning);
+        return content;
+      }
+
+      // TODO: Think about using callbacks instead?
+
+      /**
+       * Load an Image.
+       * TODO: Wouldn't this be better in images.js? Requires a promise here as well
+       *
+       * @param {string} imageObject - Image object.
+       * @param {number} id - H5P ID.
+       * @return {Promise} Promise for image being loaded.
+       */
+      const loadImage = (imageObject, id) => {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          const src = H5P.getPath(imageObject.params.file.path, id);
+          image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+          image.onload = () => {
+            resolve(image);
+          };
+          image.onerror = (error) => {
+            reject(error);
+          };
+          image.src = src;
+        });
+      };
+
+      /*
+       * Load images first before DOM is created; will help to prevent layout
+       * problems in some cases.
+       */
+      const promises = [];
+      this.options.items.forEach(item => {
+        promises.push(loadImage(item.image, this.id));
+      });
+      Promise.all(promises).then(results => {
+        this.images = results.map((item, index) => {
+          return {
+            img: item,
+            alt: this.options.items[index].image.params.alt,
+            title: this.options.items[index].image.params.title
+          };
+        });
+
+        this.wrapper = document.createElement('div');
+        this.wrapper.classList.add('h5p-agamotto-wrapper');
+        this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
+        this.wrapper.classList.add('h5p-agamotto-passepartout-top');
+        this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
+        content.append(this.wrapper);
+
+        // Title
+        if (this.options.title) {
+          const title = document.createElement('div');
+          title.classList.add('h5p-agamotto-title');
+          title.innerHTML = `<h2>${this.options.title}</h2>`;
+          title.setAttribute('tabindex', 0);
+          this.wrapper.appendChild(title);
+        }
+
+        // Images
+        this.images = new Images(this.images);
+        this.wrapper.appendChild(this.images.getDOM());
+        this.images.resize();
+
+        // Slider
+        const labelTexts = [];
+        for (let i = 0; i <= this.maxItem; i++) {
+          labelTexts[i] = this.options.items[i].labelText || '';
+        }
+        this.slider = new Slider({
+          snap: this.options.snap,
+          ticks: this.options.ticks,
+          labels: this.options.labels,
+          labelTexts: labelTexts,
+          size: this.maxItem
+        }, this.selector, this);
+        this.wrapper.appendChild(this.slider.getDOM());
+        this.slider.resize();
+
+        // Descriptions
+        if (this.hasDescription) {
+          const descriptionTexts = [];
+          for (let i = 0; i <= this.maxItem; i++) {
+            descriptionTexts[i] = this.options.items[i].description;
+          }
+          this.descriptions = new Descriptions(descriptionTexts, this.selector, this);
+          this.wrapper.appendChild(this.descriptions.getDOM());
+          this.descriptions.adjustHeight();
+          // Passepartout at the bottom is not needed, because we have a description
+          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+          this.heightDescriptions = this.descriptions.offsetHeight;
+        }
+        else {
+          this.heightDescriptions = 0;
+        }
+
+        // Add passepartout depending on the combination of elements
+        if (this.options.showTitle) {
+          // Passepartout at the top is not needed, because we have a title
+          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+        }
+        else if (!this.hasDescription) {
+          // No passepartout is needed at all, because we just have an image
+          this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
+          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+        }
+
+        // KeyListeners for Images that will allow to jump from one image to another
+        this.imageContainer = this.images.getDOM ();
+        // TODO: Move this to Images class or remove alltogether
+        this.imageContainer.addEventListener('keydown', event => {
+          // Prevent repeated pressing of a key
+          if (this.keyPressed !== false) {
+            return;
+          }
+          this.imageContainer.classList.add('h5p-agamotto-images-keydown');
+          event = event || window.event;
+          const key = event.which || event.keyCode;
+          if (key === 37 || key === 33) {
+            event.preventDefault();
+            this.keyPressed = key;
+            this.slider.setPosition(Util.project(Math.max(0, this.position - 1), 0, this.maxItem, 0, this.slider.getWidth()), true);
+          }
+          if (key === 39 || key === 34) {
+            event.preventDefault();
+            this.keyPressed = key;
+            this.slider.setPosition(Util.project(Math.min(this.position + 1, this.maxItem), 0, this.maxItem, 0, this.slider.getWidth()), true);
+          }
+        });
+        this.imageContainer.addEventListener('keyup', event => {
+          // Only trigger xAPI if the interaction started by a particular key has ended
+          event = event || window.event;
+          const key = event.which || event.keyCode;
+          if (key === this.keyPressed) {
+            this.keyPressed = false;
+            this.xAPIInteracted();
+            this.xAPICompleted();
+          }
+        });
+
+        // Trigger xAPI when starting to view content
+        this.xAPIExperienced();
+
+        this.slider.on('update', event => {
+          /*
+           * Map the slider value to the image indexes. Since we might not
+           * want to initiate opacity shifts right away, we can add a margin to
+           * the left and right of the slider where nothing happens
+           */
+          const margin = 5;
+          const mappedValue = Util.project(
+            event.data.position,
+            0 + margin,
+            this.slider.getWidth() - margin,
+            0,
+            this.maxItem
+          );
+          // Account for margin change and mapping outside the image indexes
+          const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
+
+          /*
+           * Using the cosine will allow an image to be displayed a little longer
+           * before blending than a linear function
+           */
+          const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
+          const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
+
+          this.updateContent(topIndex, topOpacity);
+        });
+
+        // Add Resize Handler
+        window.addEventListener('resize', () => {
+          // Prevent infinite resize loops
+          if (!this.resizeCooling) {
+            /*
+             * Decrease the size of the content if on a mobile device in landscape
+             * orientation, because it might be hard to use it otherwise.
+             * iOS devices don't switch screen.height and screen.width on rotation
+             */
+            if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+              if (/iPhone/.test(navigator.userAgent)) {
+                this.wrapper.style.width = Math.round((screen.width / 2) * this.images.getRatio()) + 'px';
+              }
+              else {
+                this.wrapper.style.width = Math.round((screen.height / 2) * this.images.getRatio()) + 'px';
+              }
+            }
+            else {
+              // Portrait orientation
+              this.wrapper.style.width = 'auto';
+            }
+
+            // Resize DOM elements
+            this.images.resize();
+            this.slider.resize();
+            // The descriptions will get a scroll bar via CSS if necessary, no resize needed
+            this.trigger('resize');
+
+            this.resizeCooling = setTimeout(() => {
+              this.resizeCooling = null;
+            }, Agamotto.RESIZE_COOLING_PERIOD);
+          }
+        });
+
+        this.trigger('resize');
+      });
+
+      return content;
+    };
+
+    // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/
+
+    /**
+     * Trigger xAPI statement 'experienced' (when interaction encountered).
+     */
+    this.xAPIExperienced = () => {
+      this.triggerXAPI('experienced');
+    };
+
+    /**
+     * Trigger xAPI statement 'interacted' (when slider moved, keys released, or link clicked).
+     */
+    this.xAPIInteracted = () => {
+      this.triggerXAPI('interacted');
+    };
+
+    /**
+     * Trigger xAPI statement 'completed' (when all images have been viewed).
+     */
+    this.xAPICompleted = () => {
+      if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
+        this.triggerXAPI('completed');
+        // Only trigger this once
+        this.completed = true;
+      }
+    };
+
+    /**
+     * Get the content type title.
+     *
+     * @return {string} title.
+     */
+    this.getTitle = () => {
+      return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
+    };
+  }
+
+  /**
+   * Remove missing items and limit amount.
+   *
+   * @param {Object} items - Items defined in semantics.org.
+   * @return {Object} Sanitized items.
+   */
+  static sanitizeItems(items) {
+    /*
+     * Remove items with missing image an restrict to 50 images, because it
+     * might become hard to differentiate more positions on the slider - and
+     * a video to slide over might be more sensible anyway if you need more
+     * frames.
+     */
+    items = items
+      .filter(item => {
+        if (!item.image || !item.image.params || !item.image.params.file) {
+          console.warn('An image is missing. I will continue without it, but please check your settings.');
+          return false;
+        }
+        return true;
+      })
+      .splice(0, 50)
+      .map(item => {
+        item.image.params.alt = item.image.params.alt || '';
+        item.image.params.title = item.image.params.title || '';
+        return item;
+      });
+
+    return items;
+  }
+}
+
+/** @constant {string} */
+Agamotto.DEFAULT_DESCRIPTION = 'Agamotto';
+
+/** @constant {string} Cooldown period in ms to prevent infinite resizing */
+Agamotto.RESIZE_COOLING_PERIOD = 50;
+
+export default Agamotto;
