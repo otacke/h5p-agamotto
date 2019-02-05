@@ -1,5 +1,4 @@
-/* global Promise */
-
+import Promise from 'promise-polyfill';
 import Util from './h5p-agamotto-util';
 
 /** Class representing Images */

@@ -1,9 +1,8 @@
-/* global Promise */
-
 import Descriptions from './h5p-agamotto-descriptions';
 import Images from './h5p-agamotto-images';
 import Slider from './h5p-agamotto-slider';
 import Util from './h5p-agamotto-util';
+import Promise from 'promise-polyfill';
 
 /** Class for Agamotto interaction */
 class Agamotto extends H5P.Question {
@@ -118,7 +117,7 @@ class Agamotto extends H5P.Question {
         this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
         this.wrapper.classList.add('h5p-agamotto-passepartout-top');
         this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
-        content.append(this.wrapper);
+        content.appendChild(this.wrapper);
 
         // Title
         if (this.options.title) {
