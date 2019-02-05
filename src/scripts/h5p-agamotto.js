@@ -96,38 +96,13 @@ class Agamotto extends H5P.Question {
         return content;
       }
 
-      // TODO: Think about using callbacks instead?
-
-      /**
-       * Load an Image.
-       * TODO: Wouldn't this be better in images.js? Requires a promise here as well
-       *
-       * @param {string} imageObject - Image object.
-       * @param {number} id - H5P ID.
-       * @return {Promise} Promise for image being loaded.
-       */
-      const loadImage = (imageObject, id) => {
-        return new Promise((resolve, reject) => {
-          const image = new Image();
-          const src = H5P.getPath(imageObject.params.file.path, id);
-          image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
-          image.onload = () => {
-            resolve(image);
-          };
-          image.onerror = (error) => {
-            reject(error);
-          };
-          image.src = src;
-        });
-      };
-
       /*
        * Load images first before DOM is created; will help to prevent layout
        * problems in some cases.
        */
       const promises = [];
       this.options.items.forEach(item => {
-        promises.push(loadImage(item.image, this.id));
+        promises.push(Images.loadImage(item.image, this.id));
       });
       Promise.all(promises).then(results => {
         this.images = results.map((item, index) => {

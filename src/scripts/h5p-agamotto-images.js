@@ -1,3 +1,5 @@
+/* global Promise */
+
 import Util from './h5p-agamotto-util';
 
 /** Class representing Images */
@@ -126,6 +128,27 @@ class Images {
    */
   getRatio() {
     return this.ratio;
+  }
+
+  /**
+   * Load an Image.
+   * @param {string} imageObject - Image object.
+   * @param {number} id - H5P ID.
+   * @return {Promise} Promise for image being loaded.
+   */
+  static loadImage(imageObject, id) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      const src = H5P.getPath(imageObject.params.file.path, id);
+      image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = (error) => {
+        reject(error);
+      };
+      image.src = src;
+    });
   }
 }
 
