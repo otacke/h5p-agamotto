@@ -12,8 +12,8 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
             var newImage = {
               library: 'H5P.Image 1.0',
               // We avoid using H5P.createUUID since this is an upgrade script and H5P function may change
-              subContentId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(char) {
-                var random = Math.random()*16|0, newChar = char === 'x' ? random : (random&0x3|0x8);
+              subContentId: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (char) {
+                var random = Math.random() * 16 | 0, newChar = char === 'x' ? random : (random & 0x3 | 0x8);
                 return newChar.toString(16);
               }),
               params: {
