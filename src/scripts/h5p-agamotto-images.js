@@ -74,12 +74,13 @@ class Images {
     this.imageTop.setAttribute('draggable', 'false');
     this.imageTop.setAttribute('alt', images[0].alt);
     this.imageTop.setAttribute('title', images[0].title);
-    this.imageTop.setAttribute('aria-live', 'polite');
+    this.imageTop.setAttribute('aria-label', `${images[0].alt}. ${Util.stripHTML(images[0].description)}`);
 
     this.imageBottom = document.createElement('img');
     this.imageBottom.classList.add('h5p-agamotto-image-bottom');
     this.imageBottom.src = images[1].img.src;
     this.imageBottom.setAttribute('draggable', 'false');
+    this.imageBottom.setAttribute('aria-hidden', true);
 
     this.container = document.createElement('div');
 
@@ -95,6 +96,15 @@ class Images {
   getDOM() {
     return this.container;
   }
+
+  /**
+   * Get ALT tag of currently visible image.
+   * @return {string} ALT tag of currently visible image.
+   */
+  getCurrentAltTag() {
+    return this.imageTop.getAttribute('alt');
+  }
+
   /**
    * Set the visible image combination.
    * @param {number} index - Image index.
@@ -105,9 +115,9 @@ class Images {
     this.imageTop.src = this.images[index].img.src;
     this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
     this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
+    this.imageTop.setAttribute('aria-label', `${this.images[visibleImageIndex].alt}. ${Util.stripHTML(this.images[visibleImageIndex].description)}`);
     this.imageTop.style.opacity = opacity;
     this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
-    this.imageTop.setAttribute('aria-label', this.images[visibleImageIndex].alt);
   }
 
   /**

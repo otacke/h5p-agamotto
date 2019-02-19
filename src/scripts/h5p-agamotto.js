@@ -21,6 +21,24 @@ class Agamotto extends H5P.Question {
 
     this.options = params;
     this.options.items = Agamotto.sanitizeItems(this.options.items);
+
+    /*
+     * Tribute to the weird behavior of H5P groups. Can be removed when a11y
+     * gets more than one element and will be passed as an object, not a string.
+     */
+    if (typeof this.options.a11y === 'string') {
+      this.options.a11y = {
+        imageChanged: this.options.a11y
+      };
+    }
+
+    // Set default values
+    this.options = Util.extend({
+      a11y: {
+        imageChanged: 'Image changed'
+      }
+    }, this.options);
+
     this.extras = contentData;
 
     this.maxItem = this.options.items.length - 1;
@@ -68,6 +86,9 @@ class Agamotto extends H5P.Question {
           this.imagesViewed.push(this.position);
         }
       }
+
+      // Read contents to readspeakers.
+      this.announceARIA(Util.htmlDecode(this.options.a11y.imageChanged));
     };
 
     /**
@@ -105,7 +126,8 @@ class Agamotto extends H5P.Question {
           return {
             img: item,
             alt: this.options.items[index].image.params.alt,
-            title: this.options.items[index].image.params.title
+            title: this.options.items[index].image.params.title,
+            description: this.options.items[index].description
           };
         });
 
@@ -150,7 +172,7 @@ class Agamotto extends H5P.Question {
           for (let i = 0; i <= this.maxItem; i++) {
             descriptionTexts[i] = this.options.items[i].description;
           }
-          this.descriptions = new Descriptions(descriptionTexts, this.selector, this);
+          this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
           this.wrapper.appendChild(this.descriptions.getDOM());
           this.descriptions.adjustHeight();
           // Passepartout at the bottom is not needed, because we have a description
@@ -160,6 +182,13 @@ class Agamotto extends H5P.Question {
         else {
           this.heightDescriptions = 0;
         }
+
+        // ARIA Live Region
+        this.ariaLiveRegion = document.createElement('div');
+        this.ariaLiveRegion.setAttribute('aria-live', 'polite');
+        this.ariaLiveRegion.setAttribute('aria-atomic', 'true');
+        this.ariaLiveRegion.classList.add('h5p-agamotto-visually-hidden');
+        this.wrapper.appendChild(this.ariaLiveRegion);
 
         // Add passepartout depending on the combination of elements
         if (this.options.showTitle) {
@@ -244,6 +273,16 @@ class Agamotto extends H5P.Question {
       });
 
       return content;
+    };
+
+    /**
+     * Read contents to screen readers.
+     * @param {string} [intro] Optional intro text.
+     */
+    this.announceARIA = (intro) => {
+      let announcement = (intro !== undefined) ? `${intro}. ` : '';
+      announcement += `${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
+      this.ariaLiveRegion.textContent = announcement;
     };
 
     // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/

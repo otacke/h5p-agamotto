@@ -22,6 +22,17 @@ class Util {
   }
 
   /**
+   * Strip HTML tags.
+   * @param {string} html HTML string.
+   * @return {string} String without HTML tags.
+   */
+  static stripHTML(html) {
+    let domElement = document.createElement('div');
+    domElement.innerHTML = html;
+    return domElement.textContent || domElement.innerText || '';
+  }
+
+  /**
    * Retrieve true string from HTML encoded string.
    * @param {string} input Input string.
    * @return {string} Output string.

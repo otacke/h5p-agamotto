@@ -42,6 +42,15 @@
     {
       "label": "Display labels",
       "description": "If activated, the slider bar will display a label instead of/in addition to tick marks."
+    },
+    {
+      "label": "Readspeaker",
+      "fields": [
+        {
+          "label": "Image changed",
+          "default": "Image changed"
+        }
+      ]
     }
   ]
 }

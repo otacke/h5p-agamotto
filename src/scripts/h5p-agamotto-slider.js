@@ -18,7 +18,7 @@ class Slider extends H5P.EventDispatcher {
   constructor(options, selector, parent) {
     super();
 
-    Util.extend({
+    options = Util.extend({
       snap: true,
       ticks: false,
       labels: false
@@ -49,9 +49,9 @@ class Slider extends H5P.EventDispatcher {
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');
     this.container.setAttribute('role', 'slider');
-    this.container.setAttribute('aria-valuenow', 0);
-    this.container.setAttribute('aria-valuemin', 0);
-    this.container.setAttribute('aria-valuemax', 100);
+    this.container.setAttribute('aria-valuenow', 1);
+    this.container.setAttribute('aria-valuemin', 1);
+    this.container.setAttribute('aria-valuemax', this.options.size + 1);
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
@@ -144,14 +144,14 @@ class Slider extends H5P.EventDispatcher {
         event.preventDefault();
         this.keydown = key;
 
-        const previousItemId = this.getNeighbotItemIds(this.getPosition()).previous;
+        const previousItemId = this.getNeighborItemIds().previous;
         this.setPosition(previousItemId * this.getWidth() / this.options.size, true);
       }
       if (key === 39 || key === 34) {
         event.preventDefault();
         this.keydown = key;
 
-        const nextItemId = this.getNeighbotItemIds(this.getPosition()).next;
+        const nextItemId = this.getNeighborItemIds().next;
         this.setPosition(nextItemId * this.getWidth() / this.options.size, true);
       }
     });
@@ -168,14 +168,24 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Get id of current item pointed at by slider.
+   * @param {boolean} [rounded = true] If true, position will be rounded.
+   * @return {number} Id of item pointed at. Can be a float.
+   */
+  getCurrentItemId(rounded = true) {
+    let itemPosition = this.getPosition() / this.getWidth() * this.options.size;
+    if (rounded) {
+      itemPosition = Math.round(itemPosition);
+    }
+    return itemPosition;
+  }
+
+  /**
    * Get indices of previous/next item.
-   *
-   * @param {number} position Position on slider.
    * @return {Object} previous and next item index
    */
-  getNeighbotItemIds(position) {
-    position = Util.constrain(position, 0, this.getWidth());
-    const itemPosition = position / this.getWidth() * this.options.size;
+  getNeighborItemIds() {
+    const itemPosition = this.getCurrentItemId(false);
 
     let previous = Math.floor(itemPosition);
     let next = Math.ceil(itemPosition);
@@ -278,7 +288,7 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.container.setAttribute('aria-valuenow', percentage);
+    this.container.setAttribute('aria-valuenow', this.getCurrentItemId() + 1);
 
     // Inform parent node
     this.trigger('update', {

@@ -42,6 +42,15 @@
     {
       "label": "Mostrar etiquetas",
       "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
+    },
+    {
+      "label": "Readspeaker",
+      "fields": [
+        {
+          "label": "Image changed",
+          "default": "Image changed"
+        }
+      ]
     }
   ]
 }

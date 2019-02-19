@@ -95,5 +95,21 @@
     "label": "Display labels",
     "description": "If activated, the slider bar will display a label instead of/in addition to tick marks.",
     "default": false
+  },
+  {
+    "name": "a11y",
+    "type": "group",
+    "common": true,
+    "label": "Readspeaker",
+    "importance": "low",
+    "fields": [
+      {
+        "name": "imageChanged",
+        "type": "text",
+        "label": "Image changed",
+        "importance": "low",
+        "default": "Image changed"
+      }
+    ]
   }
 ]

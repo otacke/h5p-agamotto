@@ -42,6 +42,15 @@
     {
       "label": "Toon labels",
       "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
+    },
+    {
+      "label": "Readspeaker",
+      "fields": [
+        {
+          "label": "Image changed",
+          "default": "Image changed"
+        }
+      ]
     }
   ]
 }

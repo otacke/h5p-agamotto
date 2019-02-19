@@ -48,6 +48,14 @@ class Descriptions {
   }
 
   /**
+   * Get current description text.
+   * @return {string} current description text.
+   */
+  getCurrentDescriptionText() {
+    return this.descriptionTop.textContent;
+  }
+
+  /**
    * Set the description text.
    * @param {number} index - Description (image) index.
    * @param {number} opacity - Description (image) opacity, [0..1].

@@ -42,6 +42,15 @@
     {
       "label": "Beschriftungen anzeigen",
       "description": "Wenn diese Option aktiviert ist, werden beim Slider Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
+    },
+    {
+      "label": "Read-Speaker",
+      "fields": [
+        {
+          "label": "Bild geändert",
+          "default": "Bild geändert"
+        }
+      ]
     }
   ]
 }
