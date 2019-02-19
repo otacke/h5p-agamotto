@@ -18,9 +18,11 @@ class Slider extends H5P.EventDispatcher {
   constructor(options, selector, parent) {
     super();
 
-    options.snap = options.snap || true;
-    options.ticks = options.ticks || false;
-    options.labels = options.labels || false;
+    Util.extend({
+      snap: true,
+      ticks: false,
+      labels: false
+    }, options);
 
     this.options = options;
     this.selector = selector;
