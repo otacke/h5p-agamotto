@@ -43,9 +43,6 @@ class Agamotto extends H5P.Question {
     // Store the completed state for xAPI triggering
     this.completed = false;
 
-    // Store the currently pressed key if any - false otherwise
-    this.keyPressed = false;
-
     /**
      * Update images and descriptions.
      *
@@ -124,7 +121,6 @@ class Agamotto extends H5P.Question {
           const title = document.createElement('div');
           title.classList.add('h5p-agamotto-title');
           title.innerHTML = `<h2>${this.options.title}</h2>`;
-          title.setAttribute('tabindex', 0);
           this.wrapper.appendChild(title);
         }
 
@@ -179,36 +175,6 @@ class Agamotto extends H5P.Question {
 
         // KeyListeners for Images that will allow to jump from one image to another
         this.imageContainer = this.images.getDOM ();
-        // TODO: Move this to Images class or remove alltogether
-        this.imageContainer.addEventListener('keydown', event => {
-          // Prevent repeated pressing of a key
-          if (this.keyPressed !== false) {
-            return;
-          }
-          this.imageContainer.classList.add('h5p-agamotto-images-keydown');
-          event = event || window.event;
-          const key = event.which || event.keyCode;
-          if (key === 37 || key === 33) {
-            event.preventDefault();
-            this.keyPressed = key;
-            this.slider.setPosition(Util.project(Math.max(0, this.position - 1), 0, this.maxItem, 0, this.slider.getWidth()), true);
-          }
-          if (key === 39 || key === 34) {
-            event.preventDefault();
-            this.keyPressed = key;
-            this.slider.setPosition(Util.project(Math.min(this.position + 1, this.maxItem), 0, this.maxItem, 0, this.slider.getWidth()), true);
-          }
-        });
-        this.imageContainer.addEventListener('keyup', event => {
-          // Only trigger xAPI if the interaction started by a particular key has ended
-          event = event || window.event;
-          const key = event.which || event.keyCode;
-          if (key === this.keyPressed) {
-            this.keyPressed = false;
-            this.xAPIInteracted();
-            this.xAPICompleted();
-          }
-        });
 
         // Trigger xAPI when starting to view content
         this.xAPIExperienced();

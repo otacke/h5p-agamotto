@@ -16,7 +16,6 @@ class Descriptions {
     this.descriptionTop = document.createElement('div');
     this.descriptionTop.classList.add('h5p-agamotto-description-top');
     this.descriptionTop.style.opacity = 1;
-    this.descriptionTop.setAttribute('tabindex', 0);
     this.descriptionTop.innerHTML = texts[0];
 
     this.descriptionBottom = document.createElement('div');

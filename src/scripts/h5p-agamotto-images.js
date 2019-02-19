@@ -75,7 +75,6 @@ class Images {
     this.imageTop.setAttribute('alt', images[0].alt);
     this.imageTop.setAttribute('title', images[0].title);
     this.imageTop.setAttribute('aria-live', 'polite');
-    this.imageTop.setAttribute('tabindex', 0);
 
     this.imageBottom = document.createElement('img');
     this.imageBottom.classList.add('h5p-agamotto-image-bottom');

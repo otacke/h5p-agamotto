@@ -133,27 +133,61 @@ class Slider extends H5P.EventDispatcher {
       this.snap();
     });
 
-    // Event Listeners for Keyboard on handle to move in percentage steps
     this.thumb.addEventListener('keydown', event => {
+      // Prevent repeated pressing of a key
+      if (this.keydown !== false) {
+        return;
+      }
       event = event || window.event;
       const key = event.which || event.keyCode;
-      // handler left
-      if (key === 37 && (this.keydown === false || this.keydown === 37)) {
-        this.keydown = 37;
-        this.setPosition(this.getPosition() - 0.01 * parseInt(this.getWidth()), false);
-      }
-      // handler right
-      if (key === 39 && (this.keydown === false || this.keydown === 39)) {
-        this.keydown = 39;
-        this.setPosition(this.getPosition() + 0.01 * parseInt(this.getWidth()), false);
-      }
-    });
+      if (key === 37 || key === 33) {
+        event.preventDefault();
+        this.keydown = key;
 
-    // Event Listeners for Keyboard to stop moving
-    this.thumb.addEventListener('keyup', () => {
-      this.snap();
-      this.keydown = false;
+        const previousItemId = this.getNeighbotItemIds(this.getPosition()).previous;
+        this.setPosition(previousItemId * this.getWidth() / this.options.size, true);
+      }
+      if (key === 39 || key === 34) {
+        event.preventDefault();
+        this.keydown = key;
+
+        const nextItemId = this.getNeighbotItemIds(this.getPosition()).next;
+        this.setPosition(nextItemId * this.getWidth() / this.options.size, true);
+      }
     });
+    this.thumb.addEventListener('keyup', event => {
+      // Only trigger xAPI if the interaction started by a particular key has ended
+      event = event || window.event;
+      const key = event.which || event.keyCode;
+      if (key === this.keydown) {
+        this.keydown = false;
+        parent.xAPIInteracted();
+        parent.xAPICompleted();
+      }
+    });
+  }
+
+  /**
+   * Get indices of previous/next item.
+   *
+   * @param {number} position Position on slider.
+   * @return {Object} previous and next item index
+   */
+  getNeighbotItemIds(position) {
+    position = Util.constrain(position, 0, this.getWidth());
+    const itemPosition = position / this.getWidth() * this.options.size;
+
+    let previous = Math.floor(itemPosition);
+    let next = Math.ceil(itemPosition);
+    if (previous === next) {
+      previous--;
+      next++;
+    }
+
+    return {
+      previous: Util.constrain(previous, 0, this.options.size),
+      next: Util.constrain(next, 0, this.options.size)
+    };
   }
 
   /**
