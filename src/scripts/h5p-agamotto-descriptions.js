@@ -4,9 +4,9 @@ import Util from './h5p-agamotto-util';
 class Descriptions {
   /**
    * Descriptions object.
-   * @param {object[]} texts - Array containing the texts for the images.
-   * @param {string} selector - CSS class name of parent node.
-   * @param {string} parent - Parent class Agamotto.
+   * @param {object[]} texts Array containing the texts for the images.
+   * @param {string} selector CSS class name of parent node.
+   * @param {string} parent Parent class Agamotto.
    */
   constructor(texts, selector, parent) {
     this.texts = texts;

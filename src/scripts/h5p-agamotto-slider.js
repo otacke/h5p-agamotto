@@ -4,16 +4,15 @@ import Util from './h5p-agamotto-util';
 class Slider extends H5P.EventDispatcher {
   /**
    * Slider object.
-   *
-   * @param {Object} options - Options for the slider.
-   * @param {boolean} options.snap - If true, slider will snap to fixed positions.
-   * @param {boolean} options.ticks - If true, slider container will display ticks.
-   * @param {boolean} options.labels - If true, slider container will display tick labels.
-   * @param {Object} options.labelTexts - Tick labels.
-   * @param {string} options.labelTexts.text - Tick label.
-   * @param {number} options.size - Number of positions/ticks.
-   * @param {string} selector - CSS class name of parent node.
-   * @param {string} parent - Parent class Agamotto.
+   * @param {object} params Options for the slider.
+   * @param {boolean} params.snap If true, slider will snap to fixed positions.
+   * @param {boolean} params.ticks If true, slider container will display ticks.
+   * @param {boolean} params.labels If true, slider container will display tick labels.
+   * @param {object[]} params.labelTexts Tick labels.
+   * @param {string} params.labelTexts.text Tick label.
+   * @param {number} params.size Number of positions/ticks.
+   * @param {string} selector CSS class name of parent node.
+   * @param {string} parent Parent class Agamotto.
    */
   constructor(options, selector, parent) {
     super();
