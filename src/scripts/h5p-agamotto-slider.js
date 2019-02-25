@@ -14,16 +14,16 @@ class Slider extends H5P.EventDispatcher {
    * @param {string} selector CSS class name of parent node.
    * @param {string} parent Parent class Agamotto.
    */
-  constructor(options, selector, parent) {
+  constructor(params, selector, parent) {
     super();
 
-    options = Util.extend({
+    params = Util.extend({
       snap: true,
       ticks: false,
       labels: false
-    }, options);
+    }, params);
 
-    this.options = options;
+    this.params = params;
     this.selector = selector;
     this.parent = parent;
 
@@ -50,7 +50,7 @@ class Slider extends H5P.EventDispatcher {
     this.container.setAttribute('role', 'slider');
     this.container.setAttribute('aria-valuenow', 1);
     this.container.setAttribute('aria-valuemin', 1);
-    this.container.setAttribute('aria-valuemax', this.options.size + 1);
+    this.container.setAttribute('aria-valuemax', this.params.size + 1);
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
@@ -61,12 +61,12 @@ class Slider extends H5P.EventDispatcher {
      */
     let i = 0;
     // Place ticks
-    if (this.options.ticks === true) {
+    if (this.params.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
       const placeTicks = () => {
         this.setPosition(parseInt(this.style.left) - Slider.TRACK_OFFSET, true);
       };
-      for (i = 0; i <= this.options.size; i++) {
+      for (i = 0; i <= this.params.size; i++) {
         this.ticks[i] = document.createElement('div');
         this.ticks[i].classList.add('h5p-agamotto-tick');
         this.ticks[i].addEventListener('click', placeTicks);
@@ -75,11 +75,11 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Place labels
-    if (this.options.labels === true) {
-      for (i = 0; i <= this.options.size; i++) {
+    if (this.params.labels === true) {
+      for (i = 0; i <= this.params.size; i++) {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
-        this.labels[i].innerHTML = this.options.labelTexts[i];
+        this.labels[i].innerHTML = this.params.labelTexts[i];
         this.container.appendChild(this.labels[i]);
       }
     }
@@ -140,18 +140,10 @@ class Slider extends H5P.EventDispatcher {
       event = event || window.event;
       const key = event.which || event.keyCode;
       if (key === 37 || key === 33) {
-        event.preventDefault();
-        this.keydown = key;
-
-        const previousItemId = this.getNeighborItemIds().previous;
-        this.setPosition(previousItemId * this.getWidth() / this.options.size, true);
+        this.handleKeyMove(event, this.getNeighborItemIds().previous);
       }
-      if (key === 39 || key === 34) {
-        event.preventDefault();
-        this.keydown = key;
-
-        const nextItemId = this.getNeighborItemIds().next;
-        this.setPosition(nextItemId * this.getWidth() / this.options.size, true);
+      else if (key === 39 || key === 34) {
+        this.handleKeyMove(event, this.getNeighborItemIds().next);
       }
     });
     this.thumb.addEventListener('keyup', event => {
@@ -167,12 +159,23 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Handle sliding with keys.
+   * @param {Event} event Key event.
+   * @param {number} nextItemId Id of item to slide to.
+   */
+  handleKeyMove(event, nextItemId) {
+    event.preventDefault();
+    this.keydown = event.which || event.keyCode;
+    this.setPosition(nextItemId * this.getWidth() / this.params.size, true);
+  }
+
+  /**
    * Get id of current item pointed at by slider.
    * @param {boolean} [rounded = true] If true, position will be rounded.
    * @return {number} Id of item pointed at. Can be a float.
    */
   getCurrentItemId(rounded = true) {
-    let itemPosition = this.getPosition() / this.getWidth() * this.options.size;
+    let itemPosition = this.getPosition() / this.getWidth() * this.params.size;
     if (rounded) {
       itemPosition = Math.round(itemPosition);
     }
@@ -229,7 +232,7 @@ class Slider extends H5P.EventDispatcher {
    */
   setWidth(value) {
     this.trackWidth = value;
-    this.track.style.width = value + 'px';
+    this.track.style.width = `${value}px`;
   }
 
   /**
@@ -308,9 +311,9 @@ class Slider extends H5P.EventDispatcher {
    * Snap slider to closest tick position.
    */
   snap() {
-    if (this.options.snap === true) {
-      const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.options.size));
-      this.setPosition(snapIndex * this.getWidth() / this.options.size, true);
+    if (this.params.snap === true) {
+      const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
+      this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
     }
     // Only trigger on mouseup that was started by mousedown over slider
     if (this.sliderdown === true) {
@@ -349,7 +352,7 @@ class Slider extends H5P.EventDispatcher {
 
     let i = 0;
     // Update ticks
-    if (this.options.ticks === true) {
+    if (this.params.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
         this.ticks[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
       }
@@ -359,7 +362,7 @@ class Slider extends H5P.EventDispatcher {
     let overlapping = false;
 
     // Update labels
-    if (this.options.labels === true) {
+    if (this.params.labels === true) {
       for (i = 0; i < this.labels.length; i++) {
         maxLabelHeight = Math.max(maxLabelHeight, parseInt(window.getComputedStyle(this.labels[i]).height));
 
@@ -399,7 +402,7 @@ class Slider extends H5P.EventDispatcher {
       }
 
       // If there are no ticks, put the labels a little closer to the track
-      const buffer = (this.options.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
+      const buffer = (this.params.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
 
       // Update slider height
       this.container.style.height = (this.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';

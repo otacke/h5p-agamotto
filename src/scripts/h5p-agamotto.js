@@ -19,33 +19,33 @@ class Agamotto extends H5P.Question {
       return;
     }
 
-    this.options = params;
-    this.options.items = Agamotto.sanitizeItems(this.options.items);
+    this.params = params;
+    this.params.items = Agamotto.sanitizeItems(this.params.items);
 
     /*
      * Tribute to the weird behavior of H5P groups. Can be removed when a11y
      * gets more than one element and will be passed as an object, not a string.
      */
-    if (typeof this.options.a11y === 'string') {
-      this.options.a11y = {
-        imageChanged: this.options.a11y
+    if (typeof this.params.a11y === 'string') {
+      this.params.a11y = {
+        imageChanged: this.params.a11y
       };
     }
 
     // Set default values
-    this.options = Util.extend({
+    this.params = Util.extend({
       a11y: {
         imageChanged: 'Image changed'
       }
-    }, this.options);
+    }, this.params);
 
     this.extras = contentData;
 
-    this.maxItem = this.options.items.length - 1;
+    this.maxItem = this.params.items.length - 1;
     this.selector = '.h5p-agamotto-wrapper';
 
     // Set hasDescription = true if at least one item has a description
-    this.hasDescription = this.options.items.some(item => item.description !== '');
+    this.hasDescription = this.params.items.some(item => item.description !== '');
 
     this.id = contentId;
 
@@ -87,7 +87,7 @@ class Agamotto extends H5P.Question {
       }
 
       // Read contents to readspeakers.
-      this.announceARIA(Util.htmlDecode(this.options.a11y.imageChanged));
+      this.announceARIA(Util.htmlDecode(this.params.a11y.imageChanged));
     };
 
     /**
@@ -104,7 +104,7 @@ class Agamotto extends H5P.Question {
       const content = document.createElement('div');
       content.classList.add('h5p-agamotto');
 
-      if (!this.options.items || this.maxItem < 1) {
+      if (!this.params.items || this.maxItem < 1) {
         const warning = document.createElement('div');
         warning.classList.add('h5p-agamotto-warning');
         warning.innerHTML = 'I really need at least two images :-)';
@@ -117,18 +117,16 @@ class Agamotto extends H5P.Question {
        * problems in some cases.
        */
       const promises = [];
-      this.options.items.forEach(item => {
+      this.params.items.forEach(item => {
         promises.push(Images.loadImage(item.image, this.id));
       });
       Promise.all(promises).then(results => {
-        this.images = results.map((item, index) => {
-          return {
-            img: item,
-            alt: this.options.items[index].image.params.alt,
-            title: this.options.items[index].image.params.title,
-            description: this.options.items[index].description
-          };
-        });
+        this.images = results.map((item, index) => ({
+          img: item,
+          alt: this.params.items[index].image.params.alt,
+          title: this.params.items[index].image.params.title,
+          description: this.params.items[index].description
+        }));
 
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('h5p-agamotto-wrapper');
@@ -138,10 +136,10 @@ class Agamotto extends H5P.Question {
         content.appendChild(this.wrapper);
 
         // Title
-        if (this.options.title) {
+        if (this.params.title) {
           const title = document.createElement('div');
           title.classList.add('h5p-agamotto-title');
-          title.innerHTML = `<h2>${this.options.title}</h2>`;
+          title.innerHTML = `<h2>${this.params.title}</h2>`;
           this.wrapper.appendChild(title);
         }
 
@@ -153,12 +151,12 @@ class Agamotto extends H5P.Question {
         // Slider
         const labelTexts = [];
         for (let i = 0; i <= this.maxItem; i++) {
-          labelTexts[i] = this.options.items[i].labelText || '';
+          labelTexts[i] = this.params.items[i].labelText || '';
         }
         this.slider = new Slider({
-          snap: this.options.snap,
-          ticks: this.options.ticks,
-          labels: this.options.labels,
+          snap: this.params.snap,
+          ticks: this.params.ticks,
+          labels: this.params.labels,
           labelTexts: labelTexts,
           size: this.maxItem
         }, this.selector, this);
@@ -169,7 +167,7 @@ class Agamotto extends H5P.Question {
         if (this.hasDescription) {
           const descriptionTexts = [];
           for (let i = 0; i <= this.maxItem; i++) {
-            descriptionTexts[i] = this.options.items[i].description;
+            descriptionTexts[i] = this.params.items[i].description;
           }
           this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
           this.wrapper.appendChild(this.descriptions.getDOM());
@@ -183,7 +181,7 @@ class Agamotto extends H5P.Question {
         }
 
         // Add passepartout depending on the combination of elements
-        if (this.options.showTitle) {
+        if (this.params.showTitle) {
           // Passepartout at the top is not needed, because we have a title
           this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
         }
@@ -237,12 +235,8 @@ class Agamotto extends H5P.Question {
              * iOS devices don't switch screen.height and screen.width on rotation
              */
             if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-              if (/iPhone/.test(navigator.userAgent)) {
-                this.wrapper.style.width = Math.round((screen.width / 2) * this.images.getRatio()) + 'px';
-              }
-              else {
-                this.wrapper.style.width = Math.round((screen.height / 2) * this.images.getRatio()) + 'px';
-              }
+              const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+              this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
             }
             else {
               // Portrait orientation
@@ -298,7 +292,7 @@ class Agamotto extends H5P.Question {
      * Trigger xAPI statement 'completed' (when all images have been viewed).
      */
     this.xAPICompleted = () => {
-      if ((this.imagesViewed.length === this.options.items.length) && !this.completed) {
+      if ((this.imagesViewed.length === this.params.items.length) && !this.completed) {
         this.triggerXAPI('completed');
         // Only trigger this once
         this.completed = true;
