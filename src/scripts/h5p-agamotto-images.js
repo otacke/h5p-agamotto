@@ -5,9 +5,8 @@ import Util from './h5p-agamotto-util';
 class Images {
   /**
    * Images object
-   *
    * @class Images
-   * @param {Object} images - Array containing the images.
+   * @param {object[]} images Array containing the images.
    */
   constructor(images) {
     this.images = images;
@@ -91,7 +90,7 @@ class Images {
 
   /**
    * Get the DOM elements.
-   * @return {object} The DOM elements.
+   * @return {HTMLElement} The DOM elements.
    */
   getDOM() {
     return this.container;
@@ -107,8 +106,8 @@ class Images {
 
   /**
    * Set the visible image combination.
-   * @param {number} index - Image index.
-   * @param {number} opacity - Image opacity, [0..1].
+   * @param {number} index Image index.
+   * @param {number} opacity Image opacity, [0..1].
    */
   setImage(index, opacity) {
     const visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
@@ -140,8 +139,8 @@ class Images {
 
   /**
    * Load an Image.
-   * @param {string} imageObject - Image object.
-   * @param {number} id - H5P ID.
+   * @param {object} imageObject Image object.
+   * @param {number} id H5P ID.
    * @return {Promise} Promise for image being loaded.
    */
   static loadImage(imageObject, id) {

@@ -43,13 +43,12 @@ class Util {
 
   /**
    * Map a value from one range to another.
-   *
-   * @param {number} value - Value to me remapped.
-   * @param {number} lo1 - Lower boundary of first range.
-   * @param {number} hi1 - Upper boundary of first range.
-   * @param {number} lo2 - Lower boundary of second range.
-   * @param {number} hi2 - Upper boundary of second range.
-   * @return {number} - Remapped value.
+   * @param {number} value Value to me remapped.
+   * @param {number} lo1 Lower boundary of first range.
+   * @param {number} hi1 Upper boundary of first range.
+   * @param {number} lo2 Lower boundary of second range.
+   * @param {number} hi2 Upper boundary of second range.
+   * @return {number} Remapped value.
    */
   static project(value, lo1, hi1, lo2, hi2) {
     return lo2 + (hi2 - lo2) * (value - lo1) / (hi1 - lo1);
@@ -57,11 +56,10 @@ class Util {
 
   /**
    * Constrain a number value within a range.
-   *
-   * @param {number} value - Value to be constrained.
-   * @param {number} lo - Lower boundary of the range.
-   * @param {number} hi - Upper boundary of the range.
-   * @returns {number} - Constrained value.
+   * @param {number} value Value to be constrained.
+   * @param {number} lo Lower boundary of the range.
+   * @param {number} hi Upper boundary of the range.
+   * @returns {number} Constrained value.
    */
   static constrain(value, lo, hi) {
     return Math.min(hi, Math.max(lo, value));
@@ -69,7 +67,6 @@ class Util {
 
   /**
    * Detect mobile devices (http://detectmobilebrowsers.com/)
-   *
    * @returns {boolean} True if running on a mobile device.
    */
   static isMobileDevice() {

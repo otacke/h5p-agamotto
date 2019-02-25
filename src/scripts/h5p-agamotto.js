@@ -63,9 +63,8 @@ class Agamotto extends H5P.Question {
 
     /**
      * Update images and descriptions.
-     *
-     * @param {Number} index - Index of top image.
-     * @param {Number} opacity - Opacity of top image.
+     * @param {number} index Index of top image.
+     * @param {number} opacity Opacity of top image.
      */
     this.updateContent = (index, opacity) => {
       // Update images
@@ -314,7 +313,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Get the content type title.
-     *
      * @return {string} title.
      */
     this.getTitle = () => {
@@ -324,9 +322,8 @@ class Agamotto extends H5P.Question {
 
   /**
    * Remove missing items and limit amount.
-   *
-   * @param {Object} items - Items defined in semantics.org.
-   * @return {Object} Sanitized items.
+   * @param {object[]} items Items defined in semantics.org.
+   * @return {object[]} Sanitized items.
    */
   static sanitizeItems(items) {
     /*

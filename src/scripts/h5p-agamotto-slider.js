@@ -182,7 +182,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get indices of previous/next item.
-   * @return {Object} previous and next item index
+   * @return {object} Previous and next item index.
    */
   getNeighborItemIds() {
     const itemPosition = this.getCurrentItemId(false);
@@ -195,14 +195,14 @@ class Slider extends H5P.EventDispatcher {
     }
 
     return {
-      previous: Util.constrain(previous, 0, this.options.size),
-      next: Util.constrain(next, 0, this.options.size)
+      previous: Util.constrain(previous, 0, this.params.size),
+      next: Util.constrain(next, 0, this.params.size)
     };
   }
 
   /**
    * Get the DOM elements.
-   * @return {object} The DOM elements.
+   * @return {HTMLElement} The DOM elements.
    */
   getDOM() {
     return this.container;
@@ -226,7 +226,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the slider's width.
-   * @param {number} value - Slider's width.
+   * @param {number} value Slider's width.
    */
   setWidth(value) {
     this.trackWidth = value;
@@ -243,9 +243,9 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the position of the thumb on the slider track.
-   * @param {number} position - Position on the slider track from 0 to max.
-   * @param {boolean} animate - If true, slide instead of jumping.
-   * @param {boolean} resize - If true, won't recompute position/width ratio.
+   * @param {number} position Position on the slider track from 0 to max.
+   * @param {boolean} animate If true, slide instead of jumping.
+   * @param {boolean} resize If true, won't recompute position/width ratio.
    */
   setPosition(position, animate, resize) {
     if (this.thumb.classList.contains('h5p-agamotto-disabled')) {
@@ -327,7 +327,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the horizontal position of the pointer/finger.
-   * @param {Event} e - Delivering event.
+   * @param {Event} e Delivering event.
    * @return {number} Horizontal pointer/finger position.
    */
   getPointerX(e) {
@@ -409,8 +409,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Detect overlapping labels
-   * @param {object} label1 - Label 1.
-   * @param {object} label2 - Label 2.
+   * @param {HTMLElement} label1 Label 1.
+   * @param {HTMLElement} label2 Label 2.
    * @return {boolean} True if labels are overlapping.
    */
   areOverlapping(label1, label2) {
