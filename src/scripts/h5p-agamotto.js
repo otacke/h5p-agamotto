@@ -182,13 +182,6 @@ class Agamotto extends H5P.Question {
           this.heightDescriptions = 0;
         }
 
-        // ARIA Live Region
-        this.ariaLiveRegion = document.createElement('div');
-        this.ariaLiveRegion.setAttribute('aria-live', 'polite');
-        this.ariaLiveRegion.setAttribute('aria-atomic', 'true');
-        this.ariaLiveRegion.classList.add('h5p-agamotto-visually-hidden');
-        this.wrapper.appendChild(this.ariaLiveRegion);
-
         // Add passepartout depending on the combination of elements
         if (this.options.showTitle) {
           // Passepartout at the top is not needed, because we have a title
@@ -281,7 +274,8 @@ class Agamotto extends H5P.Question {
     this.announceARIA = (intro) => {
       let announcement = (intro !== undefined) ? `${intro}. ` : '';
       announcement += `${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
-      this.ariaLiveRegion.textContent = announcement;
+      // Use ARIA live region provided by H5P.Question
+      this.read(announcement);
     };
 
     // Cmp. vocabulary of xAPI statements: http://xapi.vocab.pub/datasets/adl/

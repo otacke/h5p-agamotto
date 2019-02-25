@@ -16,6 +16,8 @@ class Descriptions {
     this.descriptionTop.classList.add('h5p-agamotto-description-top');
     this.descriptionTop.style.opacity = 1;
     this.descriptionTop.innerHTML = texts[0];
+    // For ARIA, description is part of image alt text
+    this.descriptionTop.setAttribute('aria-hidden', 'true');
 
     this.descriptionBottom = document.createElement('div');
     this.descriptionBottom.classList.add('h5p-agamotto-description-bottom');
