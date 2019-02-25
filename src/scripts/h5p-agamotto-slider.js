@@ -405,7 +405,7 @@ class Slider extends H5P.EventDispatcher {
       const buffer = (this.params.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
 
       // Update slider height
-      this.container.style.height = (this.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
+      this.container.style.height = (Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
     }
   }
 
