@@ -35,6 +35,7 @@ class Agamotto extends H5P.Question {
 
     // Set default values
     this.params = Util.extend({
+      transparencyReplacementColor: '#000000',
       a11y: {
         imageChanged: 'Image changed'
       }
@@ -152,7 +153,7 @@ class Agamotto extends H5P.Question {
         }
 
         // Images
-        this.images = new Images(this.images);
+        this.images = new Images(this.images, this.params.transparencyReplacementColor);
         this.wrapper.appendChild(this.images.getDOM());
         this.images.resize();
 

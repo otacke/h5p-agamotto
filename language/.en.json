@@ -44,6 +44,10 @@
       "description": "If activated, the slider bar will display a label instead of/in addition to tick marks."
     },
     {
+      "label": "Transparency Replacement Color",
+      "description": "Set the color that will replace transparent areas of the images."
+    },
+    {
       "label": "Readspeaker",
       "fields": [
         {

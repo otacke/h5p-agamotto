@@ -44,6 +44,10 @@
       "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
     },
     {
+      "label": "Transparency Replacement Color",
+      "description": "Set the color that will replace transparent areas of the images."
+    },
+    {
       "label": "Readspeaker",
       "fields": [
         {

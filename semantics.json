@@ -97,6 +97,19 @@
     "default": false
   },
   {
+    "name": "transparencyReplacementColor",
+    "importance": "medium",
+    "type": "text",
+    "label": "Transparency Replacement Color",
+    "description": "Set the color that will replace transparent areas of the images.",
+    "optional": true,
+    "default": "#000000",
+    "widget": "colorSelector",
+    "spectrum": {
+      "showInput": true
+    }
+  },
+  {
     "name": "a11y",
     "type": "group",
     "common": true,

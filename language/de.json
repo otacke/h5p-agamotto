@@ -44,6 +44,10 @@
       "description": "Wenn diese Option aktiviert ist, werden beim Slider Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
     },
     {
+      "label": "Ersatzfarbe für Transparenz",
+      "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
+    },
+    {
       "label": "Read-Speaker",
       "fields": [
         {

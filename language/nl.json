@@ -44,6 +44,10 @@
       "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
     },
     {
+      "label": "Transparency Replacement Color",
+      "description": "Set the color that will replace transparent areas of the images."
+    },
+    {
       "label": "Readspeaker",
       "fields": [
         {

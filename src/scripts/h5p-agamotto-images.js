@@ -7,8 +7,9 @@ class Images {
    * Images object
    * @class Images
    * @param {object[]} images Array containing the images.
+   * @param {string} transparencyReplacementColor Replacement color for transparency.
    */
-  constructor(images) {
+  constructor(images, transparencyReplacementColor = '#000000') {
     this.images = images;
 
     this.ratio = this.images[0].img.naturalWidth / this.images[0].img.naturalHeight;
@@ -45,14 +46,14 @@ class Images {
       const offsetX = Util.constrain((maxX - imgX) / 2, 0, maxX);
       const offsetY = Util.constrain((maxY - imgY) / 2, 0, maxY);
 
-      // Create scaled image with black border.
+      // Create scaled image with background.
       const imageCanvas = document.createElement('canvas');
       imageCanvas.setAttribute('width', maxX);
       imageCanvas.setAttribute('height', maxY);
       const imageCtx = imageCanvas.getContext('2d');
       imageCtx.beginPath();
       imageCtx.rect(0, 0, maxX, maxY);
-      imageCtx.fillStyle = 'black';
+      imageCtx.fillStyle = transparencyReplacementColor;
       imageCtx.fill();
       imageCtx.drawImage(this.images[i].img, offsetX, offsetY, imgX, imgY);
 
