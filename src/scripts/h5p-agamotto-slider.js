@@ -290,7 +290,7 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.container.setAttribute('aria-valuenow', this.getCurrentItemId() + 1);
+    this.container.setAttribute('aria-valuenow', (this.getCurrentItemId() || 0) + 1);
 
     // Inform parent node
     this.trigger('update', {
