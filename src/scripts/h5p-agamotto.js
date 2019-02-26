@@ -1,6 +1,7 @@
 import Descriptions from './h5p-agamotto-descriptions';
 import Images from './h5p-agamotto-images';
 import Slider from './h5p-agamotto-slider';
+import Spinner from './h5p-agamotto-spinner';
 import Util from './h5p-agamotto-util';
 import Promise from 'promise-polyfill';
 
@@ -112,6 +113,10 @@ class Agamotto extends H5P.Question {
         return content;
       }
 
+      // Spinner to indicate loading
+      this.spinner = new Spinner('h5p-agamotto-spinner');
+      content.appendChild(this.spinner.getDOM());
+
       /*
        * Load images first before DOM is created; will help to prevent layout
        * problems in some cases.
@@ -127,6 +132,9 @@ class Agamotto extends H5P.Question {
           title: this.params.items[index].image.params.title,
           description: this.params.items[index].description
         }));
+
+        // We can hide the spinner now
+        this.spinner.hide();
 
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('h5p-agamotto-wrapper');
