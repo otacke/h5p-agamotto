@@ -1,16 +1,16 @@
 {
   "semantics": [
     {
-      "label": "Heading",
-      "placeholder": "Here you can add an optional heading.",
-      "description": "The heading you'd like to show above the image"
+      "label": "Titel",
+      "placeholder": "Hier kannst du optional einen Titel angeben.",
+      "description": "Der Titel, der über dem Bild angezeigt werden soll"
     },
     {
       "label": "Elemente",
       "entity": "Element",
       "widgets": [
         {
-          "label": "Default"
+          "label": "Voreinstellung"
         }
       ],
       "field": {
@@ -41,17 +41,17 @@
     },
     {
       "label": "Beschriftungen anzeigen",
-      "description": "Wenn diese Option aktiviert ist, werden beim Slider Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
+      "description": "Wenn diese Option aktiviert ist, werden beim Schieberegler Beschriftungen zusätzlich/alternativ zu den Bildpositionen angezeigt."
     },
     {
       "label": "Ersatzfarbe für Transparenz",
       "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
     },
     {
-      "label": "Read-Speaker",
+      "label": "Vorlesewerkzeug (Barrierefreiheit)",
       "fields": [
         {
-          "label": "Bild geändert",
+          "label": "Text, der vorgelesen wird, wenn sich das Bild geändert hat",
           "default": "Bild geändert"
         }
       ]
