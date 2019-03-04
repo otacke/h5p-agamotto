@@ -10,6 +10,27 @@ If you like what I do, please consider to become my supporter at patreon: https:
 ## Example
 !["Agamotto for H5P"](https://ibin.co/w800/3s38Wcrata19.png "Agamotto for H5P")
 
+## Building the distribution files
+Pull or download this archive files and go into the main folder. There run
+
+```bash
+npm install
+```
+
+to get the required modules. Then build the project using
+
+```bash
+npm run build
+```
+
+or
+
+```bash
+npm run watch
+```
+
+if you want to modify the code and want to get a fresh build built in the background.
+
 ## About this repository
 If you want to download the sourcecode, you can choose from three main branches:
 
