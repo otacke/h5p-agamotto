@@ -115,6 +115,7 @@
     "common": true,
     "label": "Readspeaker",
     "importance": "low",
+    "default": "Image changed",
     "fields": [
       {
         "name": "imageChanged",
