@@ -28,7 +28,7 @@ class Util {
    */
   static stripHTML(html) {
     let domElement = document.createElement('div');
-    domElement.innerHTML = html;
+    domElement.innerHTML = Util.htmlDecode(html); // Don't let HTML encoded stuff sneak in
     return domElement.textContent || domElement.innerText || '';
   }
 

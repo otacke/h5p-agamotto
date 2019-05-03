@@ -89,7 +89,7 @@ class Agamotto extends H5P.Question {
       }
 
       // Read contents to readspeakers.
-      this.announceARIA(Util.htmlDecode(this.params.a11y.imageChanged));
+      this.announceARIA(this.params.a11y.imageChanged);
     };
 
     /**
@@ -275,8 +275,9 @@ class Agamotto extends H5P.Question {
      * @param {string} [intro] Optional intro text.
      */
     this.announceARIA = (intro) => {
-      let announcement = (intro !== undefined) ? `${intro}. ` : '';
-      announcement += `${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
+      intro = (intro !== undefined) ? Util.htmlDecode(`${intro} `) : '';
+      let announcement = `${intro}${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
+      announcement = Util.stripHTML(announcement);
       // Use ARIA live region provided by H5P.Question
       this.read(announcement);
     };

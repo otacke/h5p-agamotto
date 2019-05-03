@@ -12,6 +12,13 @@ class Images {
   constructor(images, transparencyReplacementColor = '#000000') {
     this.images = images;
 
+    // Sanitize properties
+    this.images.map(image => {
+      image.alt = Util.stripHTML(image.alt);
+      image.title = Util.stripHTML(image.title);
+      image.description = Util.stripHTML(image.description);
+    });
+
     this.ratio = this.images[0].img.naturalWidth / this.images[0].img.naturalHeight;
 
     /*
@@ -25,8 +32,8 @@ class Images {
     for (let i = 0; i < this.images.length; i++) {
       let maxX = firstMaxX;
       let maxY = firstMaxY;
-      let imgX = images[i].img.naturalWidth;
-      let imgY = images[i].img.naturalHeight;
+      let imgX = this.images[i].img.naturalWidth;
+      let imgY = this.images[i].img.naturalHeight;
 
       // Scale image.
       if ((imgX / imgY < this.ratio) && (imgY > maxY)) {
@@ -72,13 +79,13 @@ class Images {
     this.imageTop.classList.add('h5p-agamotto-image-top');
     this.imageTop.src = images[0].img.src;
     this.imageTop.setAttribute('draggable', 'false');
-    this.imageTop.setAttribute('alt', images[0].alt);
-    this.imageTop.setAttribute('title', images[0].title);
-    this.imageTop.setAttribute('aria-label', `${images[0].alt}. ${Util.stripHTML(images[0].description)}`);
+    this.imageTop.setAttribute('alt', this.images[0].alt);
+    this.imageTop.setAttribute('title', this.images[0].title);
+    this.imageTop.setAttribute('aria-label', `${images[0].alt}. ${this.images[0].description}`);
 
     this.imageBottom = document.createElement('img');
     this.imageBottom.classList.add('h5p-agamotto-image-bottom');
-    this.imageBottom.src = images[1].img.src;
+    this.imageBottom.src = this.images[1].img.src;
     this.imageBottom.setAttribute('draggable', 'false');
     this.imageBottom.setAttribute('aria-hidden', true);
 
@@ -115,7 +122,7 @@ class Images {
     this.imageTop.src = this.images[index].img.src;
     this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
     this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
-    this.imageTop.setAttribute('aria-label', `${this.images[visibleImageIndex].alt}. ${Util.stripHTML(this.images[visibleImageIndex].description)}`);
+    this.imageTop.setAttribute('aria-label', `${this.images[visibleImageIndex].alt}. ${this.images[visibleImageIndex].description}`);
     this.imageTop.style.opacity = opacity;
     this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
   }
