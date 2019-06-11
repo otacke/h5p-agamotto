@@ -276,7 +276,8 @@ class Agamotto extends H5P.Question {
      */
     this.announceARIA = (intro) => {
       intro = (intro !== undefined) ? Util.htmlDecode(`${intro} `) : '';
-      let announcement = `${intro}${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
+      const descriptionText = (this.descriptions) ? this.descriptions.getCurrentDescriptionText() : '';
+      let announcement = `${intro}${this.images.getCurrentAltTag()}. ${descriptionText}`;
       announcement = Util.stripHTML(announcement);
       // Use ARIA live region provided by H5P.Question
       this.read(announcement);
