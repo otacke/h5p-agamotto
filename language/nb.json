@@ -36,6 +36,10 @@
       "description": "These options will let you control how the task behaves.",
       "fields": [
         {
+          "label": "Start image",
+          "description": "Set the number of the image to start with."
+        },
+        {
           "label": "Snap slider",
           "description": "If activated, the slider will snap to an image's position."
         },

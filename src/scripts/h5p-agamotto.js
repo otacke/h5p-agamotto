@@ -37,6 +37,7 @@ class Agamotto extends H5P.Question {
     this.params = Util.extend({
       items: [],
       behaviour: {
+        startImage: 1,
         snap: true,
         ticks: false,
         labels: false,
@@ -50,6 +51,7 @@ class Agamotto extends H5P.Question {
     this.extras = contentData;
 
     this.maxItem = this.params.items.length - 1;
+    this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
 
     // Set hasDescription = true if at least one item has a description
@@ -184,6 +186,7 @@ class Agamotto extends H5P.Question {
           ticks: this.params.behaviour.ticks,
           labels: this.params.behaviour.labels,
           labelTexts: labelTexts,
+          startRatio: this.startImage / this.maxItem,
           size: this.maxItem
         }, this.selector, this);
         this.wrapper.appendChild(this.slider.getDOM());

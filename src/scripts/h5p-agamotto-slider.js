@@ -8,6 +8,7 @@ class Slider extends H5P.EventDispatcher {
    * @param {boolean} params.snap If true, slider will snap to fixed positions.
    * @param {boolean} params.ticks If true, slider container will display ticks.
    * @param {boolean} params.labels If true, slider container will display tick labels.
+   * @param {number} params.startRatio Set the start ratio.
    * @param {object[]} params.labelTexts Tick labels.
    * @param {string} params.labelTexts.text Tick label.
    * @param {number} params.size Number of positions/ticks.
@@ -20,7 +21,8 @@ class Slider extends H5P.EventDispatcher {
     params = Util.extend({
       snap: true,
       ticks: false,
-      labels: false
+      labels: false,
+      startRatio: 0,
     }, params);
 
     this.params = params;
@@ -30,7 +32,7 @@ class Slider extends H5P.EventDispatcher {
     this.trackWidth = 0;
     this.trackOffset = null;
     this.thumbPosition = 0;
-    this.ratio = 0;
+    this.ratio = params.startRatio;
 
     this.ticks = [];
     this.labels = [];

@@ -53,6 +53,7 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
        */
       5: function (parameters, finished, extras) {
         parameters.behaviour = {
+          startImage: 1,
           snap: parameters.snap || true,
           ticks: parameters.ticks || false,
           labels: parameters.labels || false,

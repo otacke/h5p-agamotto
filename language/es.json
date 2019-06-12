@@ -36,6 +36,10 @@
       "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
       "fields": [
         {
+          "label": "Start image",
+          "description": "Set the number of the image to start with."
+        },
+        {
           "label": "Deslizador ajustado a la imágen.",
           "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
         },

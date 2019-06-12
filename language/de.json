@@ -36,6 +36,10 @@
       "description": "Diese Optionen legen fest, wie die Aufgabe im Detail funktioniert.",
       "fields": [
         {
+          "label": "Startbild",
+          "description": "Setzte hier die Nummer des Startbilds."
+        },
+        {
           "label": "Schieberegler einrasten",
           "description": "Wenn diese Option aktiviert ist, wird der Schieberegler an den Bildpositionen einrasten."
         },
