@@ -118,7 +118,7 @@ class Images {
    * @param {number} opacity Image opacity, [0..1].
    */
   setImage(index, opacity) {
-    const visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
+    const visibleImageIndex = Util.constrain(index + Math.round(1 - opacity), 0, this.images.length - 1);
     this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
     this.imageTop.src = this.images[index].img.src;
     this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
