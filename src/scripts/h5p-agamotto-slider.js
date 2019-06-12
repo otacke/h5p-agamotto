@@ -122,14 +122,15 @@ class Slider extends H5P.EventDispatcher {
       event.preventDefault();
       event.stopPropagation();
       this.setPosition(event, false);
-
-      this.addEventListener('touchmove', event => {
-        event = event || window.event;
-        event.preventDefault();
-        event.stopPropagation();
-        this.setPosition(event, false);
-      });
     });
+
+    this.container.addEventListener('touchmove', event => {
+      event = event || window.event;
+      event.preventDefault();
+      event.stopPropagation();
+      this.setPosition(event, false);
+    });
+
     this.container.addEventListener('touchend', event => {
       event = event || window.event;
       event.preventDefault();
@@ -174,6 +175,13 @@ class Slider extends H5P.EventDispatcher {
     nextItemId = Util.constrain(nextItemId, 0, this.params.size);
 
     this.setPosition(Util.project(nextItemId, 0, this.params.size, 0, this.getWidth()), true);
+  }
+
+  handleTouchMove(event) {
+    event = event || window.event;
+    event.preventDefault();
+    event.stopPropagation();
+    this.setPosition(event, false);
   }
 
   /**
