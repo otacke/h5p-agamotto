@@ -32,20 +32,26 @@
       }
     },
     {
-      "label": "Deslizador ajustado a la imágen.",
-      "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
-    },
-    {
-      "label": "Mostrar posicion de la imagen",
-      "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estarán resaltadas."
-    },
-    {
-      "label": "Mostrar etiquetas",
-      "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
-    },
-    {
-      "label": "Transparency Replacement Color",
-      "description": "Set the color that will replace transparent areas of the images."
+      "label": "Configuraciones de comportamiento",
+      "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
+      "fields": [
+        {
+          "label": "Deslizador ajustado a la imágen.",
+          "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
+        },
+        {
+          "label": "Mostrar posicion de la imagen",
+          "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estarán resaltadas."
+        },
+        {
+          "label": "Mostrar etiquetas",
+          "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
+        },
+        {
+          "label": "Transparency Replacement Color",
+          "description": "Set the color that will replace transparent areas of the images."
+        }
+      ]
     },
     {
       "label": "Readspeaker",

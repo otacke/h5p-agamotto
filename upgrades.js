@@ -46,6 +46,25 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
         extras.metadata = metadata;
 
         finished(null, parameters, extras);
+      },
+
+      /*
+       * Move parameters to behaviour group
+       */
+      5: function (parameters, finished, extras) {
+        parameters.behaviour = {
+          snap: parameters.snap || true,
+          ticks: parameters.ticks || false,
+          labels: parameters.labels || false,
+          transparencyReplacementColor: parameters.transparencyReplacementColor || '#000000'
+        };
+
+        delete parameters.snap;
+        delete parameters.ticks;
+        delete parameters.labels;
+        delete parameters.transparencyReplacementColor;
+
+        finished(null, parameters, extras);
       }
     }
   };

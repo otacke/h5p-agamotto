@@ -73,41 +73,50 @@
     }
   },
   {
-    "name": "snap",
-    "importance": "medium",
-    "type": "boolean",
-    "label": "Snap slider",
-    "description": "If activated, the slider will snap to an image's position.",
-    "default": true
-  },
-  {
-    "name": "ticks",
-    "importance": "medium",
-    "type": "boolean",
-    "label": "Display tick marks",
-    "description": "If activated, the slider bar will display a tick mark for each image.",
-    "default": false
-  },
-  {
-    "name": "labels",
-    "importance": "medium",
-    "type": "boolean",
-    "label": "Display labels",
-    "description": "If activated, the slider bar will display a label instead of/in addition to tick marks.",
-    "default": false
-  },
-  {
-    "name": "transparencyReplacementColor",
-    "importance": "medium",
-    "type": "text",
-    "label": "Transparency Replacement Color",
-    "description": "Set the color that will replace transparent areas of the images.",
-    "optional": true,
-    "default": "#000000",
-    "widget": "colorSelector",
-    "spectrum": {
-      "showInput": true
-    }
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behavioural settings",
+    "importance": "low",
+    "description": "These options will let you control how the task behaves.",
+    "fields": [
+      {
+        "name": "snap",
+        "importance": "medium",
+        "type": "boolean",
+        "label": "Snap slider",
+        "description": "If activated, the slider will snap to an image's position.",
+        "default": true
+      },
+      {
+        "name": "ticks",
+        "importance": "medium",
+        "type": "boolean",
+        "label": "Display tick marks",
+        "description": "If activated, the slider bar will display a tick mark for each image.",
+        "default": false
+      },
+      {
+        "name": "labels",
+        "importance": "medium",
+        "type": "boolean",
+        "label": "Display labels",
+        "description": "If activated, the slider bar will display a label instead of/in addition to tick marks.",
+        "default": false
+      },
+      {
+        "name": "transparencyReplacementColor",
+        "importance": "medium",
+        "type": "text",
+        "label": "Transparency Replacement Color",
+        "description": "Set the color that will replace transparent areas of the images.",
+        "optional": true,
+        "default": "#000000",
+        "widget": "colorSelector",
+        "spectrum": {
+          "showInput": true
+        }
+      }
+    ]
   },
   {
     "name": "a11y",

@@ -36,10 +36,12 @@ class Agamotto extends H5P.Question {
     // Set default values
     this.params = Util.extend({
       items: [],
-      snap: true,
-      ticks: false,
-      labels: false,
-      transparencyReplacementColor: '#000000',
+      behaviour: {
+        snap: true,
+        ticks: false,
+        labels: false,
+        transparencyReplacementColor: '#000000'
+      },
       a11y: {
         imageChanged: 'Image changed'
       }
@@ -168,7 +170,7 @@ class Agamotto extends H5P.Question {
         }
 
         // Images
-        this.images = new Images(this.images, this.params.transparencyReplacementColor);
+        this.images = new Images(this.images, this.params.behaviour.transparencyReplacementColor);
         this.wrapper.appendChild(this.images.getDOM());
         this.images.resize();
 
@@ -178,9 +180,9 @@ class Agamotto extends H5P.Question {
           labelTexts[i] = this.params.items[i].labelText || '';
         }
         this.slider = new Slider({
-          snap: this.params.snap,
-          ticks: this.params.ticks,
-          labels: this.params.labels,
+          snap: this.params.behaviour.snap,
+          ticks: this.params.behaviour.ticks,
+          labels: this.params.behaviour.labels,
           labelTexts: labelTexts,
           size: this.maxItem
         }, this.selector, this);
