@@ -248,15 +248,10 @@ class Slider extends H5P.EventDispatcher {
     else if (typeof position === 'object') {
       // Need to compute left offset of slider when DOM has been built
       if (this.trackOffset === null) {
-        this.trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
-        const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
-        if (questionContainer) {
-          const style = window.getComputedStyle(questionContainer) || 0;
-          this.trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
-        }
+        this.trackOffset = this.computeTrackOffset();
       }
 
-      position = this.getPointerX(position) - Slider.TRACK_OFFSET - this.trackOffset;
+      position = this.getPointerX(position) - this.trackOffset;
 
     }
     else {
@@ -401,6 +396,30 @@ class Slider extends H5P.EventDispatcher {
       // Update slider height
       this.container.style.height = (Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
     }
+  }
+
+  /**
+   * Compute offset for setting slider track zero position.
+   * @return {number} Track offset.
+   */
+  computeTrackOffset() {
+    let trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
+
+    const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
+    if (questionContainer) {
+      const style = window.getComputedStyle(questionContainer);
+      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+    }
+
+    const wrapper = Util.findClosest(this.container, this.selector);
+    if (wrapper) {
+      const style = window.getComputedStyle(wrapper);
+      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+    }
+
+    trackOffset += Slider.TRACK_OFFSET;
+
+    return trackOffset;
   }
 
   /**

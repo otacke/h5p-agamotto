@@ -72,10 +72,18 @@ class Util {
   /**
    * Find closest element with class.
    * @param {HTMLElement} element Element to start with.
-   * @param {string} classname Name of class to look for.
+   * @param {string} classname='.' Name of class to look for.
    * @return {HTMLElement} Element found.
    */
-  static findClosest(element, classname) {
+  static findClosest(element, classname = '.') {
+    if (!element) {
+      return null;
+    }
+
+    if (classname.substr(0, 1) === '.') {
+      classname = classname.substr(1);
+    }
+
     while (!element.classList.contains(classname) && (element = element.parentElement));
     return element;
   }
