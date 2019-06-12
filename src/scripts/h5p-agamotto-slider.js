@@ -293,20 +293,21 @@ class Slider extends H5P.EventDispatcher {
    * Snap slider to closest tick position.
    */
   snap() {
-    if (this.params.snap === true) {
-      const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
-      this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
-    }
     // Only trigger on mouseup that was started by mousedown over slider
-    if (this.sliderdown === true) {
-      // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
-      // Trigger xAPI when interacted with content
-      this.parent.xAPIInteracted();
-      // Will check if interaction was completed before triggering
-      this.parent.xAPICompleted();
-      // release interaction trigger
-      this.sliderdown = false;
+    if (this.sliderdown !== true || this.params.snap !== true) {
+      return;
     }
+
+    const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
+    this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
+
+    // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
+    // Trigger xAPI when interacted with content
+    this.parent.xAPIInteracted();
+    // Will check if interaction was completed before triggering
+    this.parent.xAPICompleted();
+    // release interaction trigger
+    this.sliderdown = false;
   }
 
   /**

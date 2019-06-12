@@ -96,6 +96,7 @@ class Agamotto extends H5P.Question {
 
       // Read contents to readspeakers.
       this.announceARIA(this.params.a11y.imageChanged);
+      console.log(index, opacity, this.params.a11y.imageChanged);
     };
 
     /**
