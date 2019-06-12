@@ -71,7 +71,7 @@ class Agamotto extends H5P.Question {
     this.updateContent = (index, opacity) => {
       // Limit updates for performance reasons, will be a little jumpy though
       opacity = Math.round(opacity * 10) / 10;
-      if (opacity === this.images.getTopOpacity() && opacity !== 1) {
+      if (opacity === this.images.getTopOpacity() && (opacity !== 1 || this.position === index)) {
         return;
       }
 
@@ -94,8 +94,13 @@ class Agamotto extends H5P.Question {
         }
       }
 
-      // Read contents to readspeakers.
-      this.announceARIA(this.params.a11y.imageChanged);
+      // Read contents to readspeakers when image changed
+      if (
+        this.slider.isUsed() && opacity === 0.5 ||
+        !this.slider.isUsed() && (opacity === 0 || opacity === 1)
+      ) {
+        this.announceARIA(this.params.a11y.imageChanged);
+      }
     };
 
     /**

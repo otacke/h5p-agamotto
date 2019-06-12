@@ -35,7 +35,7 @@ class Slider extends H5P.EventDispatcher {
     this.ticks = [];
     this.labels = [];
 
-    this.mousedown = false;
+    this.sliderdown = false;
     this.keydown = false;
     this.interactionstarted = false;
 
@@ -90,18 +90,15 @@ class Slider extends H5P.EventDispatcher {
       this.setPosition(event, false);
     });
     document.addEventListener('mouseup', () => {
-      this.mousedown = false;
       this.snap();
     });
     this.track.addEventListener('mousedown', event => {
       event = event || window.event;
-      this.mousedown = true;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
     this.thumb.addEventListener('mousedown', event => {
       event = event || window.event;
-      this.mousedown = true;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
@@ -242,7 +239,7 @@ class Slider extends H5P.EventDispatcher {
       position = parseInt(position);
     }
     else if (typeof position === 'object') {
-      if ((this.mousedown === false) && (position.type === 'mousemove')) {
+      if ((this.sliderdown === false) && (position.type === 'mousemove')) {
         return;
       }
 
@@ -295,6 +292,14 @@ class Slider extends H5P.EventDispatcher {
    */
   getPosition() {
     return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
+  }
+
+  /**
+   * Get current slider down state.
+   * @return {boolean} True, if slider is in usw.
+   */
+  isUsed() {
+    return this.sliderdown;
   }
 
   /**
