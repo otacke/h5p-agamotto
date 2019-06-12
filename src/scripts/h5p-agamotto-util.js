@@ -38,6 +38,10 @@ class Util {
    * @return {string} Output string.
    */
   static htmlDecode(input) {
+    if (!input || input === '') {
+      return '';
+    }
+
     return new DOMParser().parseFromString(input, 'text/html').documentElement.textContent;
   }
 
