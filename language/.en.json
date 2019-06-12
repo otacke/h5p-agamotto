@@ -37,7 +37,7 @@
       "fields": [
         {
           "label": "Start image",
-          "description": "Set the image to start with."
+          "description": "Set the number of the image to start with."
         },
         {
           "label": "Snap slider",
