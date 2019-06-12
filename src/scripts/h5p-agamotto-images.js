@@ -1,4 +1,4 @@
-import Promise from 'promise-polyfill';
+import Promise from 'core-js/features/promise';
 import Util from './h5p-agamotto-util';
 
 /** Class representing Images */

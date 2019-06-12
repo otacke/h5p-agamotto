@@ -1,9 +1,9 @@
 import Descriptions from './h5p-agamotto-descriptions';
 import Images from './h5p-agamotto-images';
+import Promise from 'core-js/features/promise';
 import Slider from './h5p-agamotto-slider';
 import Spinner from './h5p-agamotto-spinner';
 import Util from './h5p-agamotto-util';
-import Promise from 'promise-polyfill';
 
 /** Class for Agamotto interaction */
 class Agamotto extends H5P.Question {
