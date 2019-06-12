@@ -119,12 +119,12 @@ class Images {
    */
   setImage(index, opacity) {
     const visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
+    this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
     this.imageTop.src = this.images[index].img.src;
     this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
     this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
     this.imageTop.setAttribute('aria-label', `${this.images[visibleImageIndex].alt}. ${this.images[visibleImageIndex].description}`);
     this.imageTop.style.opacity = opacity;
-    this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
   }
 
   /**
@@ -143,6 +143,14 @@ class Images {
    */
   getRatio() {
     return this.ratio;
+  }
+
+  /**
+   * Get opacity of top image.
+   * @return {number} Opacity of top image.
+   */
+  getTopOpacity() {
+    return parseInt(this.imageTop.style.opacity || '');
   }
 
   /**
