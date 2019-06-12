@@ -28,6 +28,7 @@ class Slider extends H5P.EventDispatcher {
     this.parent = parent;
 
     this.trackWidth = 0;
+    this.trackOffset = null;
     this.thumbPosition = 0;
     this.ratio = 0;
 
@@ -245,14 +246,17 @@ class Slider extends H5P.EventDispatcher {
         return;
       }
 
-      let offset = parseInt(window.getComputedStyle(this.container).marginLeft);
-      const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
-      if (questionContainer) {
-        const style = window.getComputedStyle(questionContainer) || 0;
-        offset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+      // Need to compute left offset of slider when DOM has been built
+      if (this.trackOffset === null) {
+        this.trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
+        const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
+        if (questionContainer) {
+          const style = window.getComputedStyle(questionContainer) || 0;
+          this.trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+        }
       }
 
-      position = this.getPointerX(position) - Slider.TRACK_OFFSET - offset;
+      position = this.getPointerX(position) - Slider.TRACK_OFFSET - this.trackOffset;
 
     }
     else {
