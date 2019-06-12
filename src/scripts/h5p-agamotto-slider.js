@@ -252,7 +252,6 @@ class Slider extends H5P.EventDispatcher {
       }
 
       position = this.getPointerX(position) - this.trackOffset;
-
     }
     else {
       position = 0;

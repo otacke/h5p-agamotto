@@ -244,7 +244,7 @@ class Agamotto extends H5P.Question {
               this.maxItem
             );
             // Account for margin change and mapping outside the image indexes
-            const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
+            const topIndex = Util.constrain(Math.round(mappedValue), 0, this.maxItem);
 
             /*
              * Using the cosine will allow an image to be displayed a little longer
