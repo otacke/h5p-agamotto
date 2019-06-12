@@ -87,10 +87,15 @@ class Slider extends H5P.EventDispatcher {
 
     // Event Listeners for Mouse Interface
     document.addEventListener('mousemove', event => {
-      this.setPosition(event, false);
+      if (this.sliderdown) {
+        this.setPosition(event, false);
+      }
     });
     document.addEventListener('mouseup', () => {
-      this.snap();
+      if (this.sliderdown) {
+        this.sliderdown = false;
+        this.snap();
+      }
     });
     this.track.addEventListener('mousedown', event => {
       event = event || window.event;
@@ -239,10 +244,6 @@ class Slider extends H5P.EventDispatcher {
       position = parseInt(position);
     }
     else if (typeof position === 'object') {
-      if ((this.sliderdown === false) && (position.type === 'mousemove')) {
-        return;
-      }
-
       // Need to compute left offset of slider when DOM has been built
       if (this.trackOffset === null) {
         this.trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
@@ -306,21 +307,16 @@ class Slider extends H5P.EventDispatcher {
    * Snap slider to closest tick position.
    */
   snap() {
-    // Only trigger on mouseup that was started by mousedown over slider
-    if (this.sliderdown !== true || this.params.snap !== true) {
-      return;
+    if (this.params.snap === true) {
+      const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
+      this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
     }
-
-    const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
-    this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
 
     // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
     // Trigger xAPI when interacted with content
     this.parent.xAPIInteracted();
     // Will check if interaction was completed before triggering
     this.parent.xAPICompleted();
-    // release interaction trigger
-    this.sliderdown = false;
   }
 
   /**
