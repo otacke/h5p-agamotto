@@ -145,147 +145,152 @@ class Agamotto extends H5P.Question {
       this.params.items.forEach(item => {
         promises.push(Images.loadImage(item.image, this.id));
       });
-      Promise.all(promises).then(results => {
-        this.images = results.map((item, index) => ({
-          img: item,
-          alt: this.params.items[index].image.params.alt,
-          title: this.params.items[index].image.params.title,
-          description: this.params.items[index].description
-        }));
+      Promise
+        .all(promises)
+        .then(results => {
+          this.images = results.map((item, index) => ({
+            img: item,
+            alt: this.params.items[index].image.params.alt,
+            title: this.params.items[index].image.params.title,
+            description: this.params.items[index].description
+          }));
 
-        // We can hide the spinner now
-        this.spinner.hide();
+          // We can hide the spinner now
+          this.spinner.hide();
 
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('h5p-agamotto-wrapper');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-top');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
-        content.appendChild(this.wrapper);
+          this.wrapper = document.createElement('div');
+          this.wrapper.classList.add('h5p-agamotto-wrapper');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-top');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
+          content.appendChild(this.wrapper);
 
-        // Title
-        if (this.params.title) {
-          const title = document.createElement('div');
-          title.classList.add('h5p-agamotto-title');
-          title.innerHTML = `<h2>${this.params.title}</h2>`;
-          this.wrapper.appendChild(title);
-        }
+          // Title
+          if (this.params.title) {
+            const title = document.createElement('div');
+            title.classList.add('h5p-agamotto-title');
+            title.innerHTML = `<h2>${this.params.title}</h2>`;
+            this.wrapper.appendChild(title);
+          }
 
-        // Images
-        this.images = new Images(this.images, this.params.behaviour.transparencyReplacementColor);
-        this.wrapper.appendChild(this.images.getDOM());
-        this.images.resize();
+          // Images
+          this.images = new Images(this.images, this.params.behaviour.transparencyReplacementColor);
+          this.wrapper.appendChild(this.images.getDOM());
+          this.images.resize();
 
-        // Slider
-        const labelTexts = [];
-        for (let i = 0; i <= this.maxItem; i++) {
-          labelTexts[i] = this.params.items[i].labelText || '';
-        }
-        this.slider = new Slider({
-          snap: this.params.behaviour.snap,
-          ticks: this.params.behaviour.ticks,
-          labels: this.params.behaviour.labels,
-          labelTexts: labelTexts,
-          startRatio: this.startImage / this.maxItem,
-          size: this.maxItem
-        }, this.selector, this);
-        this.wrapper.appendChild(this.slider.getDOM());
-        this.slider.resize();
-
-        // Descriptions
-        if (this.hasDescription) {
-          const descriptionTexts = [];
+          // Slider
+          const labelTexts = [];
           for (let i = 0; i <= this.maxItem; i++) {
-            descriptionTexts[i] = this.params.items[i].description;
+            labelTexts[i] = this.params.items[i].labelText || '';
           }
-          this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
-          this.wrapper.appendChild(this.descriptions.getDOM());
-          this.descriptions.adjustHeight();
-          // Passepartout at the bottom is not needed, because we have a description
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-          this.heightDescriptions = this.descriptions.offsetHeight;
-        }
-        else {
-          this.heightDescriptions = 0;
-        }
+          this.slider = new Slider({
+            snap: this.params.behaviour.snap,
+            ticks: this.params.behaviour.ticks,
+            labels: this.params.behaviour.labels,
+            labelTexts: labelTexts,
+            startRatio: this.startImage / this.maxItem,
+            size: this.maxItem
+          }, this.selector, this);
+          this.wrapper.appendChild(this.slider.getDOM());
+          this.slider.resize();
 
-        // Add passepartout depending on the combination of elements
-        if (this.params.showTitle) {
-          // Passepartout at the top is not needed, because we have a title
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-        }
-        else if (!this.hasDescription) {
-          // No passepartout is needed at all, because we just have an image
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-        }
+          // Descriptions
+          if (this.hasDescription) {
+            const descriptionTexts = [];
+            for (let i = 0; i <= this.maxItem; i++) {
+              descriptionTexts[i] = this.params.items[i].description;
+            }
+            this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
+            this.wrapper.appendChild(this.descriptions.getDOM());
+            this.descriptions.adjustHeight();
+            // Passepartout at the bottom is not needed, because we have a description
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+            this.heightDescriptions = this.descriptions.offsetHeight;
+          }
+          else {
+            this.heightDescriptions = 0;
+          }
 
-        // KeyListeners for Images that will allow to jump from one image to another
-        this.imageContainer = this.images.getDOM ();
+          // Add passepartout depending on the combination of elements
+          if (this.params.showTitle) {
+            // Passepartout at the top is not needed, because we have a title
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+          }
+          else if (!this.hasDescription) {
+            // No passepartout is needed at all, because we just have an image
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+          }
 
-        // Trigger xAPI when starting to view content
-        this.xAPIExperienced();
+          // KeyListeners for Images that will allow to jump from one image to another
+          this.imageContainer = this.images.getDOM ();
 
-        this.slider.on('update', event => {
-          /*
-           * Map the slider value to the image indexes. Since we might not
-           * want to initiate opacity shifts right away, we can add a margin to
-           * the left and right of the slider where nothing happens
-           */
-          const margin = 5;
-          const mappedValue = Util.project(
-            event.data.position,
-            0 + margin,
-            this.slider.getWidth() - margin,
-            0,
-            this.maxItem
-          );
-          // Account for margin change and mapping outside the image indexes
-          const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
+          // Trigger xAPI when starting to view content
+          this.xAPIExperienced();
 
-          /*
-           * Using the cosine will allow an image to be displayed a little longer
-           * before blending than a linear function
-           */
-          const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
-          const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
-
-          this.updateContent(topIndex, topOpacity);
-        });
-
-        // Add Resize Handler
-        window.addEventListener('resize', () => {
-          // Prevent infinite resize loops
-          if (!this.resizeCooling) {
+          this.slider.on('update', event => {
             /*
-             * Decrease the size of the content if on a mobile device in landscape
-             * orientation, because it might be hard to use it otherwise.
-             * iOS devices don't switch screen.height and screen.width on rotation
+             * Map the slider value to the image indexes. Since we might not
+             * want to initiate opacity shifts right away, we can add a margin to
+             * the left and right of the slider where nothing happens
              */
-            if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-              const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-              this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
-            }
-            else {
-              // Portrait orientation
-              this.wrapper.style.width = 'auto';
-            }
+            const margin = 5;
+            const mappedValue = Util.project(
+              event.data.position,
+              0 + margin,
+              this.slider.getWidth() - margin,
+              0,
+              this.maxItem
+            );
+            // Account for margin change and mapping outside the image indexes
+            const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
 
-            // Resize DOM elements
-            this.images.resize();
-            this.slider.resize();
-            // The descriptions will get a scroll bar via CSS if necessary, no resize needed
-            this.trigger('resize');
+            /*
+             * Using the cosine will allow an image to be displayed a little longer
+             * before blending than a linear function
+             */
+            const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
+            const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
 
-            this.resizeCooling = setTimeout(() => {
-              this.resizeCooling = null;
-            }, Agamotto.RESIZE_COOLING_PERIOD);
-          }
+            this.updateContent(topIndex, topOpacity);
+          });
+
+          // Add Resize Handler
+          window.addEventListener('resize', () => {
+            // Prevent infinite resize loops
+            if (!this.resizeCooling) {
+              /*
+               * Decrease the size of the content if on a mobile device in landscape
+               * orientation, because it might be hard to use it otherwise.
+               * iOS devices don't switch screen.height and screen.width on rotation
+               */
+              if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+                const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+                this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+              }
+              else {
+                // Portrait orientation
+                this.wrapper.style.width = 'auto';
+              }
+
+              // Resize DOM elements
+              this.images.resize();
+              this.slider.resize();
+              // The descriptions will get a scroll bar via CSS if necessary, no resize needed
+              this.trigger('resize');
+
+              this.resizeCooling = setTimeout(() => {
+                this.resizeCooling = null;
+              }, Agamotto.RESIZE_COOLING_PERIOD);
+            }
+          });
+
+          this.trigger('resize');
+        })
+        .catch(error => {
+          console.warn(error);
         });
-
-        this.trigger('resize');
-      });
 
       return content;
     };
