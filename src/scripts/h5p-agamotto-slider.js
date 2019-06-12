@@ -140,10 +140,10 @@ class Slider extends H5P.EventDispatcher {
       event = event || window.event;
       const key = event.which || event.keyCode;
       if (key === 37 || key === 33) {
-        this.handleKeyMove(event, this.getNeighborItemIds().previous);
+        this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
       }
       else if (key === 39 || key === 34) {
-        this.handleKeyMove(event, this.getNeighborItemIds().next);
+        this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
       }
     });
     this.thumb.addEventListener('keyup', event => {
@@ -166,7 +166,9 @@ class Slider extends H5P.EventDispatcher {
   handleKeyMove(event, nextItemId) {
     event.preventDefault();
     this.keydown = event.which || event.keyCode;
-    this.setPosition(nextItemId * this.getWidth() / this.params.size, true);
+    nextItemId = Util.constrain(nextItemId, 0, this.params.size);
+
+    this.setPosition(Util.project(nextItemId, 0, this.params.size, 0, this.getWidth()), true);
   }
 
   /**
@@ -180,26 +182,6 @@ class Slider extends H5P.EventDispatcher {
       itemPosition = Math.round(itemPosition);
     }
     return itemPosition;
-  }
-
-  /**
-   * Get indices of previous/next item.
-   * @return {object} Previous and next item index.
-   */
-  getNeighborItemIds() {
-    const itemPosition = this.getCurrentItemId(false);
-
-    let previous = Math.floor(itemPosition);
-    let next = Math.ceil(itemPosition);
-    if (previous === next) {
-      previous--;
-      next++;
-    }
-
-    return {
-      previous: Util.constrain(previous, 0, this.params.size),
-      next: Util.constrain(next, 0, this.params.size)
-    };
   }
 
   /**
