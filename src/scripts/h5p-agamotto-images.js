@@ -150,7 +150,7 @@ class Images {
    * @return {number} Opacity of top image.
    */
   getTopOpacity() {
-    return parseInt(this.imageTop.style.opacity || '');
+    return parseFloat(this.imageTop.style.opacity || '');
   }
 
   /**
