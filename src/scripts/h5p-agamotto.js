@@ -35,6 +35,10 @@ class Agamotto extends H5P.Question {
 
     // Set default values
     this.params = Util.extend({
+      items: [],
+      snap: true,
+      ticks: false,
+      labels: false,
       transparencyReplacementColor: '#000000',
       a11y: {
         imageChanged: 'Image changed'
