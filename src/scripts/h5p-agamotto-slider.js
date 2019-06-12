@@ -245,11 +245,15 @@ class Slider extends H5P.EventDispatcher {
         return;
       }
 
-      position = this.getPointerX(position) -
-        Slider.TRACK_OFFSET -
-        parseInt(window.getComputedStyle(this.container).marginLeft) -
-        parseInt(window.getComputedStyle(document.querySelector(this.selector)).paddingLeft) -
-        parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
+      let offset = parseInt(window.getComputedStyle(this.container).marginLeft);
+      const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
+      if (questionContainer) {
+        const style = window.getComputedStyle(questionContainer) || 0;
+        offset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+      }
+
+      position = this.getPointerX(position) - Slider.TRACK_OFFSET - offset;
+
     }
     else {
       position = 0;

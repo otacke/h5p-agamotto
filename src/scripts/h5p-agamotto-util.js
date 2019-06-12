@@ -66,6 +66,17 @@ class Util {
   }
 
   /**
+   * Find closest element with class.
+   * @param {HTMLElement} element Element to start with.
+   * @param {string} classname Name of class to look for.
+   * @return {HTMLElement} Element found.
+   */
+  static findClosest(element, classname) {
+    while (!element.classList.contains(classname) && (element = element.parentElement));
+    return element;
+  }
+
+  /**
    * Detect mobile devices (http://detectmobilebrowsers.com/)
    * @returns {boolean} True if running on a mobile device.
    */
