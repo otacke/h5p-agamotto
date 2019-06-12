@@ -71,7 +71,7 @@ class Agamotto extends H5P.Question {
     this.updateContent = (index, opacity) => {
       // Limit updates for performance reasons, will be a little jumpy though
       opacity = Math.round(opacity * 10) / 10;
-      if (this.position === index && opacity === this.images.getTopOpacity()) {
+      if (opacity === this.images.getTopOpacity() && opacity !== 1) {
         return;
       }
 
