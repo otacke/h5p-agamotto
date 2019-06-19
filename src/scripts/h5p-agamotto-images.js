@@ -69,7 +69,7 @@ class Images {
 
       // This is necessary to prevent security errors in some cases.
       const src = imageCanvas.toDataURL('image/jpeg');
-      image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+      image.crossOrigin = this.images[i].img.crossOrigin; // Use the same crossOrigin policy as the inital load used.
       image.src = src;
       this.images[i].img = image;
     }
@@ -162,15 +162,22 @@ class Images {
   static loadImage(imageObject, id) {
     return new Promise((resolve, reject) => {
       const image = new Image();
-      const src = H5P.getPath(imageObject.params.file.path, id);
-      image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
       image.onload = () => {
         resolve(image);
       };
       image.onerror = (error) => {
         reject(error);
       };
-      image.src = src;
+
+      if (H5P.setSource !== undefined) {
+        H5P.setSource(image, imageObject.params.file, id);
+      }
+      else {
+        // Backwards compatibiltiy (H5P Core <v1.22)
+        const src = H5P.getPath(imageObject.params.file.path, id);
+        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+        image.src = src;
+      }
     });
   }
 }
