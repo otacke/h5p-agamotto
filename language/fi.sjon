@@ -1,68 +1,68 @@
 {
   "semantics": [
     {
-      "label": "Heading",
-      "placeholder": "Here you can add an optional heading.",
-      "description": "The heading you'd like to show above the image"
+      "label": "Otsikko",
+      "placeholder": "Tähän voit kirjoittaa vapaaehtoisen otsikon",
+      "description": "Otsikko jonka haluat näyttää kuvan yläpuolella"
     },
     {
-      "label": "Items",
-      "entity": "item",
+      "label": "Osiot",
+      "entity": "osio",
       "widgets": [
         {
-          "label": "Default"
+          "label": "Oletus"
         }
       ],
       "field": {
-        "label": "Item",
+        "label": "Osio",
         "fields": [
           {
-            "label": "Image"
+            "label": "Kuva"
           },
           {
-            "label": "Label",
-            "description": "Optional label for a tick. Please make sure it's not too long, or it will be hidden."
+            "label": "Etiketti",
+            "description": "Vapaaehtoinen etikettiteksti aikajanan pisteille. Älä kirjoita liian pitkää tekstiä tai sitä ei näytetä"
           },
           {
-            "label": "Description",
-            "placeholder": "My image description ...",
-            "description": "Optional description for the image"
+            "label": "Kuvaus",
+            "placeholder": "Minun kuvaukseni kuvalle...",
+            "description": "Vapaaehtoinen kuvausteksti kuvalle"
           }
         ]
       }
     },
     {
-      "label": "Behavioural settings",
-      "description": "These options will let you control how the task behaves.",
+      "label": "Lisäasetukset",
+      "description": "Nämä asetukset sallivat muuttaa tehtävän lisäasetuksia.",
       "fields": [
         {
-          "label": "Start image",
-          "description": "Set the number of the image to start with."
+          "label": "Aloituskuva",
+          "description": "Määritä sen kuvan numero josta haluat esityksen alkavan."
         },
         {
-          "label": "Snap slider",
-          "description": "If activated, the slider will snap to an image's position."
+          "label": "Kiinnity osion kuvauspisteeseen",
+          "description": "Jos valittuna aikajanan etenemistä kuvaava ikoni lukittuu aina kohdatessaan osion kuvauspisteen sen sijaan että liukuisi vapaasti."
         },
         {
-          "label": "Display tick marks",
-          "description": "If activated, the slider bar will display a tick mark for each image."
+          "label": "Näytä aikajanalla osioiden kuvauspisteet",
+          "description": "Jos päällä aikajanalla esitetään jokaiselle dialle oma osion kuvaupiste."
         },
         {
-          "label": "Display labels",
-          "description": "If activated, the slider bar will display a label instead of/in addition to tick marks."
+          "label": "Näytä etiketit",
+          "description": "Jos päällä osion kuvauspisteen päällä esitetään määrittelemäsi etikettiteksti"
         },
         {
-          "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images."
+          "label": "Läpinäkyvyyden korvaava väri",
+          "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet."
         }
       ]
     },
     {
-      "label": "Readspeaker",
+      "label": "Ruudunlukija",
       "fields": [
         {
-          "label": "Image changed",
-          "default": "Image changed"
+          "label": "Kuva vaihtui",
+          "default": "Kuva vaihtui"
         }
       ]
     }
