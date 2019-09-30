@@ -132,6 +132,10 @@
   background-size:contain;
   border-radius: 2px;
 }
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:focus {
+  outline: 2px solid #179fff;
+  outline-offset: 4px;
+}
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb.h5p-agamotto-disabled {
   color: #dbd7d1;
   cursor: default;
