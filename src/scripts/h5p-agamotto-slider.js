@@ -145,10 +145,10 @@ class Slider extends H5P.EventDispatcher {
       }
       event = event || window.event;
       const key = event.which || event.keyCode;
-      if (key === 37 || key === 33) {
+      if (key === 37 || key === 38) {
         this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
       }
-      else if (key === 39 || key === 34) {
+      else if (key === 39 || key === 40) {
         this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
       }
     });
