@@ -47,13 +47,13 @@ class Slider extends H5P.EventDispatcher {
     this.thumb = document.createElement('div');
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
+    this.thumb.setAttribute('role', 'slider');
+    this.thumb.setAttribute('aria-valuenow', 1);
+    this.thumb.setAttribute('aria-valuemin', 1);
+    this.thumb.setAttribute('aria-valuemax', this.params.size + 1);
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');
-    this.container.setAttribute('role', 'slider');
-    this.container.setAttribute('aria-valuenow', 1);
-    this.container.setAttribute('aria-valuemin', 1);
-    this.container.setAttribute('aria-valuemax', this.params.size + 1);
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
@@ -295,7 +295,7 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.container.setAttribute('aria-valuenow', (this.getCurrentItemId() || 0) + 1);
+    this.thumb.setAttribute('aria-valuenow', (this.getCurrentItemId() || 0) + 1);
 
     // Inform parent node
     this.trigger('update', {
