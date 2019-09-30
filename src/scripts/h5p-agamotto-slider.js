@@ -36,7 +36,6 @@ class Slider extends H5P.EventDispatcher {
 
     this.ticks = [];
     this.labels = [];
-    this.descriptions = [];
 
     this.sliderdown = false;
     this.keydown = false;
@@ -82,16 +81,9 @@ class Slider extends H5P.EventDispatcher {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
         this.labels[i].innerHTML = this.params.labelTexts[i];
-        this.descriptions[i] = this.params.descriptions[i] || this.params.labelTexts[i] || '';
         this.container.appendChild(this.labels[i]);
       }
     }
-    else {
-      this.descriptions = this.params.descriptions;
-    }
-
-    // Set current value for slider
-    this.thumb.setAttribute('aria-valuetext', this.descriptions[i]);
 
     // Event Listeners for Mouse Interface
     document.addEventListener('mousemove', event => {
@@ -301,7 +293,11 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.thumb.setAttribute('aria-valuetext', this.descriptions[this.getCurrentItemId() || 0]);
+    const currentItemId = (this.getCurrentItemId() || 0);
+    this.thumb.setAttribute(
+      'aria-valuetext',
+      this.params.labels ? this.labels[currentItemId].innerHTML : `${this.params.a11y.image} ${currentItemId + 1}`
+    );
 
     // Inform parent node
     this.trigger('update', {

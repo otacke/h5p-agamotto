@@ -56,6 +56,16 @@
           "description": "Configurar el color que remplazará las áreas transparentes de las imágenes."
         }
       ]
+    },
+    {
+      "label": "Readspeaker",
+      "default": "Imagen",
+      "fields": [
+        {
+          "label": "Imagen",
+          "default": "Imagen"
+        }
+      ]
     }
   ]
 }

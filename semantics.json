@@ -127,5 +127,22 @@
         }
       }
     ]
+  },
+  {
+    "name": "a11y",
+    "type": "group",
+    "common": true,
+    "label": "Readspeaker",
+    "importance": "low",
+    "default": "Image",
+    "fields": [
+      {
+        "name": "image",
+        "type": "text",
+        "label": "Image",
+        "importance": "low",
+        "default": "Image"
+      }
+    ]
   }
 ]

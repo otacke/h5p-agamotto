@@ -56,6 +56,16 @@
           "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
         }
       ]
+    },
+    {
+      "label": "Vorlesewerkzeug (Barrierefreiheit)",
+      "default": "Bild",
+      "fields": [
+        {
+          "label": "Bild",
+          "default": "Bild"
+        }
+      ]
     }
   ]
 }

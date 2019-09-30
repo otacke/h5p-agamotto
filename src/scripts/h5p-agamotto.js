@@ -23,6 +23,15 @@ class Agamotto extends H5P.Question {
     this.params = params;
     this.params.items = Agamotto.sanitizeItems(this.params.items);
 
+    /*
+     * Tribute to the weird behavior of H5P groups. Can be removed when a11y
+     * gets more than one element and will be passed as an object, not a string.
+     */
+    if (typeof this.params.a11y === 'string') {
+      this.params.a11y = {
+        image: this.params.a11y
+      };
+    }
 
     // Set default values
     this.params = Util.extend({
@@ -33,6 +42,9 @@ class Agamotto extends H5P.Question {
         ticks: false,
         labels: false,
         transparencyReplacementColor: '#000000'
+      },
+      a11y: {
+        image: 'Image'
       }
     }, this.params);
 
@@ -167,10 +179,12 @@ class Agamotto extends H5P.Question {
             snap: this.params.behaviour.snap,
             ticks: this.params.behaviour.ticks,
             labels: this.params.behaviour.labels,
-            descriptions: this.images.getDescriptions(),
             labelTexts: labelTexts,
             startRatio: this.startImage / this.maxItem,
-            size: this.maxItem
+            size: this.maxItem,
+            a11y: {
+              image: this.params.a11y.image
+            }
           }, this.selector, this);
           this.wrapper.appendChild(this.slider.getDOM());
           this.slider.resize();
