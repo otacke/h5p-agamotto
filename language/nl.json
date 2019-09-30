@@ -56,15 +56,6 @@
           "description": "Set the color that will replace transparent areas of the images."
         }
       ]
-    },
-    {
-      "label": "Readspeaker",
-      "fields": [
-        {
-          "label": "Image changed",
-          "default": "Image changed"
-        }
-      ]
     }
   ]
 }

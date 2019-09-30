@@ -36,10 +36,12 @@ class Slider extends H5P.EventDispatcher {
 
     this.ticks = [];
     this.labels = [];
+    this.descriptions = [];
 
     this.sliderdown = false;
     this.keydown = false;
     this.interactionstarted = false;
+    this.wasUsed = false;
 
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
@@ -48,9 +50,6 @@ class Slider extends H5P.EventDispatcher {
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
     this.thumb.setAttribute('role', 'slider');
-    this.thumb.setAttribute('aria-valuenow', 1);
-    this.thumb.setAttribute('aria-valuemin', 1);
-    this.thumb.setAttribute('aria-valuemax', this.params.size + 1);
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');
@@ -83,9 +82,16 @@ class Slider extends H5P.EventDispatcher {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
         this.labels[i].innerHTML = this.params.labelTexts[i];
+        this.descriptions[i] = this.params.descriptions[i] || this.params.labelTexts[i] || '';
         this.container.appendChild(this.labels[i]);
       }
     }
+    else {
+      this.descriptions = this.params.descriptions;
+    }
+
+    // Set current value for slider
+    this.thumb.setAttribute('aria-valuetext', this.descriptions[i]);
 
     // Event Listeners for Mouse Interface
     document.addEventListener('mousemove', event => {
@@ -295,7 +301,7 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.thumb.setAttribute('aria-valuenow', (this.getCurrentItemId() || 0) + 1);
+    this.thumb.setAttribute('aria-valuetext', this.descriptions[this.getCurrentItemId() || 0]);
 
     // Inform parent node
     this.trigger('update', {

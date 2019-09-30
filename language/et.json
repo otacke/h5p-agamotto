@@ -56,15 +56,6 @@
           "description": "Seadista värv, mis asendab piltide nähtamatud alad."
         }
       ]
-    },
-    {
-      "label": "Lugeja",
-      "fields": [
-        {
-          "label": "Pilt muutus",
-          "default": "Pilt muutus"
-        }
-      ]
     }
   ]
 }

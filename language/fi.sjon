@@ -56,15 +56,6 @@
           "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet."
         }
       ]
-    },
-    {
-      "label": "Ruudunlukija",
-      "fields": [
-        {
-          "label": "Kuva vaihtui",
-          "default": "Kuva vaihtui"
-        }
-      ]
     }
   ]
 }

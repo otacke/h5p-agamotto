@@ -127,22 +127,5 @@
         }
       }
     ]
-  },
-  {
-    "name": "a11y",
-    "type": "group",
-    "common": true,
-    "label": "Readspeaker",
-    "importance": "low",
-    "default": "Image changed",
-    "fields": [
-      {
-        "name": "imageChanged",
-        "type": "text",
-        "label": "Image changed",
-        "importance": "low",
-        "default": "Image changed"
-      }
-    ]
   }
 ]

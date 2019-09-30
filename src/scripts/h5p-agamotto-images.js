@@ -113,6 +113,14 @@ class Images {
   }
 
   /**
+   * Get descriptions of images.
+   * @return {object[]} Descriptions.
+   */
+  getDescriptions() {
+    return this.images.map(image => image.alt || image.title);
+  }
+
+  /**
    * Set the visible image combination.
    * @param {number} index Image index.
    * @param {number} opacity Image opacity, [0..1].
