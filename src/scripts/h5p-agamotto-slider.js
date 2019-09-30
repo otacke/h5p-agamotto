@@ -145,11 +145,24 @@ class Slider extends H5P.EventDispatcher {
       }
       event = event || window.event;
       const key = event.which || event.keyCode;
-      if (key === 37 || key === 38) {
-        this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
-      }
-      else if (key === 39 || key === 40) {
-        this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
+      switch (key) {
+        case 35: // end
+          this.handleKeyMove(event, this.params.size);
+          break;
+
+        case 36: // home
+          this.handleKeyMove(event, 0);
+          break;
+
+        case 37: // left
+        case 38: // up
+          this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
+          break;
+
+        case 39: // right
+        case 40: // down
+          this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
+          break;
       }
     });
     this.thumb.addEventListener('keyup', event => {
