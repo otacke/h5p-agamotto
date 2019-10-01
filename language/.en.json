@@ -59,11 +59,14 @@
     },
     {
       "label": "Readspeaker",
-      "default": "Image",
       "fields": [
         {
           "label": "Image",
           "default": "Image"
+        },
+        {
+          "label": "Image Slider",
+          "default": "Image Slider"
         }
       ]
     }

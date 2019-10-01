@@ -49,6 +49,7 @@ class Slider extends H5P.EventDispatcher {
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
     this.thumb.setAttribute('role', 'slider');
+    this.thumb.setAttribute('aria-label', this.params.a11y.imageSlider);
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');

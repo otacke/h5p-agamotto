@@ -50,6 +50,7 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
 
       /*
        * Move parameters to behaviour group
+       * Remove old single a11y and make object
        */
       5: function (parameters, finished, extras) {
         parameters.behaviour = {
@@ -64,6 +65,9 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
         delete parameters.ticks;
         delete parameters.labels;
         delete parameters.transparencyReplacementColor;
+
+        parameters.a11y = {
+        };
 
         finished(null, parameters, extras);
       }

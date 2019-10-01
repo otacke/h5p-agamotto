@@ -59,11 +59,14 @@
     },
     {
       "label": "Vorlesewerkzeug (Barrierefreiheit)",
-      "default": "Bild",
       "fields": [
         {
           "label": "Bild",
           "default": "Bild"
+        },
+        {
+          "label": "Schieberegler für Bilder",
+          "default": "Schieberegler für Bilder"
         }
       ]
     }

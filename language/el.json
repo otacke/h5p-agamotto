@@ -59,11 +59,14 @@
     },
     {
       "label": "Ακουστική υποβοήθηση",
-      "default": "Εικόνα",
       "fields": [
         {
           "label": "Εικόνα",
           "default": "Εικόνα"
+        },
+        {
+          "label": "Image Slider",
+          "default": "Image Slider"
         }
       ]
     }

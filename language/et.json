@@ -59,11 +59,14 @@
     },
     {
       "label": "Lugeja",
-      "default": "Pilt",
       "fields": [
         {
           "label": "Pilt",
           "default": "Pilt"
+        },
+        {
+          "label": "Image Slider",
+          "default": "Image Slider"
         }
       ]
     }
