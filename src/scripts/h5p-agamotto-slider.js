@@ -297,7 +297,9 @@ class Slider extends H5P.EventDispatcher {
     const currentItemId = (this.getCurrentItemId() || 0);
     this.thumb.setAttribute(
       'aria-valuetext',
-      this.params.labels ? this.labels[currentItemId].innerHTML : `${this.params.a11y.image} ${currentItemId + 1}`
+      this.params.labels ?
+        this.labels[currentItemId].innerHTML :
+        this.params.altTitleTexts[currentItemId] || `${this.params.a11y.image} ${currentItemId + 1}`
     );
 
     // Inform parent node

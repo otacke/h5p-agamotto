@@ -171,6 +171,7 @@ class Agamotto extends H5P.Question {
             ticks: this.params.behaviour.ticks,
             labels: this.params.behaviour.labels,
             labelTexts: labelTexts,
+            altTitleTexts: this.images.getAltTitleTags(),
             startRatio: this.startImage / this.maxItem,
             size: this.maxItem,
             a11y: {

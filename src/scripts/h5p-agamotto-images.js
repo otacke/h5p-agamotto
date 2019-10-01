@@ -116,6 +116,14 @@ class Images {
   }
 
   /**
+   * Get all alt tags or title tags as alternative.
+   * @return {object[]} Alt tags or title texts.
+.  */
+  getAltTitleTags() {
+    return this.images.map(image => image.alt || image.title);
+  }
+
+  /**
    * Set the visible image combination.
    * @param {number} index Image index.
    * @param {number} opacity Image opacity, [0..1].
