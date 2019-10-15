@@ -8,6 +8,7 @@ class Slider extends H5P.EventDispatcher {
    * @param {boolean} params.snap If true, slider will snap to fixed positions.
    * @param {boolean} params.ticks If true, slider container will display ticks.
    * @param {boolean} params.labels If true, slider container will display tick labels.
+   * @param {number} params.startRatio Set the start ratio.
    * @param {object[]} params.labelTexts Tick labels.
    * @param {string} params.labelTexts.text Tick label.
    * @param {number} params.size Number of positions/ticks.
@@ -20,7 +21,8 @@ class Slider extends H5P.EventDispatcher {
     params = Util.extend({
       snap: true,
       ticks: false,
-      labels: false
+      labels: false,
+      startRatio: 0,
     }, params);
 
     this.params = params;
@@ -28,15 +30,17 @@ class Slider extends H5P.EventDispatcher {
     this.parent = parent;
 
     this.trackWidth = 0;
+    this.trackOffset = null;
     this.thumbPosition = 0;
-    this.ratio = 0;
+    this.ratio = params.startRatio;
 
     this.ticks = [];
     this.labels = [];
 
-    this.mousedown = false;
+    this.sliderdown = false;
     this.keydown = false;
     this.interactionstarted = false;
+    this.wasUsed = false;
 
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
@@ -44,13 +48,11 @@ class Slider extends H5P.EventDispatcher {
     this.thumb = document.createElement('div');
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
+    this.thumb.setAttribute('role', 'slider');
+    this.thumb.setAttribute('aria-label', this.params.a11y.imageSlider);
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');
-    this.container.setAttribute('role', 'slider');
-    this.container.setAttribute('aria-valuenow', 1);
-    this.container.setAttribute('aria-valuemin', 1);
-    this.container.setAttribute('aria-valuemax', this.params.size + 1);
     this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
@@ -86,21 +88,23 @@ class Slider extends H5P.EventDispatcher {
 
     // Event Listeners for Mouse Interface
     document.addEventListener('mousemove', event => {
-      this.setPosition(event, false);
+      if (this.sliderdown) {
+        this.setPosition(event, false);
+      }
     });
     document.addEventListener('mouseup', () => {
-      this.mousedown = false;
-      this.snap();
+      if (this.sliderdown) {
+        this.sliderdown = false;
+        this.snap();
+      }
     });
     this.track.addEventListener('mousedown', event => {
       event = event || window.event;
-      this.mousedown = true;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
     this.thumb.addEventListener('mousedown', event => {
       event = event || window.event;
-      this.mousedown = true;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
@@ -117,14 +121,15 @@ class Slider extends H5P.EventDispatcher {
       event.preventDefault();
       event.stopPropagation();
       this.setPosition(event, false);
-
-      this.addEventListener('touchmove', event => {
-        event = event || window.event;
-        event.preventDefault();
-        event.stopPropagation();
-        this.setPosition(event, false);
-      });
     });
+
+    this.container.addEventListener('touchmove', event => {
+      event = event || window.event;
+      event.preventDefault();
+      event.stopPropagation();
+      this.setPosition(event, false);
+    });
+
     this.container.addEventListener('touchend', event => {
       event = event || window.event;
       event.preventDefault();
@@ -139,11 +144,24 @@ class Slider extends H5P.EventDispatcher {
       }
       event = event || window.event;
       const key = event.which || event.keyCode;
-      if (key === 37 || key === 33) {
-        this.handleKeyMove(event, this.getNeighborItemIds().previous);
-      }
-      else if (key === 39 || key === 34) {
-        this.handleKeyMove(event, this.getNeighborItemIds().next);
+      switch (key) {
+        case 35: // end
+          this.handleKeyMove(event, this.params.size);
+          break;
+
+        case 36: // home
+          this.handleKeyMove(event, 0);
+          break;
+
+        case 37: // left
+        case 38: // up
+          this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
+          break;
+
+        case 39: // right
+        case 40: // down
+          this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
+          break;
       }
     });
     this.thumb.addEventListener('keyup', event => {
@@ -166,7 +184,16 @@ class Slider extends H5P.EventDispatcher {
   handleKeyMove(event, nextItemId) {
     event.preventDefault();
     this.keydown = event.which || event.keyCode;
-    this.setPosition(nextItemId * this.getWidth() / this.params.size, true);
+    nextItemId = Util.constrain(nextItemId, 0, this.params.size);
+
+    this.setPosition(Util.project(nextItemId, 0, this.params.size, 0, this.getWidth()), true);
+  }
+
+  handleTouchMove(event) {
+    event = event || window.event;
+    event.preventDefault();
+    event.stopPropagation();
+    this.setPosition(event, false);
   }
 
   /**
@@ -180,26 +207,6 @@ class Slider extends H5P.EventDispatcher {
       itemPosition = Math.round(itemPosition);
     }
     return itemPosition;
-  }
-
-  /**
-   * Get indices of previous/next item.
-   * @return {object} Previous and next item index.
-   */
-  getNeighborItemIds() {
-    const itemPosition = this.getCurrentItemId(false);
-
-    let previous = Math.floor(itemPosition);
-    let next = Math.ceil(itemPosition);
-    if (previous === next) {
-      previous--;
-      next++;
-    }
-
-    return {
-      previous: Util.constrain(previous, 0, this.params.size),
-      next: Util.constrain(next, 0, this.params.size)
-    };
   }
 
   /**
@@ -259,15 +266,12 @@ class Slider extends H5P.EventDispatcher {
       position = parseInt(position);
     }
     else if (typeof position === 'object') {
-      if ((this.mousedown === false) && (position.type === 'mousemove')) {
-        return;
+      // Need to compute left offset of slider when DOM has been built
+      if (this.trackOffset === null) {
+        this.trackOffset = this.computeTrackOffset();
       }
 
-      position = this.getPointerX(position) -
-        Slider.TRACK_OFFSET -
-        parseInt(window.getComputedStyle(this.container).marginLeft) -
-        parseInt(window.getComputedStyle(document.querySelector(this.selector)).paddingLeft) -
-        parseInt(window.getComputedStyle(document.querySelector(this.selector)).marginLeft);
+      position = this.getPointerX(position) - this.trackOffset;
     }
     else {
       position = 0;
@@ -290,7 +294,13 @@ class Slider extends H5P.EventDispatcher {
     // Update DOM
     this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
-    this.container.setAttribute('aria-valuenow', (this.getCurrentItemId() || 0) + 1);
+    const currentItemId = (this.getCurrentItemId() || 0);
+    this.thumb.setAttribute(
+      'aria-valuetext',
+      this.params.labels ?
+        this.labels[currentItemId].innerHTML :
+        this.params.altTitleTexts[currentItemId] || `${this.params.a11y.image} ${currentItemId + 1}`
+    );
 
     // Inform parent node
     this.trigger('update', {
@@ -308,6 +318,14 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Get current slider down state.
+   * @return {boolean} True, if slider is in usw.
+   */
+  isUsed() {
+    return this.sliderdown;
+  }
+
+  /**
    * Snap slider to closest tick position.
    */
   snap() {
@@ -315,16 +333,12 @@ class Slider extends H5P.EventDispatcher {
       const snapIndex = Math.round(Util.project(this.ratio, 0, 1, 0, this.params.size));
       this.setPosition(snapIndex * this.getWidth() / this.params.size, true);
     }
-    // Only trigger on mouseup that was started by mousedown over slider
-    if (this.sliderdown === true) {
-      // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
-      // Trigger xAPI when interacted with content
-      this.parent.xAPIInteracted();
-      // Will check if interaction was completed before triggering
-      this.parent.xAPICompleted();
-      // release interaction trigger
-      this.sliderdown = false;
-    }
+
+    // Won't pass object and context if invoked by Agamotto.prototype.xAPI...()
+    // Trigger xAPI when interacted with content
+    this.parent.xAPIInteracted();
+    // Will check if interaction was completed before triggering
+    this.parent.xAPICompleted();
   }
 
   /**
@@ -407,6 +421,30 @@ class Slider extends H5P.EventDispatcher {
       // Update slider height
       this.container.style.height = (Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
     }
+  }
+
+  /**
+   * Compute offset for setting slider track zero position.
+   * @return {number} Track offset.
+   */
+  computeTrackOffset() {
+    let trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
+
+    const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
+    if (questionContainer) {
+      const style = window.getComputedStyle(questionContainer);
+      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+    }
+
+    const wrapper = Util.findClosest(this.container, this.selector);
+    if (wrapper) {
+      const style = window.getComputedStyle(wrapper);
+      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+    }
+
+    trackOffset += Slider.TRACK_OFFSET;
+
+    return trackOffset;
   }
 
   /**

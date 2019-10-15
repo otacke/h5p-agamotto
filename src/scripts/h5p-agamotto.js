@@ -1,9 +1,9 @@
 import Descriptions from './h5p-agamotto-descriptions';
 import Images from './h5p-agamotto-images';
+import Promise from 'core-js/features/promise';
 import Slider from './h5p-agamotto-slider';
 import Spinner from './h5p-agamotto-spinner';
 import Util from './h5p-agamotto-util';
-import Promise from 'promise-polyfill';
 
 /** Class for Agamotto interaction */
 class Agamotto extends H5P.Question {
@@ -23,27 +23,26 @@ class Agamotto extends H5P.Question {
     this.params = params;
     this.params.items = Agamotto.sanitizeItems(this.params.items);
 
-    /*
-     * Tribute to the weird behavior of H5P groups. Can be removed when a11y
-     * gets more than one element and will be passed as an object, not a string.
-     */
-    if (typeof this.params.a11y === 'string') {
-      this.params.a11y = {
-        imageChanged: this.params.a11y
-      };
-    }
-
     // Set default values
     this.params = Util.extend({
-      transparencyReplacementColor: '#000000',
+      items: [],
+      behaviour: {
+        startImage: 1,
+        snap: true,
+        ticks: false,
+        labels: false,
+        transparencyReplacementColor: '#000000'
+      },
       a11y: {
-        imageChanged: 'Image changed'
+        image: 'Image',
+        imageSlider: 'Image slider'
       }
     }, this.params);
 
     this.extras = contentData;
 
     this.maxItem = this.params.items.length - 1;
+    this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
 
     // Set hasDescription = true if at least one item has a description
@@ -69,6 +68,12 @@ class Agamotto extends H5P.Question {
      * @param {number} opacity Opacity of top image.
      */
     this.updateContent = (index, opacity) => {
+      // Limit updates for performance reasons, will be a little jumpy though
+      opacity = Math.round(opacity * 10) / 10;
+      if (this.slider.isUsed() && opacity === this.images.getTopOpacity() && (opacity !== 1 || this.position === index)) {
+        return;
+      }
+
       // Update images
       this.images.setImage(index, opacity);
 
@@ -87,9 +92,6 @@ class Agamotto extends H5P.Question {
           this.imagesViewed.push(this.position);
         }
       }
-
-      // Read contents to readspeakers.
-      this.announceARIA(this.params.a11y.imageChanged);
     };
 
     /**
@@ -126,146 +128,157 @@ class Agamotto extends H5P.Question {
       this.params.items.forEach(item => {
         promises.push(Images.loadImage(item.image, this.id));
       });
-      Promise.all(promises).then(results => {
-        this.images = results.map((item, index) => ({
-          img: item,
-          alt: this.params.items[index].image.params.alt,
-          title: this.params.items[index].image.params.title,
-          description: this.params.items[index].description
-        }));
+      Promise
+        .all(promises)
+        .then(results => {
+          this.images = results.map((item, index) => ({
+            img: item,
+            alt: this.params.items[index].image.params.alt,
+            title: this.params.items[index].image.params.title,
+            description: this.params.items[index].description
+          }));
 
-        // We can hide the spinner now
-        this.spinner.hide();
+          // We can hide the spinner now
+          this.spinner.hide();
 
-        this.wrapper = document.createElement('div');
-        this.wrapper.classList.add('h5p-agamotto-wrapper');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-top');
-        this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
-        content.appendChild(this.wrapper);
+          this.wrapper = document.createElement('div');
+          this.wrapper.classList.add('h5p-agamotto-wrapper');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-top');
+          this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
+          content.appendChild(this.wrapper);
 
-        // Title
-        if (this.params.title) {
-          const title = document.createElement('div');
-          title.classList.add('h5p-agamotto-title');
-          title.innerHTML = `<h2>${this.params.title}</h2>`;
-          this.wrapper.appendChild(title);
-        }
+          // Title
+          if (this.params.title) {
+            const title = document.createElement('div');
+            title.classList.add('h5p-agamotto-title');
+            title.innerHTML = `<h2>${this.params.title}</h2>`;
+            this.wrapper.appendChild(title);
+          }
 
-        // Images
-        this.images = new Images(this.images, this.params.transparencyReplacementColor);
-        this.wrapper.appendChild(this.images.getDOM());
-        this.images.resize();
+          // Images
+          this.images = new Images(this.images, this.params.behaviour.transparencyReplacementColor);
+          this.wrapper.appendChild(this.images.getDOM());
+          this.images.resize();
 
-        // Slider
-        const labelTexts = [];
-        for (let i = 0; i <= this.maxItem; i++) {
-          labelTexts[i] = this.params.items[i].labelText || '';
-        }
-        this.slider = new Slider({
-          snap: this.params.snap,
-          ticks: this.params.ticks,
-          labels: this.params.labels,
-          labelTexts: labelTexts,
-          size: this.maxItem
-        }, this.selector, this);
-        this.wrapper.appendChild(this.slider.getDOM());
-        this.slider.resize();
-
-        // Descriptions
-        if (this.hasDescription) {
-          const descriptionTexts = [];
+          // Slider
+          const labelTexts = [];
           for (let i = 0; i <= this.maxItem; i++) {
-            descriptionTexts[i] = this.params.items[i].description;
+            labelTexts[i] = this.params.items[i].labelText || '';
           }
-          this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
-          this.wrapper.appendChild(this.descriptions.getDOM());
-          this.descriptions.adjustHeight();
-          // Passepartout at the bottom is not needed, because we have a description
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-          this.heightDescriptions = this.descriptions.offsetHeight;
-        }
-        else {
-          this.heightDescriptions = 0;
-        }
+          this.slider = new Slider({
+            snap: this.params.behaviour.snap,
+            ticks: this.params.behaviour.ticks,
+            labels: this.params.behaviour.labels,
+            labelTexts: labelTexts,
+            altTitleTexts: this.images.getAltTitleTags(),
+            startRatio: this.startImage / this.maxItem,
+            size: this.maxItem,
+            a11y: {
+              image: this.params.a11y.image,
+              imageSlider: this.params.a11y.imageSlider
+            }
+          }, this.selector, this);
+          this.wrapper.appendChild(this.slider.getDOM());
+          this.slider.resize();
 
-        // Add passepartout depending on the combination of elements
-        if (this.params.showTitle) {
-          // Passepartout at the top is not needed, because we have a title
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-        }
-        else if (!this.hasDescription) {
-          // No passepartout is needed at all, because we just have an image
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-          this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-        }
+          // Descriptions
+          if (this.hasDescription) {
+            const descriptionTexts = [];
+            for (let i = 0; i <= this.maxItem; i++) {
+              descriptionTexts[i] = this.params.items[i].description;
+            }
+            this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
+            this.wrapper.appendChild(this.descriptions.getDOM());
+            this.descriptions.adjustHeight();
+            // Passepartout at the bottom is not needed, because we have a description
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+            this.heightDescriptions = this.descriptions.offsetHeight;
+          }
+          else {
+            this.heightDescriptions = 0;
+          }
 
-        // KeyListeners for Images that will allow to jump from one image to another
-        this.imageContainer = this.images.getDOM ();
+          // Add passepartout depending on the combination of elements
+          if (this.params.showTitle) {
+            // Passepartout at the top is not needed, because we have a title
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+          }
+          else if (!this.hasDescription) {
+            // No passepartout is needed at all, because we just have an image
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
+            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
+          }
 
-        // Trigger xAPI when starting to view content
-        this.xAPIExperienced();
+          // KeyListeners for Images that will allow to jump from one image to another
+          this.imageContainer = this.images.getDOM ();
 
-        this.slider.on('update', event => {
-          /*
-           * Map the slider value to the image indexes. Since we might not
-           * want to initiate opacity shifts right away, we can add a margin to
-           * the left and right of the slider where nothing happens
-           */
-          const margin = 5;
-          const mappedValue = Util.project(
-            event.data.position,
-            0 + margin,
-            this.slider.getWidth() - margin,
-            0,
-            this.maxItem
-          );
-          // Account for margin change and mapping outside the image indexes
-          const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
+          // Trigger xAPI when starting to view content
+          this.xAPIExperienced();
 
-          /*
-           * Using the cosine will allow an image to be displayed a little longer
-           * before blending than a linear function
-           */
-          const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
-          const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
-
-          this.updateContent(topIndex, topOpacity);
-        });
-
-        // Add Resize Handler
-        window.addEventListener('resize', () => {
-          // Prevent infinite resize loops
-          if (!this.resizeCooling) {
+          this.slider.on('update', event => {
             /*
-             * Decrease the size of the content if on a mobile device in landscape
-             * orientation, because it might be hard to use it otherwise.
-             * iOS devices don't switch screen.height and screen.width on rotation
+             * Map the slider value to the image indexes. Since we might not
+             * want to initiate opacity shifts right away, we can add a margin to
+             * the left and right of the slider where nothing happens
              */
-            if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-              const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-              this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
-            }
-            else {
-              // Portrait orientation
-              this.wrapper.style.width = 'auto';
-            }
+            const margin = 5;
+            const mappedValue = Util.project(
+              event.data.position,
+              0 + margin,
+              this.slider.getWidth() - margin,
+              0,
+              this.maxItem
+            );
+            // Account for margin change and mapping outside the image indexes
+            const topIndex = Util.constrain(Math.floor(mappedValue), 0, this.maxItem);
 
-            // Resize DOM elements
-            this.images.resize();
-            this.slider.resize();
-            // The descriptions will get a scroll bar via CSS if necessary, no resize needed
-            this.trigger('resize');
+            /*
+             * Using the cosine will allow an image to be displayed a little longer
+             * before blending than a linear function
+             */
+            const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
+            const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
 
-            this.resizeCooling = setTimeout(() => {
-              this.resizeCooling = null;
-            }, Agamotto.RESIZE_COOLING_PERIOD);
-          }
+            this.updateContent(topIndex, topOpacity);
+          });
+
+          // Add Resize Handler
+          window.addEventListener('resize', () => {
+            // Prevent infinite resize loops
+            if (!this.resizeCooling) {
+              /*
+               * Decrease the size of the content if on a mobile device in landscape
+               * orientation, because it might be hard to use it otherwise.
+               * iOS devices don't switch screen.height and screen.width on rotation
+               */
+              if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+                const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+                this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+              }
+              else {
+                // Portrait orientation
+                this.wrapper.style.width = 'auto';
+              }
+
+              // Resize DOM elements
+              this.images.resize();
+              this.slider.resize();
+              // The descriptions will get a scroll bar via CSS if necessary, no resize needed
+              this.trigger('resize');
+
+              this.resizeCooling = setTimeout(() => {
+                this.resizeCooling = null;
+              }, Agamotto.RESIZE_COOLING_PERIOD);
+            }
+          });
+
+          this.trigger('resize');
+        })
+        .catch(error => {
+          console.warn(error);
         });
-
-        this.trigger('resize');
-      });
 
       return content;
     };
@@ -276,7 +289,8 @@ class Agamotto extends H5P.Question {
      */
     this.announceARIA = (intro) => {
       intro = (intro !== undefined) ? Util.htmlDecode(`${intro} `) : '';
-      let announcement = `${intro}${this.images.getCurrentAltTag()}. ${this.descriptions.getCurrentDescriptionText()}`;
+      const descriptionText = (this.descriptions) ? this.descriptions.getCurrentDescriptionText() : '';
+      let announcement = `${intro}${this.images.getCurrentAltTag()}. ${descriptionText}`;
       announcement = Util.stripHTML(announcement);
       // Use ARIA live region provided by H5P.Question
       this.read(announcement);

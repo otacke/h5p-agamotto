@@ -1,4 +1,4 @@
-import Promise from 'promise-polyfill';
+import Promise from 'core-js/features/promise';
 import Util from './h5p-agamotto-util';
 
 /** Class representing Images */
@@ -69,7 +69,7 @@ class Images {
 
       // This is necessary to prevent security errors in some cases.
       const src = imageCanvas.toDataURL('image/jpeg');
-      image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+      image.crossOrigin = this.images[i].img.crossOrigin; // Use the same crossOrigin policy as the inital load used.
       image.src = src;
       this.images[i].img = image;
     }
@@ -81,7 +81,10 @@ class Images {
     this.imageTop.setAttribute('draggable', 'false');
     this.imageTop.setAttribute('alt', this.images[0].alt);
     this.imageTop.setAttribute('title', this.images[0].title);
-    this.imageTop.setAttribute('aria-label', `${images[0].alt}. ${this.images[0].description}`);
+    this.imageTop.setAttribute('aria-label', (this.images[0].alt !== '') ?
+      `${images[0].alt}. ${this.images[0].description}` :
+      this.images[0].description
+    );
 
     this.imageBottom = document.createElement('img');
     this.imageBottom.classList.add('h5p-agamotto-image-bottom');
@@ -113,18 +116,29 @@ class Images {
   }
 
   /**
+   * Get all alt tags or title tags as alternative.
+   * @return {object[]} Alt tags or title texts.
+.  */
+  getAltTitleTags() {
+    return this.images.map(image => image.alt || image.title);
+  }
+
+  /**
    * Set the visible image combination.
    * @param {number} index Image index.
    * @param {number} opacity Image opacity, [0..1].
    */
   setImage(index, opacity) {
-    const visibleImageIndex = Math.min(this.images.length - 1, index + Math.round((1 - opacity)));
+    const visibleImageIndex = Util.constrain(index + Math.round(1 - opacity), 0, this.images.length - 1);
+    this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
     this.imageTop.src = this.images[index].img.src;
     this.imageTop.setAttribute('alt', this.images[visibleImageIndex].alt);
     this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
-    this.imageTop.setAttribute('aria-label', `${this.images[visibleImageIndex].alt}. ${this.images[visibleImageIndex].description}`);
+    this.imageTop.setAttribute('aria-label', (this.images[visibleImageIndex].alt !== '') ?
+      `${this.images[visibleImageIndex].alt}. ${this.images[visibleImageIndex].description}` :
+      this.images[visibleImageIndex].description
+    );
     this.imageTop.style.opacity = opacity;
-    this.imageBottom.src = this.images[Util.constrain(index + 1, 0, this.images.length - 1)].img.src;
   }
 
   /**
@@ -146,6 +160,14 @@ class Images {
   }
 
   /**
+   * Get opacity of top image.
+   * @return {number} Opacity of top image.
+   */
+  getTopOpacity() {
+    return parseFloat(this.imageTop.style.opacity || '');
+  }
+
+  /**
    * Load an Image.
    * @param {object} imageObject Image object.
    * @param {number} id H5P ID.
@@ -154,15 +176,22 @@ class Images {
   static loadImage(imageObject, id) {
     return new Promise((resolve, reject) => {
       const image = new Image();
-      const src = H5P.getPath(imageObject.params.file.path, id);
-      image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
       image.onload = () => {
         resolve(image);
       };
       image.onerror = (error) => {
         reject(error);
       };
-      image.src = src;
+
+      if (H5P.setSource !== undefined) {
+        H5P.setSource(image, imageObject.params.file, id);
+      }
+      else {
+        // Backwards compatibiltiy (H5P Core <v1.22)
+        const src = H5P.getPath(imageObject.params.file.path, id);
+        image.crossOrigin = (H5P.getCrossOrigin !== undefined ? H5P.getCrossOrigin(src) : 'Anonymous');
+        image.src = src;
+      }
     });
   }
 }
