@@ -173,12 +173,11 @@
 .h5p-agamotto .h5p-agamotto-descriptions-container {
   position: relative;
 }
-.h5p-agamotto .h5p-agamotto-description-top{
+.h5p-agamotto .h5p-agamotto-description-top {
   position: absolute;
   z-index: 1;
   width: 100%;
   height: inherit;
-  overflow-y: auto;
 }
 .h5p-agamotto .h5p-agamotto-description-bottom {
   position: absolute;

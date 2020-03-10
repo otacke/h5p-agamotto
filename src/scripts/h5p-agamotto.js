@@ -190,7 +190,7 @@ class Agamotto extends H5P.Question {
             }
             this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
             this.wrapper.appendChild(this.descriptions.getDOM());
-            this.descriptions.adjustHeight();
+            this.descriptions.resize();
             // Passepartout at the bottom is not needed, because we have a description
             this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
             this.heightDescriptions = this.descriptions.offsetHeight;
@@ -265,8 +265,11 @@ class Agamotto extends H5P.Question {
               // Resize DOM elements
               this.images.resize();
               this.slider.resize();
-              // The descriptions will get a scroll bar via CSS if necessary, no resize needed
-              this.trigger('resize');
+              this.descriptions.resize();
+
+              setTimeout(() => {
+                this.trigger('resize');
+              });
 
               this.resizeCooling = setTimeout(() => {
                 this.resizeCooling = null;

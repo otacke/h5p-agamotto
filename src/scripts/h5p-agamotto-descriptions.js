@@ -81,7 +81,7 @@ class Descriptions {
   /**
    * Adjust the height of the description area.
    */
-  adjustHeight() {
+  resize() {
     // We need to determine the highest of all description texts for resizing
     let height = 0;
     this.texts.forEach(text => {
