@@ -65,8 +65,8 @@ class Slider extends H5P.EventDispatcher {
     // Place ticks
     if (this.params.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
-      const placeTicks = () => {
-        this.setPosition(parseInt(this.style.left) - Slider.TRACK_OFFSET, true);
+      const placeTicks = (event) => {
+        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET, true);
       };
       for (i = 0; i <= this.params.size; i++) {
         this.ticks[i] = document.createElement('div');
