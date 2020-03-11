@@ -265,7 +265,9 @@ class Agamotto extends H5P.Question {
               // Resize DOM elements
               this.images.resize();
               this.slider.resize();
-              this.descriptions.resize();
+              if (this.hasDescription) {
+                this.descriptions.resize();
+              }
 
               setTimeout(() => {
                 this.trigger('resize');
