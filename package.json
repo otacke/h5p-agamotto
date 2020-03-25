@@ -3,7 +3,6 @@
   "version": "1.4.3",
   "description": "Displays an interactive sequence of images",
   "scripts": {
-    "test": "jest",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack -p",
     "watch": "./node_modules/.bin/webpack --watch"
   },
@@ -18,28 +17,16 @@
     "url": "https://github.com/otacke/h5p-agamotto/issues"
   },
   "homepage": "https://github.com/otacke/h5p-agaotto#readme",
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/src/stylesheets/"
-    },
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/src/stylesheets/"
-    ]
-  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "babel-minify-webpack-plugin": "^0.3.1",
     "cross-env": "^5.2.1",
     "css-loader": "^1.0.1",
     "file-loader": "^2.0.0",
-    "jest": "^24.9.0",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "regenerator-runtime": "^0.13.3",
