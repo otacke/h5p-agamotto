@@ -21,7 +21,6 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^8.0.6",
     "babel-minify-webpack-plugin": "^0.3.1",
     "cross-env": "^5.2.1",
@@ -29,8 +28,6 @@
     "file-loader": "^2.0.0",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "regenerator-runtime": "^0.13.3",
-    "resolve-url-loader": "^3.1.0",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
   },
