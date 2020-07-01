@@ -1,16 +1,16 @@
 {
   "semantics": [
     {
-      "label": "Heading",
-      "placeholder": "Here you can add an optional heading.",
-      "description": "The heading you'd like to show above the image"
+      "label": "Koptekst",
+      "placeholder": "Hier kunt u een optionele koptekst toevoegen.",
+      "description": "De koptekst die u wilt tonen boven de afbeelding"
     },
     {
       "label": "Items",
       "entity": "Item",
       "widgets": [
         {
-          "label": "Default"
+          "label": "Standaard"
         }
       ],
       "field": {
@@ -36,8 +36,8 @@
       "description": "Deze opties bepalen hoe de taak op de input reageert.",
       "fields": [
         {
-          "label": "Start image",
-          "description": "Set the number of the image to start with."
+          "label": "Start afbeelding",
+          "description": "Stel het nummer in van de afbeelding om mee te starten."
         },
         {
           "label": "Inschakelen schuifregelaar",
@@ -53,7 +53,7 @@
         },
         {
           "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images."
+          "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt."
         }
       ]
     },
@@ -61,12 +61,12 @@
       "label": "Readspeaker",
       "fields": [
         {
-          "label": "Image",
-          "default": "Image"
+          "label": "Afbeelding",
+          "default": "Afbeelding"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Afbeeldingsschuifregelaar",
+          "default": "Afbeeldingsschuifregelaar"
         }
       ]
     }
