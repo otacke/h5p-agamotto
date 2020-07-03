@@ -361,6 +361,10 @@ class Slider extends H5P.EventDispatcher {
    * Resize the slider.
    */
   resize() {
+    if (this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET) {
+      return; // Skip, already correct width
+    }
+
     this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
 
