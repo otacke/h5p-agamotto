@@ -52,7 +52,7 @@
           "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
         },
         {
-          "label": "Transparency Replacement Color",
+          "label": "Vervangende kleur voor transparant",
           "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt."
         }
       ]
