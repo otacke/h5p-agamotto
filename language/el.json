@@ -65,8 +65,8 @@
           "default": "Εικόνα"
         },
         {
-          "label": "Slider εικόνων",
-          "default": "Slider εικόνων"
+          "label": "Image Slider",
+          "default": "Slider εικόνας"
         }
       ]
     }
