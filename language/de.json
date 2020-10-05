@@ -27,6 +27,10 @@
             "label": "Beschreibung",
             "placeholder": "Meine Bildbeschreibung ...",
             "description": "Optionale Beschreibung für das Bild"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Ersatzfarbe für Transparenz",
           "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

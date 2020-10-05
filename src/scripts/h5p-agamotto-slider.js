@@ -18,19 +18,19 @@ class Slider extends H5P.EventDispatcher {
   constructor(params, selector, parent) {
     super();
 
-    params = Util.extend({
+    this.params = Util.extend({
       snap: true,
       ticks: false,
       labels: false,
-      startRatio: 0,
+      startRatio: 0
     }, params);
 
-    this.params = params;
     this.selector = selector;
     this.parent = parent;
 
     this.trackWidth = 0;
     this.trackOffset = null;
+    this.audioButtonOffset = 0;
     this.thumbPosition = 0;
     this.ratio = params.startRatio;
 
@@ -42,18 +42,32 @@ class Slider extends H5P.EventDispatcher {
     this.interactionstarted = false;
     this.wasUsed = false;
 
+    this.container = document.createElement('div');
+    this.container.classList.add('h5p-agamotto-slider-container');
+
+    if (this.params.audio) {
+      this.muted = true;
+      this.audioButton = document.createElement('button');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-button');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
+      this.audioButton.setAttribute('tabindex', 0);
+      this.audioButton.setAttribute('title', this.params.l10n.unmute);
+      this.audioButtonOffset = 28;
+      this.audioButton.addEventListener('click', () => {
+        this.toggleAudioButton();
+      });
+      this.container.appendChild(this.audioButton);
+    }
+
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
+    this.container.appendChild(this.track);
 
     this.thumb = document.createElement('div');
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
     this.thumb.setAttribute('role', 'slider');
     this.thumb.setAttribute('aria-label', this.params.a11y.imageSlider);
-
-    this.container = document.createElement('div');
-    this.container.classList.add('h5p-agamotto-slider-container');
-    this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
 
     /*
@@ -177,6 +191,38 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Detect whether audio is muted.
+   * @return {boolean} True, if muted.
+   */
+  isMuted() {
+    return this.muted;
+  }
+
+  /**
+   * Toggle audio button
+   */
+  toggleAudioButton() {
+    if (!this.audioButton) {
+      return;
+    }
+
+    if (this.isMuted()) {
+      this.audioButton.classList.remove('h5p-agamotto-slider-audio-muted');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
+      this.audioButton.title = this.params.l10n.mute;
+      this.trigger('unmuted');
+      this.muted = false;
+    }
+    else {
+      this.muted = true;
+      this.trigger('muted');
+      this.audioButton.classList.remove('h5p-agamotto-slider-audio-unmuted');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
+      this.audioButton.title = this.params.l10n.unmute;
+    }
+  }
+
+  /**
    * Handle sliding with keys.
    * @param {Event} event Key event.
    * @param {number} nextItemId Id of item to slide to.
@@ -238,8 +284,12 @@ class Slider extends H5P.EventDispatcher {
    * @param {number} value Slider's width.
    */
   setWidth(value) {
-    this.trackWidth = value;
-    this.track.style.width = `${value}px`;
+    if (this.params.audio) {
+      this.track.style.left = `${Slider.THUMB_OFFSET + this.audioButtonOffset}px`;
+    }
+
+    this.trackWidth = value - this.audioButtonOffset;
+    this.track.style.width = `${value - this.audioButtonOffset}px`;
   }
 
   /**
@@ -271,7 +321,7 @@ class Slider extends H5P.EventDispatcher {
         this.trackOffset = this.computeTrackOffset();
       }
 
-      position = this.getPointerX(position) - this.trackOffset;
+      position = this.getPointerX(position) - this.trackOffset - this.audioButtonOffset;
     }
     else {
       position = 0;
@@ -292,7 +342,7 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Update DOM
-    this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
+    this.thumb.style.left = position + Slider.THUMB_OFFSET + this.audioButtonOffset + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
     this.thumb.setAttribute(

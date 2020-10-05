@@ -132,7 +132,23 @@
   background-size:contain;
   border-radius: 2px;
 }
-.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:focus {
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-audio-button {
+  background-color: transparent;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  height: 20px;
+  margin: 8px;
+  width: 20px;
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-audio-muted {
+  background-image: url('../images/slider_audio_muted.svg');
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-audio-unmuted {
+  background-image: url('../images/slider_audio_unmuted.svg');
+}
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-thumb:focus,
+.h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-audio-button:focus{
   outline: 2px solid #179fff;
   outline-offset: 4px;
 }

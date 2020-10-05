@@ -27,6 +27,10 @@
             "label": "Popis",
             "placeholder": "Můj popis obrázku ...",
             "description": "Volitelný popis obrázku"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Barva na výměnu průhlednosti",
           "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

@@ -36,6 +36,10 @@ class Agamotto extends H5P.Question {
       a11y: {
         image: 'Image',
         imageSlider: 'Image slider'
+      },
+      l10n: {
+        mute: 'Mute',
+        unmute: 'Unmute'
       }
     }, this.params);
 
@@ -48,7 +52,10 @@ class Agamotto extends H5P.Question {
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = this.params.items.some(item => item.description !== '');
 
-    this.id = contentId;
+    // Start muted
+    this.muted = true;
+
+    this.contentId = contentId;
 
     // Container for KeyListeners
     this.imageContainer = undefined;
@@ -74,6 +81,9 @@ class Agamotto extends H5P.Question {
         return;
       }
 
+      // Update audio
+      this.setAudio(index, opacity);
+
       // Update images
       this.images.setImage(index, opacity);
 
@@ -92,6 +102,82 @@ class Agamotto extends H5P.Question {
           this.imagesViewed.push(this.position);
         }
       }
+    };
+
+    /**
+     * Set audio.
+     * @param {number} index Current image's index.
+     * @param {number} opacity Current image's opacity.
+     */
+    this.setAudio = (index, opacity) => {
+      // Keep track of current audio
+      const audioIndex = Math.round(1 + index - opacity);
+      if (audioIndex === this.currentAudioId) {
+        return; // skip, already played/playing or null
+      }
+      this.currentAudioId = audioIndex;
+
+      // No need to play
+      if (this.muted) {
+        return;
+      }
+
+      this.stopAudios();
+
+      // Start new audio
+      if (this.audios[audioIndex]) {
+        this.startAudio(this.currentAudioId);
+      }
+    };
+
+    /**
+     * Start audio.
+     * @param {number} id Index.
+     */
+    this.startAudio = (id) => {
+      if (this.audios.length <= id) {
+        return;
+      }
+
+      const currentAudio = this.audios[id];
+      if (!currentAudio) {
+        return;
+      }
+
+      // People might move the slider quickly ...
+      if (!currentAudio.promise) {
+        currentAudio.promise = currentAudio.player.play();
+        currentAudio.promise.then(() => {
+          currentAudio.promise = null;
+        });
+      }
+    };
+
+    /**
+     * Stop audios
+     */
+    this.stopAudios = () => {
+      /*
+       * People may move the slider quickly, and audios that should
+       * be stopped may not have loaded yet.
+       */
+      this.audios.forEach(audio => {
+        if (!audio) {
+          return; // skip, no audio
+        }
+
+        if (audio.promise) {
+          audio.promise.then(() => {
+            audio.player.pause();
+            audio.player.load(); // Reset
+            audio.promise = null;
+          });
+        }
+        else {
+          audio.player.pause();
+          audio.player.load(); // Reset
+        }
+      });
     };
 
     /**
@@ -120,13 +206,21 @@ class Agamotto extends H5P.Question {
       this.spinner = new Spinner('h5p-agamotto-spinner');
       content.appendChild(this.spinner.getDOM());
 
+      // Create audio elements
+      this.audios = this.createAudios(this.params.items);
+      this.audios.forEach(audio => {
+        if (audio) {
+          content.append(audio.player);
+        }
+      });
+
       /*
        * Load images first before DOM is created; will help to prevent layout
        * problems in some cases.
        */
       const promises = [];
       this.params.items.forEach(item => {
-        promises.push(Images.loadImage(item.image, this.id));
+        promises.push(Images.loadImage(item.image, this.contentId));
       });
       Promise
         .all(promises)
@@ -167,6 +261,7 @@ class Agamotto extends H5P.Question {
             labelTexts[i] = this.params.items[i].labelText || '';
           }
           this.slider = new Slider({
+            audio: this.hasAudio(),
             snap: this.params.behaviour.snap,
             ticks: this.params.behaviour.ticks,
             labels: this.params.behaviour.labels,
@@ -177,6 +272,10 @@ class Agamotto extends H5P.Question {
             a11y: {
               image: this.params.a11y.image,
               imageSlider: this.params.a11y.imageSlider
+            },
+            l10n: {
+              mute: this.params.l10n.mute,
+              unmute: this.params.l10n.unmute
             }
           }, this.selector, this);
           this.wrapper.appendChild(this.slider.getDOM());
@@ -244,6 +343,18 @@ class Agamotto extends H5P.Question {
             this.updateContent(topIndex, topOpacity);
           });
 
+          // Detect audio muting
+          this.slider.on('muted', () => {
+            this.muted = true;
+            this.stopAudios();
+          });
+
+          // Detect audio unmuting
+          this.slider.on('unmuted', () => {
+            this.muted = false;
+            this.startAudio(this.currentAudioId);
+          });
+
           // Add Resize Handler
           window.addEventListener('resize', () => {
             // Prevent infinite resize loops
@@ -286,6 +397,40 @@ class Agamotto extends H5P.Question {
         });
 
       return content;
+    };
+
+    /**
+     * Create audio elements from items.
+     * @param {object[]} items Items from params.
+     * @return {object[]} Audio elements.
+     */
+    this.createAudios = (items) => {
+      const audioElements = [];
+
+      items.forEach(item => {
+        if (!item.audio || item.audio.length < 1 || !item.audio[0].path) {
+          audioElements.push(null);
+          return;
+        }
+
+        const player = document.createElement('audio');
+        player.style.display = 'none';
+        player.src = H5P.getPath(item.audio[0].path, this.contentId);
+        audioElements.push({
+          player: player,
+          promise: null
+        });
+      });
+
+      return audioElements;
+    };
+
+    /**
+     * Detect whether there's at least one audio.
+     * @return {boolean} True, if content has audio.
+     */
+    this.hasAudio = () => {
+      return this.audios.some(audio => audio !== null);
     };
 
     /**

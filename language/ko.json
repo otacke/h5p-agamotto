@@ -27,6 +27,10 @@
             "label": "설명",
             "placeholder": "내 이미지 설명...",
             "description": "이미지에 대한 선택적 설명"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "투명성 대체 색상",
           "description": "이미지의 투명한 영역을 대체할 색상을 설정하십시오."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

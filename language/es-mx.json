@@ -27,6 +27,10 @@
             "label": "Descripción",
             "placeholder": "Mi descripción de la imagen...",
             "description": "Descripción opcional para la imagen"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Color de Remplazo de Transparencia",
           "description": "Configurar el color que remplazará las áreas transparentes de las imágenes."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

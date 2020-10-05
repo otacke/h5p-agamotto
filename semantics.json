@@ -70,6 +70,15 @@
             "pre",
             "code"
           ]
+        },
+        {
+          "name": "audio",
+          "type": "audio",
+          "importance": "low",
+          "label": "Audio",
+          "description": "Optional audio that plays when an image is shown.",
+          "optional": true,
+          "widgetExtensions": ["AudioRecorder"]
         }
       ]
     }
@@ -127,6 +136,29 @@
         "spectrum": {
           "showInput": true
         }
+      }
+    ]
+  },
+  {
+    "name": "l10n",
+    "type": "group",
+    "common": true,
+    "label": "Localize",
+    "importance": "low",
+    "fields": [
+      {
+        "name": "mute",
+        "type": "text",
+        "label": "Mute title",
+        "importance": "low",
+        "default": "Mute"
+      },
+      {
+        "name": "unmute",
+        "type": "text",
+        "label": "Unmute title",
+        "importance": "low",
+        "default": "Unmute"
       }
     ]
   },

@@ -27,6 +27,10 @@
             "label": "Περιγραφή",
             "placeholder": "Η περιγραφή της εικόνας μου...",
             "description": "Περιγραφή της εικόνας (προαιρετικό)"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Χρώμα αντί για διαφάνεια",
           "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

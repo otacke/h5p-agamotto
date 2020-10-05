@@ -27,6 +27,10 @@
             "label": "Beschrijving",
             "placeholder": "Mijn afbeeldingsbeschrijving ...",
             "description": "Optionele beschrijving van de afbeelding"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Vervangende kleur voor transparant",
           "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

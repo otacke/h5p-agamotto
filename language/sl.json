@@ -27,6 +27,10 @@
             "label": "Opis",
             "placeholder": "Moj opis slike ...",
             "description": "Neobvezen opis prikazanega na sliki"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Nadomestna barva za prosojnost",
           "description": "Izbrana barva nadomesti prosojna področja slik."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

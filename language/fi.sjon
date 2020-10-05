@@ -27,6 +27,10 @@
             "label": "Kuvaus",
             "placeholder": "Minun kuvaukseni kuvalle...",
             "description": "Vapaaehtoinen kuvausteksti kuvalle"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Läpinäkyvyyden korvaava väri",
           "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

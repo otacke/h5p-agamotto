@@ -27,6 +27,10 @@
             "label": "Kirjeldus",
             "placeholder": "Minu pildi kirjeldus ...",
             "description": "Valikuline kirjeldus pildi kohta."
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Nähtamatuse asendamise värv",
           "description": "Seadista värv, mis asendab piltide nähtamatud alad."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

@@ -27,6 +27,10 @@
             "label": "Описание",
             "placeholder": "Описание на моето изображение ...",
             "description": "Незадължително описание на изображението"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -54,6 +58,19 @@
         {
           "label": "Цвят, който заменя прозрачната област",
           "description": "Задайте цвят, който ще замени прозрачните области на изображенията."
+        }
+      ]
+    },
+    {
+      "label": "Localize",
+      "fields": [
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         }
       ]
     },

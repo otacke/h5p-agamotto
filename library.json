@@ -35,6 +35,11 @@
       "machineName": "H5PEditor.ColorSelector",
       "majorVersion": 1,
       "minorVersion": 2
+    },
+    {
+      "machineName": "H5PEditor.AudioRecorder",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "preloadedDependencies": [
