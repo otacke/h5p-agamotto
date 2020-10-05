@@ -136,9 +136,11 @@
   background-color: transparent;
   background-size: cover;
   border: none;
+  bottom: 0;
   cursor: pointer;
   height: 20px;
   margin: 8px;
+  position: absolute;
   width: 20px;
 }
 .h5p-agamotto .h5p-agamotto-slider-container .h5p-agamotto-slider-audio-muted {

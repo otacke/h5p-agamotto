@@ -40,7 +40,7 @@ class Slider extends H5P.EventDispatcher {
     this.sliderdown = false;
     this.keydown = false;
     this.interactionstarted = false;
-    this.wasUsed = false;
+    this.extraInitResizes = 1;
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-agamotto-slider-container');
@@ -52,7 +52,7 @@ class Slider extends H5P.EventDispatcher {
       this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
       this.audioButton.setAttribute('tabindex', 0);
       this.audioButton.setAttribute('title', this.params.l10n.unmute);
-      this.audioButtonOffset = 28;
+      this.audioButtonOffset = 28; // TODO: Explain
       this.audioButton.addEventListener('click', () => {
         this.toggleAudioButton();
       });
@@ -80,7 +80,7 @@ class Slider extends H5P.EventDispatcher {
     if (this.params.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
       const placeTicks = (event) => {
-        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET, true);
+        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET - this.audioButtonOffset, true);
       };
       for (i = 0; i <= this.params.size; i++) {
         this.ticks[i] = document.createElement('div');
@@ -250,7 +250,7 @@ class Slider extends H5P.EventDispatcher {
   getCurrentItemId(rounded = true) {
     let itemPosition = this.getPosition() / this.getWidth() * this.params.size;
     if (rounded) {
-      itemPosition = Math.round(itemPosition);
+      itemPosition = Util.constrain(0, Math.round(itemPosition), this.params.size);
     }
     return itemPosition;
   }
@@ -285,7 +285,7 @@ class Slider extends H5P.EventDispatcher {
    */
   setWidth(value) {
     if (this.params.audio) {
-      this.track.style.left = `${Slider.THUMB_OFFSET + this.audioButtonOffset}px`;
+      this.track.style.left = `${Slider.TRACK_OFFSET + this.audioButtonOffset}px`;
     }
 
     this.trackWidth = value - this.audioButtonOffset;
@@ -345,6 +345,7 @@ class Slider extends H5P.EventDispatcher {
     this.thumb.style.left = position + Slider.THUMB_OFFSET + this.audioButtonOffset + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
+
     this.thumb.setAttribute(
       'aria-valuetext',
       this.params.labels ?
@@ -411,9 +412,11 @@ class Slider extends H5P.EventDispatcher {
    * Resize the slider.
    */
   resize() {
-    if (this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET) {
+    if (this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET && this.extraInitResizes < 0) {
       return; // Skip, already correct width
     }
+
+    this.extraInitResizes--;
 
     this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
@@ -422,7 +425,7 @@ class Slider extends H5P.EventDispatcher {
     // Update ticks
     if (this.params.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
-        this.ticks[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+        this.ticks[i].style.left = Slider.TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) + 'px';
       }
     }
     // Height to enlarge the slider container
@@ -438,7 +441,7 @@ class Slider extends H5P.EventDispatcher {
         switch (i) {
           case (0):
             // First label
-            this.labels[i].style.left = (Slider.TRACK_OFFSET / 2) + 'px';
+            this.labels[i].style.left = (Slider.TRACK_OFFSET / 2) + this.audioButtonOffset + 'px';
             break;
           case (this.labels.length - 1):
             // Last label
@@ -447,7 +450,7 @@ class Slider extends H5P.EventDispatcher {
           default:
             // Centered over tick mark position
             var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-            this.labels[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
+            this.labels[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + this.audioButtonOffset + 'px';
         }
 
         // Detect overlapping labels
