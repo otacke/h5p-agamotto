@@ -29,8 +29,8 @@
             "description": "Optionale Beschreibung für das Bild"
           },
           {
-            "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "label": "Tondatei",
+            "description": "Optionale Tondatei, die abgespielt wird, wenn ein Bild angezeigt wird."
           }
         ]
       }
@@ -62,15 +62,15 @@
       ]
     },
     {
-      "label": "Localize",
+      "label": "Bezeichnungen und Beschriftungen",
       "fields": [
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Beschriftung des \"Stummschalten\"-Buttons",
+          "default": "Stummschalten"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Beschriftung des \"Lautschalten\"-Buttons",
+          "default": "Lautschalten"
         }
       ]
     },
