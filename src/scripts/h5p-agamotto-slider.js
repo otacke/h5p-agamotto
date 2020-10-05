@@ -46,12 +46,12 @@ class Slider extends H5P.EventDispatcher {
     this.container.classList.add('h5p-agamotto-slider-container');
 
     if (this.params.audio) {
-      this.muted = true;
+      this.muted = false;
       this.audioButton = document.createElement('button');
       this.audioButton.classList.add('h5p-agamotto-slider-audio-button');
-      this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
       this.audioButton.setAttribute('tabindex', 0);
-      this.audioButton.setAttribute('title', this.params.l10n.unmute);
+      this.audioButton.setAttribute('title', this.params.l10n.mute);
       this.audioButtonOffset = 28; // TODO: Explain
       this.audioButton.addEventListener('click', () => {
         this.toggleAudioButton();
@@ -199,11 +199,16 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
-   * Toggle audio button
+   * Toggle audio button.
+   * @param {boolean} [muted] Override for audio button.
    */
-  toggleAudioButton() {
+  toggleAudioButton(muted) {
     if (!this.audioButton) {
       return;
+    }
+
+    if (typeof muted === 'boolean') {
+      this.muted = !muted;
     }
 
     if (this.isMuted()) {

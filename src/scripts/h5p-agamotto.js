@@ -52,9 +52,6 @@ class Agamotto extends H5P.Question {
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = this.params.items.some(item => item.description !== '');
 
-    // Start muted
-    this.muted = true;
-
     this.contentId = contentId;
 
     // Container for KeyListeners
@@ -147,9 +144,15 @@ class Agamotto extends H5P.Question {
       // People might move the slider quickly ...
       if (!currentAudio.promise) {
         currentAudio.promise = currentAudio.player.play();
-        currentAudio.promise.then(() => {
-          currentAudio.promise = null;
-        });
+        currentAudio.promise
+          .then(() => {
+            currentAudio.promise = null;
+          })
+          .catch(() => {
+            // Browser policy prevents playing
+            currentAudio.promise = null;
+            this.slider.toggleAudioButton(true);
+          });
       }
     };
 
