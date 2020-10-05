@@ -52,7 +52,7 @@ class Slider extends H5P.EventDispatcher {
       this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
       this.audioButton.setAttribute('tabindex', 0);
       this.audioButton.setAttribute('title', this.params.l10n.mute);
-      this.audioButtonOffset = 28; // TODO: Explain
+      this.audioButtonOffset = 28; // Magic number, extra offset for audio button
       this.audioButton.addEventListener('click', () => {
         this.toggleAudioButton();
       });
