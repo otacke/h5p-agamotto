@@ -29,8 +29,8 @@
             "description": "Descripción opcional para la imagen"
           },
           {
-            "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "label": "Audio ",
+            "description": "Audio opcional que se reproduce cuando es mostrada una imagen."
           }
         ]
       }
@@ -48,8 +48,8 @@
           "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
         },
         {
-          "label": "Mostrar posicion de la imagen",
-          "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estarán resaltadas."
+          "label": "Mostrar posición de la imagen",
+          "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estará resaltada."
         },
         {
           "label": "Mostrar etiquetas",
@@ -62,15 +62,15 @@
       ]
     },
     {
-      "label": "Localize",
+      "label": "Localizar",
       "fields": [
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Título de Mudo",
+          "default": "Mudo"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Título de Quitar mudo",
+          "default": "Quitar mudo"
         }
       ]
     },
@@ -82,8 +82,8 @@
           "default": "Imagen"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Deslizador de imagen",
+          "default": "Deslizador de imagen"
         }
       ]
     }
