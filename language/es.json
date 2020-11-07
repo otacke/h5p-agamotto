@@ -29,7 +29,7 @@
             "description": "Descripción opcional para la imagen"
           },
           {
-            "label": "Audio ",
+            "label": "Audio",
             "description": "Audio opcional que se reproduce cuando es mostrada una imagen."
           }
         ]
