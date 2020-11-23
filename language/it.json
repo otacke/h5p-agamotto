@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Intestazione",
-      "placeholder": "Qui puoi aggiungere un'intestazione facoltativa",
+      "placeholder": "Qui puoi aggiungere un'intestazione aggiuntiva",
       "description": "L'intestazione che ti piacerebbe mostrare sopra l'immagine"
     },
     {
