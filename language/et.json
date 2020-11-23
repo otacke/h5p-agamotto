@@ -26,7 +26,7 @@
           {
             "label": "Kirjeldus",
             "placeholder": "Minu pildi kirjeldus ...",
-            "description": "Valikuline kirjeldus pildi kohta."
+            "description": "Valikuline kirjeldus pildi kohta"
           },
           {
             "label": "Audio",
@@ -36,7 +36,7 @@
       }
     },
     {
-      "label": "Käitumise seadmed",
+      "label": "Käitumise seaded",
       "description": "Need seaded lasevad sul juhtida, kuidas ülesanne käitub.",
       "fields": [
         {
