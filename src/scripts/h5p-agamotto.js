@@ -316,6 +316,11 @@ class Agamotto extends H5P.Question {
           // KeyListeners for Images that will allow to jump from one image to another
           this.imageContainer = this.images.getDOM ();
 
+          // Focus slider so people can click on the image and use keyboard
+          this.imageContainer.addEventListener('click', () => {
+            this.slider.focus({preventScroll: true});
+          });
+
           // Trigger xAPI when starting to view content
           this.xAPIExperienced();
 

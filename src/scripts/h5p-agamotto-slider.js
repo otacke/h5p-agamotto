@@ -382,6 +382,14 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Focus slider.
+   * @param {object} [options] regular element.focus options.
+   */
+  focus(options = {}) {
+    this.thumb.focus(options);
+  }
+
+  /**
    * Snap slider to closest tick position.
    */
   snap() {
