@@ -29,8 +29,8 @@
             "description": "Irudiaren hautazko deskribapena"
           },
           {
-            "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "label": "Audioa",
+            "description": "Aukerazko audioa, irudia erakustean erreproduizitzen dena."
           }
         ]
       }
@@ -62,15 +62,15 @@
       ]
     },
     {
-      "label": "Localize",
+      "label": "Lokalizatu",
       "fields": [
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Mututu izenburua",
+          "default": "Mututu"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Kendu isilarazpena izenburua",
+          "default": "Kendu isilarazpena"
         }
       ]
     },
