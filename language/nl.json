@@ -30,7 +30,7 @@
           },
           {
             "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "description": "Optionele audio die speelt wanneer een afbeelding wordt getoond."
           }
         ]
       }
@@ -62,15 +62,15 @@
       ]
     },
     {
-      "label": "Localize",
+      "label": "Localiseer",
       "fields": [
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Dempen aan titel",
+          "default": "Dempen aan"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Dempen uit titel",
+          "default": "Dempen uit"
         }
       ]
     },
