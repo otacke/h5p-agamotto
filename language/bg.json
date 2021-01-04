@@ -30,7 +30,7 @@
           },
           {
             "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "description": "Допълнителен звук, който се възпроизвежда, когато се показва изображението."
           }
         ]
       }
@@ -65,12 +65,12 @@
       "label": "Localize",
       "fields": [
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Без звук",
+          "default": "Без звук"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Включване на звука",
+          "default": "Включване на звука"
         }
       ]
     },
