@@ -3,7 +3,7 @@
   "description": "Displays an interactive sequence of images",
   "majorVersion": 1,
   "minorVersion": 5,
-  "patchVersion": 3,
+  "patchVersion": 4,
   "runnable": 1,
   "embedTypes": [
     "iframe"
