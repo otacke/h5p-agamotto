@@ -383,12 +383,12 @@ class Agamotto extends H5P.Question {
 
               // Resize DOM elements
               this.images.resize();
-              this.slider.resize();
               if (this.hasDescription) {
                 this.descriptions.resize();
               }
 
-              setTimeout(() => {
+              clearTimeout(this.resizeTimeout);
+              this.resizeTimeout = setTimeout(() => {
                 this.trigger('resize');
               });
 
@@ -396,6 +396,8 @@ class Agamotto extends H5P.Question {
                 this.resizeCooling = null;
               }, Agamotto.RESIZE_COOLING_PERIOD);
             }
+
+            this.slider.resize();
           });
 
           this.trigger('resize');
