@@ -29,7 +29,6 @@ class Slider extends H5P.EventDispatcher {
     this.parent = parent;
 
     this.trackWidth = 0;
-    this.trackOffset = null;
     this.audioButtonOffset = 0;
     this.thumbPosition = 0;
     this.ratio = params.startRatio;
@@ -321,12 +320,7 @@ class Slider extends H5P.EventDispatcher {
       position = parseInt(position);
     }
     else if (typeof position === 'object') {
-      // Need to compute left offset of slider when DOM has been built
-      if (this.trackOffset === null) {
-        this.trackOffset = this.computeTrackOffset();
-      }
-
-      position = this.getPointerX(position) - this.trackOffset - this.audioButtonOffset;
+      position = this.getPointerX(position) - this.computeTrackOffset() - this.audioButtonOffset;
     }
     else {
       position = 0;
@@ -503,7 +497,8 @@ class Slider extends H5P.EventDispatcher {
     const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
     if (questionContainer) {
       const style = window.getComputedStyle(questionContainer);
-      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+      trackOffset += questionContainer.getBoundingClientRect().left;
+      trackOffset += parseInt(style.paddingLeft);
     }
 
     const wrapper = Util.findClosest(this.container, this.selector);
