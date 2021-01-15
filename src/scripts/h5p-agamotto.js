@@ -145,12 +145,11 @@ class Agamotto extends H5P.Question {
       if (!currentAudio.promise) {
         currentAudio.promise = currentAudio.player.play();
         currentAudio.promise
-          .then(() => {
+          .finally(() => {
             currentAudio.promise = null;
           })
           .catch(() => {
             // Browser policy prevents playing
-            currentAudio.promise = null;
             this.slider.toggleAudioButton(true);
           });
       }
