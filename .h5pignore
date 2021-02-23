@@ -2,9 +2,9 @@ build
 node_modules
 reports
 tests
+test
 dev
 src
-.eslintrc.json
 .idea
 .git
 .babelrc
@@ -17,5 +17,5 @@ webpack.dev.config.js
 README.md
 CONTRIBUTING.md
 package.json
-worknotes
 package-lock.json
+worknotes
