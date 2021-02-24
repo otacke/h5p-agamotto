@@ -57,7 +57,8 @@
         },
         {
           "label": "Nadomestna barva za prosojnost",
-          "description": "Izbrana barva nadomesti prosojna področja slik."
+          "description": "Izbrana barva nadomesti prosojna področja slik.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Drsnik",
           "default": "Drsnik"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

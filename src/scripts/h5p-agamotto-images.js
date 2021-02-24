@@ -143,12 +143,11 @@ class Images {
 
   /**
    * Resize the images.
-   * @return {boolean} True if the height of the container changed.
    */
   resize() {
-    const oldHeight = this.container.style.height;
-    this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
-    return this.container.style.height !== oldHeight;
+    setTimeout(() => {
+      this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
+    }, 0);
   }
 
   /**

@@ -57,7 +57,8 @@
         },
         {
           "label": "Colore di sostituzione della trasparenza",
-          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini"
+          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Image Slider",
           "default": "Image Slider"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

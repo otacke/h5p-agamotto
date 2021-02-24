@@ -78,7 +78,9 @@
           "label": "Audio",
           "description": "Optional audio that plays when an image is shown.",
           "optional": true,
-          "widgetExtensions": ["AudioRecorder"]
+          "widgetExtensions": [
+            "AudioRecorder"
+          ]
         }
       ]
     }
@@ -182,6 +184,22 @@
         "label": "Image Slider",
         "importance": "low",
         "default": "Image Slider"
+      },
+      {
+        "name": "buttonFullscreenEnter",
+        "type": "text",
+        "label": "Title for fullscreen button (enter)",
+        "importance": "low",
+        "default": "Enter fullscreen mode",
+        "status": "new"
+      },
+      {
+        "name": "buttonFullscreenExit",
+        "type": "text",
+        "label": "Title for fullscreen button (exit)",
+        "importance": "low",
+        "default": "Exit fullscreen mode",
+        "status": "new"
       }
     ]
   }

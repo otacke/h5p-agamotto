@@ -57,7 +57,8 @@
         },
         {
           "label": "Color de Remplazo de Transparencia",
-          "description": "Configurar el color que remplazará las áreas transparentes de las imágenes."
+          "description": "Configurar el color que remplazará las áreas transparentes de las imágenes.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Deslizador de imagen",
           "default": "Deslizador de imagen"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

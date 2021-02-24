@@ -57,7 +57,8 @@
         },
         {
           "label": "Цвет фона при смене изображения",
-          "description": "Выберите цвет, который будет отображаться на прозрачной части фона при смене изображений."
+          "description": "Выберите цвет, который будет отображаться на прозрачной части фона при смене изображений.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Слайдер изображения",
           "default": "Слайдер изображения"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

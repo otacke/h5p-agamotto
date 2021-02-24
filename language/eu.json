@@ -57,7 +57,8 @@
         },
         {
           "label": "Gardentasun Ordezkapenaren Kolorea",
-          "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea."
+          "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Irudi Aurkezpena",
           "default": "Irudi Aurkezpena"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

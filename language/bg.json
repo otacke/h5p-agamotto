@@ -57,7 +57,8 @@
         },
         {
           "label": "Цвят, който заменя прозрачната област",
-          "description": "Задайте цвят, който ще замени прозрачните области на изображенията."
+          "description": "Задайте цвят, който ще замени прозрачните области на изображенията.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Плъзгаща лента с изображения",
           "default": "Плъзгаща лента с изображения"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

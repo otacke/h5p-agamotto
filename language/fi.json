@@ -57,7 +57,8 @@
         },
         {
           "label": "Läpinäkyvyyden korvaava väri",
-          "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet."
+          "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Image Slider",
           "default": "Image Slider"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

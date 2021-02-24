@@ -105,11 +105,13 @@ class Descriptions {
     // We need to determine the highest of all description texts for resizing
     let height = 0;
 
-    this.descriptionWrappers.forEach((wrapper) => {
-      height = Math.max(height, wrapper.offsetHeight);
-    });
+    setTimeout(() => {
+      this.descriptionWrappers.forEach((wrapper) => {
+        height = Math.max(height, wrapper.offsetHeight);
+      });
 
-    this.descriptionsContainer.style.height = `${height}px`;
+      this.descriptionsContainer.style.height = `${height}px`;
+    }, 0);
   }
 }
 

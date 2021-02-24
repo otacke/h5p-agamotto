@@ -57,7 +57,8 @@
         },
         {
           "label": "Ersatzfarbe für Transparenz",
-          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
+          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Schieberegler für Bilder",
           "default": "Schieberegler für Bilder"
+        },
+        {
+          "label": "Titel des Vollbild-Buttons (aktivieren)",
+          "default": "Gehe in den Vollbildmodus"
+        },
+        {
+          "label": "Titel des Vollbild-Buttons (deaktivieren)",
+          "default": "Verlasse den Vollbildmodus"
         }
       ]
     }

@@ -57,7 +57,8 @@
         },
         {
           "label": "Χρώμα αντί για διαφάνεια",
-          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων."
+          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Slider εικόνας",
           "default": "Slider εικόνας"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

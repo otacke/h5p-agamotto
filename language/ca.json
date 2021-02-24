@@ -57,7 +57,8 @@
         },
         {
           "label": "Color per substituir la transparència",
-          "description": "Establiu el color que substituirà les àrees transparents de les imatges."
+          "description": "Establiu el color que substituirà les àrees transparents de les imatges.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Imatge Slider",
           "default": "Imatge Slider"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

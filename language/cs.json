@@ -57,7 +57,8 @@
         },
         {
           "label": "Barva na výměnu průhlednosti",
-          "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků."
+          "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Posuvník obrázku",
           "default": "Posuvník obrázku"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

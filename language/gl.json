@@ -57,7 +57,8 @@
         },
         {
           "label": "Color de substitución de transparencia",
-          "description": "Establece a cor que substituirá as áreas transparentes das imaxes."
+          "description": "Establece a cor que substituirá as áreas transparentes das imaxes.",
+          "default": "#000000"
         }
       ]
     },
@@ -84,6 +85,14 @@
         {
           "label": "Galería de imaxes",
           "default": "Galería de Imaxes"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }
