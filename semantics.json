@@ -186,20 +186,32 @@
         "default": "Image Slider"
       },
       {
+        "name": "mute",
+        "type": "text",
+        "label": "Mute title",
+        "importance": "low",
+        "default": "Mute"
+      },
+      {
+        "name": "unmute",
+        "type": "text",
+        "label": "Unmute title",
+        "importance": "low",
+        "default": "Unmute"
+      },
+      {
         "name": "buttonFullscreenEnter",
         "type": "text",
         "label": "Title for fullscreen button (enter)",
         "importance": "low",
-        "default": "Enter fullscreen mode",
-        "status": "new"
+        "default": "Enter fullscreen mode"
       },
       {
         "name": "buttonFullscreenExit",
         "type": "text",
         "label": "Title for fullscreen button (exit)",
         "importance": "low",
-        "default": "Exit fullscreen mode",
-        "status": "new"
+        "default": "Exit fullscreen mode"
       }
     ]
   }

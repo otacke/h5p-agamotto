@@ -36,12 +36,10 @@ class Agamotto extends H5P.Question {
       a11y: {
         image: 'Image',
         imageSlider: 'Image slider',
+        mute: 'Mute',
+        unmute: 'Unmute',
         buttonFullscreenEnter: 'Enter fullscreen mode',
         buttonFullscreenExit: 'Exit fullscreen mode'
-      },
-      l10n: {
-        mute: 'Mute',
-        unmute: 'Unmute'
       }
     }, this.params);
 
@@ -273,12 +271,10 @@ class Agamotto extends H5P.Question {
             a11y: {
               image: this.params.a11y.image,
               imageSlider: this.params.a11y.imageSlider,
+              mute: this.params.a11y.mute,
+              unmute: this.params.a11y.unmute,
               buttonFullscreenEnter: this.params.a11y.buttonFullscreenEnter,
               buttonFullscreenExit: this.params.a11y.buttonFullscreenExit
-            },
-            l10n: {
-              mute: this.params.l10n.mute,
-              unmute: this.params.l10n.unmute
             },
             selector: this.selector,
             parent: this

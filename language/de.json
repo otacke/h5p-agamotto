@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Bezeichnungen und Beschriftungen",
-      "fields": [
-        {
-          "label": "Beschriftung des \"Stummschalten\"-Buttons",
-          "default": "Stummschalten"
-        },
-        {
-          "label": "Beschriftung des \"Lautschalten\"-Buttons",
-          "default": "Lautschalten"
-        }
-      ]
-    },
-    {
       "label": "Vorlesewerkzeug (Barrierefreiheit)",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Schieberegler für Bilder",
           "default": "Schieberegler für Bilder"
+        },
+        {
+          "label": "Beschriftung des \"Stummschalten\"-Buttons",
+          "default": "Stummschalten"
+        },
+        {
+          "label": "Beschriftung des \"Lautschalten\"-Buttons",
+          "default": "Lautschalten"
         },
         {
           "label": "Titel des Vollbild-Buttons (aktivieren)",

@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Lokalizatu",
-      "fields": [
-        {
-          "label": "Mututu izenburua",
-          "default": "Mututu"
-        },
-        {
-          "label": "Kendu isilarazpena izenburua",
-          "default": "Kendu isilarazpena"
-        }
-      ]
-    },
-    {
       "label": "Irakurgai-bozgorailua",
       "fields": [
         {
@@ -89,6 +76,14 @@
         {
           "label": "Title for fullscreen button (enter)",
           "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Mututu izenburua",
+          "default": "Mututu"
+        },
+        {
+          "label": "Kendu isilarazpena izenburua",
+          "default": "Kendu isilarazpena"
         },
         {
           "label": "Title for fullscreen button (exit)",

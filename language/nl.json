@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Localiseer",
-      "fields": [
-        {
-          "label": "Dempen aan titel",
-          "default": "Dempen aan"
-        },
-        {
-          "label": "Dempen uit titel",
-          "default": "Dempen uit"
-        }
-      ]
-    },
-    {
       "label": "Readspeaker",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Afbeeldingsschuifregelaar",
           "default": "Afbeeldingsschuifregelaar"
+        },
+        {
+          "label": "Dempen aan titel",
+          "default": "Dempen aan"
+        },
+        {
+          "label": "Dempen uit titel",
+          "default": "Dempen uit"
         },
         {
           "label": "Title for fullscreen button (enter)",

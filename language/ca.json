@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Localitza",
-      "fields": [
-        {
-          "label": "Silencia title",
-          "default": "Silencia"
-        },
-        {
-          "label": "Activa el so title",
-          "default": "Activa el so"
-        }
-      ]
-    },
-    {
       "label": "Altaveu de lectura",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Imatge Slider",
           "default": "Imatge Slider"
+        },
+        {
+          "label": "Silencia title",
+          "default": "Silencia"
+        },
+        {
+          "label": "Activa el so title",
+          "default": "Activa el so"
         },
         {
           "label": "Title for fullscreen button (enter)",

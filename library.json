@@ -2,8 +2,8 @@
   "title": "Agamotto",
   "description": "Displays an interactive sequence of images",
   "majorVersion": 1,
-  "minorVersion": 5,
-  "patchVersion": 4,
+  "minorVersion": 6,
+  "patchVersion": 0,
   "runnable": 1,
   "embedTypes": [
     "iframe"

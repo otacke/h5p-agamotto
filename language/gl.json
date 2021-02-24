@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Adaptación local",
-      "fields": [
-        {
-          "label": "Título para silenciado",
-          "default": "Silenciar"
-        },
-        {
-          "label": "Título para activar son",
-          "default": "Activar son"
-        }
-      ]
-    },
-    {
       "label": "Lector de pantalla",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Galería de imaxes",
           "default": "Galería de Imaxes"
+        },
+        {
+          "label": "Título para silenciado",
+          "default": "Silenciar"
+        },
+        {
+          "label": "Título para activar son",
+          "default": "Activar son"
         },
         {
           "label": "Title for fullscreen button (enter)",

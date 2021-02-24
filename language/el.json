@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Localize",
-      "fields": [
-        {
-          "label": "Mute title",
-          "default": "Mute"
-        },
-        {
-          "label": "Unmute title",
-          "default": "Unmute"
-        }
-      ]
-    },
-    {
       "label": "Ακουστική υποβοήθηση",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Slider εικόνας",
           "default": "Slider εικόνας"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
         },
         {
           "label": "Title for fullscreen button (enter)",

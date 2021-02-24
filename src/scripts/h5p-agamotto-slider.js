@@ -53,7 +53,7 @@ class Slider extends H5P.EventDispatcher {
       this.audioButton.classList.add('h5p-agamotto-slider-button');
       this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
       this.audioButton.setAttribute('tabindex', 0);
-      this.audioButton.setAttribute('title', this.params.l10n.mute);
+      this.audioButton.setAttribute('aria-label', this.params.a11y.mute);
       this.audioButtonOffset = 28; // Magic number, extra offset for audio button
       this.audioButton.addEventListener('click', (event) => {
         this.handleClickAudioButton(event);
@@ -298,7 +298,7 @@ class Slider extends H5P.EventDispatcher {
     if (this.isMuted()) {
       this.audioButton.classList.remove('h5p-agamotto-slider-audio-muted');
       this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
-      this.audioButton.title = this.params.l10n.mute;
+      this.audioButton.setAttribute('aria-label', this.params.a11y.mute);
       this.trigger('unmuted');
       this.muted = false;
     }
@@ -307,7 +307,7 @@ class Slider extends H5P.EventDispatcher {
       this.trigger('muted');
       this.audioButton.classList.remove('h5p-agamotto-slider-audio-unmuted');
       this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
-      this.audioButton.title = this.params.l10n.unmute;
+      this.audioButton.setAttribute('aria-label', this.params.a11y.unmute);
     }
   }
 

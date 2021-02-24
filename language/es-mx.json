@@ -63,19 +63,6 @@
       ]
     },
     {
-      "label": "Localizar",
-      "fields": [
-        {
-          "label": "Título de Mudo",
-          "default": "Mudo"
-        },
-        {
-          "label": "Título de Quitar mudo",
-          "default": "Quitar mudo"
-        }
-      ]
-    },
-    {
       "label": "Herramienta de lectura (accesibilidad)",
       "fields": [
         {
@@ -85,6 +72,14 @@
         {
           "label": "Deslizador de imagen",
           "default": "Deslizador de imagen"
+        },
+        {
+          "label": "Título de Mudo",
+          "default": "Mudo"
+        },
+        {
+          "label": "Título de Quitar mudo",
+          "default": "Quitar mudo"
         },
         {
           "label": "Title for fullscreen button (enter)",

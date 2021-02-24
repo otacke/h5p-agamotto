@@ -70,6 +70,18 @@ H5PUpgrades['H5P.Agamotto'] = (function () {
         };
 
         finished(null, parameters, extras);
+      },
+
+      /*
+       * Move l10n parameters to a11y group
+       */
+      6: function (parameters, finished, extras) {
+        parameters.a11y.mute = parameters.l10n.mute;
+        parameters.a11y.unmute = parameters.l10n.unmute;
+
+        delete parameters.l10n;
+
+        finished(null, parameters, extras);
       }
     }
   };
