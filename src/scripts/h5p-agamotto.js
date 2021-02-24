@@ -566,7 +566,7 @@ class Agamotto extends H5P.Question {
     this.setFixedSize = (state) => {
       const images = this.images.getDOM();
       const slider = this.slider.getDOM();
-      const descriptions = this.descriptions.getDOM();
+      const descriptions = (this.descriptions) ? this.descriptions.getDOM() : null;
 
       // Reset values
       if (this.title) {
