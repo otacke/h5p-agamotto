@@ -142,29 +142,6 @@
     ]
   },
   {
-    "name": "l10n",
-    "type": "group",
-    "common": true,
-    "label": "Localize",
-    "importance": "low",
-    "fields": [
-      {
-        "name": "mute",
-        "type": "text",
-        "label": "Mute title",
-        "importance": "low",
-        "default": "Mute"
-      },
-      {
-        "name": "unmute",
-        "type": "text",
-        "label": "Unmute title",
-        "importance": "low",
-        "default": "Unmute"
-      }
-    ]
-  },
-  {
     "name": "a11y",
     "type": "group",
     "common": true,
