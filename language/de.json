@@ -61,8 +61,8 @@
           "default": "#000000"
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Bildanteil im Vollbildmodus",
+          "description": "Falls du Beschreibungen zu den Bildern hinzugefügt hast, setze hier den Prozentsatz des Platzes, den Bilder im Vollbildmodus einnehmen sollen."
         }
       ]
     },
