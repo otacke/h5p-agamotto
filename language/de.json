@@ -59,6 +59,10 @@
           "label": "Ersatzfarbe für Transparenz",
           "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden.",
           "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },

@@ -59,6 +59,10 @@
           "label": "Vervangende kleur voor transparant",
           "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt.",
           "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },

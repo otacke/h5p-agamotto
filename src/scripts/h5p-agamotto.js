@@ -31,7 +31,8 @@ class Agamotto extends H5P.Question {
         snap: true,
         ticks: false,
         labels: false,
-        transparencyReplacementColor: '#000000'
+        transparencyReplacementColor: '#000000',
+        imagesDescriptionsRatio: 70
       },
       a11y: {
         image: 'Image',
@@ -587,7 +588,7 @@ class Agamotto extends H5P.Question {
           const sliderHeight = slider.offsetHeight;
 
           const maxHeight = window.innerHeight - 2 * this.wrapper.offsetTop - headingHeight - sliderHeight;
-          let imagesMaxHeight = (descriptions) ? maxHeight * 0.7 : maxHeight;
+          let imagesMaxHeight = (descriptions) ? maxHeight * this.params.behaviour.imagesDescriptionsRatio / 100 : maxHeight;
 
           // Scale images down if required
           if (images.offsetHeight > imagesMaxHeight) {

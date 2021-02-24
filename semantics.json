@@ -138,6 +138,16 @@
         "spectrum": {
           "showInput": true
         }
+      },
+      {
+        "name": "imagesDescriptionsRatio",
+        "importance": "medium",
+        "type": "number",
+        "label": "Image space in fullscreen mode",
+        "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode.",
+        "default": 70,
+        "min": 50,
+        "max": 100
       }
     ]
   },
