@@ -36,15 +36,15 @@
       }
     },
     {
-      "label": "Configuraciones de comportamiento",
-      "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
+      "label": "Configuraciones del comportamiento",
+      "description": "Estas opciones le permitirán controlar como se comporta el trabajo.",
       "fields": [
         {
           "label": "Imagen inicial",
           "description": "Configurar el número de la imagen con la cual iniciar."
         },
         {
-          "label": "Deslizador ajustado a la imágen.",
+          "label": "Deslizador ajustado a la imágen",
           "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
         },
         {
