@@ -6,8 +6,8 @@
       "description": "El encabezado que le gustaría mostrar arriba de la imagen"
     },
     {
-      "label": "Elemento",
-      "entity": "Elemento",
+      "label": "Elementos",
+      "entity": "elemento",
       "widgets": [
         {
           "label": "Predeterminado"
@@ -20,12 +20,12 @@
             "label": "Imagen"
           },
           {
-            "label": "Subtítulo",
-            "description": "Texto opcional para una imágen. Por favor, asegúrese de que no sea demasiado largo, de lo contrario no se mostrará."
+            "label": "Etiqueta",
+            "description": "Texto opcional para una casilla. Por favor, asegúrese que no sea demasiado largo, o de lo contrario se ocultará."
           },
           {
             "label": "Descripción",
-            "placeholder": "Mi descripción de la imagen...",
+            "placeholder": "Descripción de mi imagen...",
             "description": "Descripción opcional para la imagen"
           },
           {
@@ -36,24 +36,24 @@
       }
     },
     {
-      "label": "Configuraciones de comportamiento",
-      "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
+      "label": "Configuraciones del comportamiento",
+      "description": "Estas opciones le permitirán controlar como se comporta el trabajo.",
       "fields": [
         {
           "label": "Imagen inicial",
           "description": "Configurar el número de la imagen con la cual iniciar."
         },
         {
-          "label": "Deslizador ajustado a la imágen.",
-          "description": "Si esta opción está activada, el deslizador se ajustará a las posiciones de las imágenes."
+          "label": "Deslizador ajustado a la imagen",
+          "description": "Si esta opción está activada, el deslizador se ajustará a la posición de la imagen."
         },
         {
-          "label": "Mostrar posición de la imagen",
-          "description": "Cuando esta opción está habilitada, la posición de la imagen en el control deslizante estará resaltada."
+          "label": "Mostrar marcas de verificación",
+          "description": "Si se activa, la barra deslizadora mostrará una marca de verificación para cada imagen."
         },
         {
           "label": "Mostrar etiquetas",
-          "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
+          "description": "Si se activa, la barra deslizante muestra una etiqueta adicional / alternativamente a las marcas de verificación."
         },
         {
           "label": "Color de Remplazo de Transparencia",
@@ -61,13 +61,13 @@
           "default": "#000000"
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Espacio de imagen en modo de pantalla completa",
+          "description": "Si tiene descripciones además de las imágenes, configure el porcentaje del espacio que debería usar la imagen en modo de pantalla completa."
         }
       ]
     },
     {
-      "label": "Herramienta de lectura (accesibilidad)",
+      "label": "Lector de texto en voz alta",
       "fields": [
         {
           "label": "Imagen",
@@ -78,20 +78,20 @@
           "default": "Deslizador de imagen"
         },
         {
-          "label": "Título de Mudo",
+          "label": "Título Mudo",
           "default": "Mudo"
         },
         {
-          "label": "Título de Quitar mudo",
-          "default": "Quitar mudo"
+          "label": "Título de Activar sonido",
+          "default": "Activar sonido"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Título para botón de pantalla completa (introducir)",
+          "default": "Entrar a modo de pantalla completa"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Título para botón de pantalla completa (salir)",
+          "default": "Salir del modo de pantalla completa"
         }
       ]
     }
