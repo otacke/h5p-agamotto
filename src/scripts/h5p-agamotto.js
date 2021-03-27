@@ -355,38 +355,11 @@ class Agamotto extends H5P.Question {
 
           // Add Resize Handler
           window.addEventListener('resize', () => {
-            // Prevent infinite resize loops
-            if (!this.resizeCooling) {
-              /*
-               * Decrease the size of the content if on a mobile device in landscape
-               * orientation, because it might be hard to use it otherwise.
-               * iOS devices don't switch screen.height and screen.width on rotation
-               */
-              if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-                const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-                this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
-              }
-              else {
-                // Portrait orientation
-                this.wrapper.style.width = 'auto';
-              }
+            this.handleResize();
+          });
 
-              // Resize DOM elements
-              this.images.resize();
-              if (this.hasDescription) {
-                this.descriptions.resize();
-              }
-
-              clearTimeout(this.resizeTimeout);
-              this.resizeTimeout = setTimeout(() => {
-                this.trigger('resize');
-              });
-
-              this.resizeCooling = setTimeout(() => {
-                this.resizeCooling = null;
-              }, Agamotto.RESIZE_COOLING_PERIOD);
-            }
-            this.slider.resize();
+          this.on('resize', () => {
+            this.handleResize();
           });
 
           // Add fullscreen listeners
@@ -426,6 +399,44 @@ class Agamotto extends H5P.Question {
         });
 
       return content;
+    };
+
+    /**
+     * Handle resize.
+     */
+    this.handleResize = () => {
+      if (!this.resizeCooling) {
+        /*
+         * Decrease the size of the content if on a mobile device in landscape
+         * orientation, because it might be hard to use it otherwise.
+         * iOS devices don't switch screen.height and screen.width on rotation
+         */
+        if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+          const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+          this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+        }
+        else {
+          // Portrait orientation
+          this.wrapper.style.width = 'auto';
+        }
+
+        // Resize DOM elements
+        this.images.resize();
+        if (this.hasDescription) {
+          this.descriptions.resize();
+        }
+
+        // TODO: This resize handling is weird ... Investigate!
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          this.trigger('resize');
+        }, 10);
+
+        this.resizeCooling = setTimeout(() => {
+          this.resizeCooling = null;
+        }, Agamotto.RESIZE_COOLING_PERIOD);
+      }
+      this.slider.resize();
     };
 
     /**
