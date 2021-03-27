@@ -151,6 +151,17 @@ class Images {
   }
 
   /**
+   * Get image size.
+   * @return {object} Size.
+   */
+  getSize() {
+    return {
+      width: this.container.offsetWidth,
+      height: this.container.offsetHeight
+    };
+  }
+
+  /**
    * Get the image ratio.
    * @return {number} Image ratio.
    */

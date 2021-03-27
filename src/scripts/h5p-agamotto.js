@@ -50,6 +50,10 @@ class Agamotto extends H5P.Question {
     this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
 
+    // Tracking for resizes
+    this.previousSizes = [];
+    this.imagesRepeatedZeroHeight = 0;
+
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = this.params.items.some(item => item.description !== '');
 
@@ -353,11 +357,6 @@ class Agamotto extends H5P.Question {
             this.startAudio(this.currentAudioId);
           });
 
-          // Add Resize Handler
-          window.addEventListener('resize', () => {
-            this.handleResize();
-          });
-
           this.on('resize', () => {
             this.handleResize();
           });
@@ -405,38 +404,91 @@ class Agamotto extends H5P.Question {
      * Handle resize.
      */
     this.handleResize = () => {
-      if (!this.resizeCooling) {
-        /*
-         * Decrease the size of the content if on a mobile device in landscape
-         * orientation, because it might be hard to use it otherwise.
-         * iOS devices don't switch screen.height and screen.width on rotation
-         */
-        if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-          const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-          this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+      /*
+       * Decrease the size of the content if on a mobile device in landscape
+       * orientation, because it might be hard to use it otherwise.
+       * iOS devices don't switch screen.height and screen.width on rotation
+       */
+      if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+        const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+        this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+      }
+      else {
+        // Portrait orientation
+        this.wrapper.style.width = 'auto';
+      }
+
+      // Resize DOM elements
+      this.images.resize();
+      if (this.hasDescription) {
+        this.descriptions.resize();
+      }
+
+      this.slider.resize();
+
+      window.requestAnimationFrame(() => {
+        // Keep Agamotto.RESIZE_REPETITIONS previous sizes
+        this.previousSizes.push(this.images.getSize());
+        if (this.previousSizes.length > Agamotto.RESIZE_REPETITIONS) {
+          this.previousSizes.shift();
+        }
+
+        // Resize again if needed
+        if (this.isResizeNeeded()) {
+          clearTimeout(this.extraResize);
+          this.extraResize = setTimeout(() => {
+            this.trigger('resize');
+          }, Agamotto.RESIZE_COOLING_PERIOD);
+        }
+      });
+    };
+
+    /**
+     * Check if a resize is needed.
+     * @return {boolean} True, if resize is required.
+     */
+    this.isResizeNeeded = () => {
+      /*
+       * Images need time to resize, and we resize again until
+       * the size didn't yield Agamotto.RESIZE_REPETITIONS different
+       * sizes in Agamotto.RESIZE_REPETITIONS retries - 3 to prevent
+       * infinite resizes when scroll bar is added/removed
+       * In case of problems when getting height 0, stop resize after
+       * Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT attempts
+       */
+
+      // Check for minimal number of required resizes to be sure
+      let resizeNeeded = this.previousSizes.length < Agamotto.RESIZE_REPETITIONS;
+
+      // Check for height being 0
+      if (!resizeNeeded) {
+        resizeNeeded = this.previousSizes.some(size => size.height === 0);
+        if (resizeNeeded) {
+          this.imagesRepeatedZeroHeight++;
         }
         else {
-          // Portrait orientation
-          this.wrapper.style.width = 'auto';
+          this.imagesRepeatedZeroHeight = 0;
         }
 
-        // Resize DOM elements
-        this.images.resize();
-        if (this.hasDescription) {
-          this.descriptions.resize();
+        if (this.imagesRepeatedZeroHeight === Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT) {
+          this.imagesRepeatedZeroHeight = 0;
+          resizeNeeded = false; // Stop loop
         }
-
-        // TODO: This resize handling is weird ... Investigate!
-        clearTimeout(this.resizeTimeout);
-        this.resizeTimeout = setTimeout(() => {
-          this.trigger('resize');
-        }, 10);
-
-        this.resizeCooling = setTimeout(() => {
-          this.resizeCooling = null;
-        }, Agamotto.RESIZE_COOLING_PERIOD);
       }
-      this.slider.resize();
+
+      // Check for number of identical previous sizes
+      if (!resizeNeeded) {
+        const differentSizes = {};
+        this.previousSizes
+          .map(size => `${size.width}|${size.height}`)
+          .forEach(size => {
+            differentSizes[size] = true;
+          });
+
+        resizeNeeded = Object.keys(differentSizes).length === Agamotto.RESIZE_REPETITIONS;
+      }
+
+      return resizeNeeded;
     };
 
     /**
@@ -671,7 +723,13 @@ class Agamotto extends H5P.Question {
 /** @constant {string} */
 Agamotto.DEFAULT_DESCRIPTION = 'Agamotto';
 
-/** @constant {string} Cooldown period in ms to prevent infinite resizing */
-Agamotto.RESIZE_COOLING_PERIOD = 50;
+/** @constant {number} Cooldown period in ms to prevent infinite resizing */
+Agamotto.RESIZE_COOLING_PERIOD = 75;
+
+/** @constant {number} Number of consecutive identical resizes */
+Agamotto.RESIZE_REPETITIONS = 3;
+
+/** @constant {number} Number of maximum resizes with height zero */
+Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT = 50;
 
 export default Agamotto;
