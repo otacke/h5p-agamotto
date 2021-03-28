@@ -49,11 +49,11 @@
         },
         {
           "label": "Mostrar marcas de verificación",
-          "description": "Si se activa, la barra deslizadora mostrará una marca de verificación para cada imagen."
+          "description": "Si esta opción está activada activa, la barra deslizadora mostrará una marca de verificación para cada imagen."
         },
         {
           "label": "Mostrar etiquetas",
-          "description": "Si se activa, la barra deslizante muestra una etiqueta adicional / alternativamente a las marcas de verificación."
+          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta adicional / alternativamente a las marcas de verificación."
         },
         {
           "label": "Color de Remplazo de Transparencia",
@@ -74,15 +74,15 @@
           "default": "Imagen"
         },
         {
-          "label": "Deslizador de imagen",
-          "default": "Deslizador de imagen"
+          "label": "Deslizador de Imagen",
+          "default": "Deslizador de Imagen"
         },
         {
           "label": "Título Mudo",
           "default": "Mudo"
         },
         {
-          "label": "Título de Activar sonido",
+          "label": "Título Activar sonido",
           "default": "Activar sonido"
         },
         {
