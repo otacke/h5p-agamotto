@@ -370,7 +370,7 @@ class Agamotto extends H5P.Question {
               setTimeout(() => { // Needs time to get into fullscreen for window.innerHeight
                 this.setFixedSize(true);
                 this.slider.setFullScreenButtonTitle(true);
-              }, 100);
+              }, 250);
             });
 
             this.on('exitFullScreen', () => {
