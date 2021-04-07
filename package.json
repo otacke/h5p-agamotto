@@ -1,6 +1,6 @@
 {
   "name": "h5p-agamotto",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Displays an interactive sequence of images",
   "scripts": {
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack",
