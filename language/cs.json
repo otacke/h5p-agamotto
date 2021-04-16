@@ -30,7 +30,7 @@
           },
           {
             "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "description": "Když se zobrazí obrázek přehraje se volitelný zvuk."
           }
         ]
       }

@@ -74,24 +74,24 @@
           "default": "Imatge"
         },
         {
-          "label": "Imatge Slider",
-          "default": "Imatge Slider"
+          "label": "Botó de desplaçament de la imatge",
+          "default": "Botó de desplaçament de la imatge"
         },
         {
-          "label": "Silencia title",
+          "label": "Silencia el títol",
           "default": "Silencia"
         },
         {
-          "label": "Activa el so title",
+          "label": "Activa el so del títol",
           "default": "Activa el so"
         },
         {
-          "label": "Title for fullscreen button (enter)",
+          "label": "Títol per al botó de pantalla completa (accedeix)",
           "default": "Enter fullscreen mode"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Títol per al botó de pantalla completa (surt)",
+          "default": "Surt del mode pantalla completa"
         }
       ]
     }
