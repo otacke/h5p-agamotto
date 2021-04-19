@@ -91,7 +91,7 @@
         },
         {
           "label": "Título para botón de pantalla completa (salir)",
-          "default": "Salir del modo de pantalla completa"
+          "default": "Salir del modo de PantallaCompleta"
         }
       ]
     }
