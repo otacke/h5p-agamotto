@@ -3,7 +3,7 @@
     {
       "label": "Encapçalament",
       "placeholder": "Aquí podeu afegir un encapçalament opcional.",
-      "description": "L’encapçalament que voleu que es mostri a sobre de la imatge."
+      "description": "L’encapçalament que voleu que es mostri a sobre de la imatge"
     },
     {
       "label": "Elements",
@@ -61,8 +61,8 @@
           "default": "#000000"
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Espai de la imatge en mode pantalla completa",
+          "description": "Si teniu descripcions acompanyant les imatges, establiu el percentatge d'espai que les imatges haurien d'utilitzar en mode pantalla completa."
         }
       ]
     },
@@ -86,7 +86,7 @@
           "default": "Activa el so"
         },
         {
-          "label": "Títol per al botó de pantalla completa (accedeix)",
+          "label": "Títol per al botó de pantalla completa (intro)",
           "default": "Enter fullscreen mode"
         },
         {
