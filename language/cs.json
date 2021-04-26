@@ -57,8 +57,7 @@
         },
         {
           "label": "Barva na výměnu průhlednosti",
-          "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků.",
-          "default": "#000000"
+          "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků."
         },
         {
           "label": "Image space in fullscreen mode",

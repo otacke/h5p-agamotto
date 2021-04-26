@@ -57,8 +57,7 @@
         },
         {
           "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images.",
-          "default": "#000000"
+          "description": "Set the color that will replace transparent areas of the images."
         },
         {
           "label": "Image space in fullscreen mode",

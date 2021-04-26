@@ -57,8 +57,7 @@
         },
         {
           "label": "Nadomestna barva za prosojnost",
-          "description": "Izbrana barva nadomesti prosojna področja slik.",
-          "default": "#000000"
+          "description": "Izbrana barva nadomesti prosojna področja slik."
         },
         {
           "label": "Image space in fullscreen mode",

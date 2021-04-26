@@ -57,8 +57,7 @@
         },
         {
           "label": "Color de substitución de transparencia",
-          "description": "Establece a cor que substituirá as áreas transparentes das imaxes.",
-          "default": "#000000"
+          "description": "Establece a cor que substituirá as áreas transparentes das imaxes."
         },
         {
           "label": "Image space in fullscreen mode",

@@ -57,8 +57,7 @@
         },
         {
           "label": "Colore di sostituzione della trasparenza",
-          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini",
-          "default": "#000000"
+          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini"
         },
         {
           "label": "Image space in fullscreen mode",

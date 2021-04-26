@@ -57,8 +57,7 @@
         },
         {
           "label": "Gardentasun Ordezkapenaren Kolorea",
-          "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea.",
-          "default": "#000000"
+          "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea."
         },
         {
           "label": "Image space in fullscreen mode",

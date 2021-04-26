@@ -57,8 +57,7 @@
         },
         {
           "label": "Ersatzfarbe für Transparenz",
-          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden.",
-          "default": "#000000"
+          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
         },
         {
           "label": "Bildanteil im Vollbildmodus",

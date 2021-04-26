@@ -57,8 +57,7 @@
         },
         {
           "label": "투명성 대체 색상",
-          "description": "이미지의 투명한 영역을 대체할 색상을 설정하십시오.",
-          "default": "#000000"
+          "description": "이미지의 투명한 영역을 대체할 색상을 설정하십시오."
         },
         {
           "label": "Image space in fullscreen mode",

@@ -57,8 +57,7 @@
         },
         {
           "label": "Color per substituir la transparència",
-          "description": "Establiu el color que substituirà les àrees transparents de les imatges.",
-          "default": "#000000"
+          "description": "Establiu el color que substituirà les àrees transparents de les imatges."
         },
         {
           "label": "Espai de la imatge en mode pantalla completa",
