@@ -29,7 +29,7 @@
             "description": "Volitelný popis obrázku"
           },
           {
-            "label": "Audio",
+            "label": "Zvuk",
             "description": "Když se zobrazí obrázek přehraje se volitelný zvuk."
           }
         ]
@@ -52,7 +52,7 @@
           "description": "Pokud je aktivována, posuvná lišta zobrazí pozici každého obrázku."
         },
         {
-          "label": "Zobrazit  popisky",
+          "label": "Zobrazit popisky",
           "description": "Pokud je aktivována, posuvná lišta zobrazí popisek namísto/vedle pozice."
         },
         {
@@ -60,13 +60,13 @@
           "description": "Nastavte barvu, která nahradí průhledné oblasti obrázků."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Prostor obrázku v režimu celé obrazovky",
+          "description": "Pokud kromě obrázků máte i popisy, nastavte procento prostoru, které mají obrázky v režimu celé obrazovky využívat."
         }
       ]
     },
     {
-      "label": "Čtečí zařízení",
+      "label": "Čtecí zařízení",
       "fields": [
         {
           "label": "Obrázek",
@@ -77,20 +77,20 @@
           "default": "Posuvník obrázku"
         },
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Nadpis ztlumit",
+          "default": "Ztlumit"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Nadpis zesílit",
+          "default": "Zesílit"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Nadpis tlačítka na celou obrazovku (zahájit)",
+          "default": "Zahájit režim celé obrazovky"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Název tlačítka pro celou obrazovku (ukončení)",
+          "default": "Ukončit režim celé obrazovky"
         }
       ]
     }
