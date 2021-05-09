@@ -60,8 +60,8 @@
           "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Afbeeldingsruimte in volledig scherm modus",
+          "description": "Als je beschrijvingen hebt bij de afbeelingen, stel dan het percentage van de ruimte voor de afbeelingen in volledige scherm modus in."
         }
       ]
     },
@@ -85,12 +85,12 @@
           "default": "Dempen uit"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Titel voor volledig scherm knop (starten)",
+          "default": "Starten volledig scherm modus"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Titel voor volledig scherm knop (afsluiten)",
+          "default": "Afsluiten volledig scherm modus"
         }
       ]
     }
