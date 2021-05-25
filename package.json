@@ -31,7 +31,6 @@
     "mini-css-extract-plugin": "^1.3.4",
     "node-sass": "^4.13.1",
     "regenerator-runtime": "^0.13.7",
-    "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.1.1",
     "webpack": "^5.15.0",
     "webpack-cli": "^4.0.0"
