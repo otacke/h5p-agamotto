@@ -60,8 +60,8 @@
           "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Irudien espazioa pantaila osoko moduan",
+          "description": "Irudiez gain deskribapenak badituzu, zehaztu ezazu pantaila osoko moduan irudiek erabili beharreko espazioaren ehunekoa."
         }
       ]
     },
@@ -77,8 +77,8 @@
           "default": "Irudi Aurkezpena"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Pantaila osoko moduaren botoiaren izenburua (sartu)",
+          "default": "Sartu pantaila osoko moduan"
         },
         {
           "label": "Mututu izenburua",
@@ -89,8 +89,8 @@
           "default": "Kendu isilarazpena"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Pantaila osoko moduaren botoiaren izenburua (irten)",
+          "default": "Irten pantaila osoko modutik"
         }
       ]
     }
