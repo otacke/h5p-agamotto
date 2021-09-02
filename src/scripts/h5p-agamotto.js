@@ -566,6 +566,18 @@ class Agamotto extends H5P.Question {
     };
 
     /**
+     * Get context data.
+     * Contract used for confusion report.
+     * @return {object} Context data.
+     */
+    this.getContext = () => {
+      return {
+        statement: 'image',
+        value: this.position + 1
+      }
+    };
+
+    /**
      * Get the content type title.
      * @return {string} title.
      */
