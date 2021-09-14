@@ -572,7 +572,7 @@ class Agamotto extends H5P.Question {
      */
     this.getContext = () => {
       return {
-        statement: 'image',
+        type: 'image',
         value: this.position + 1
       }
     };
