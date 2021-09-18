@@ -78,11 +78,11 @@
         },
         {
           "label": "Beschriftung des \"Stummschalten\"-Buttons",
-          "default": "Stummschalten"
+          "default": "Stummschalten, ist laut"
         },
         {
           "label": "Beschriftung des \"Lautschalten\"-Buttons",
-          "default": "Lautschalten"
+          "default": "Lautschalten, ist stumm"
         },
         {
           "label": "Titel des Vollbild-Buttons (aktivieren)",
