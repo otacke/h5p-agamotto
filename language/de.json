@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Titel",
+      "label": "Überschrift",
       "placeholder": "Hier kannst du optional einen Titel angeben.",
       "description": "Der Titel, der über dem Bild angezeigt werden soll"
     },
