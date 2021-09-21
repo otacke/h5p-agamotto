@@ -49,11 +49,11 @@
         },
         {
           "label": "Mostrar marcas de verificación",
-          "description": "Si esta opción está activada activa, la barra deslizadora mostrará una marca de verificación para cada imagen."
+          "description": "Si esta opción está activada, la barra deslizadora mostrará una marca de verificación para cada imagen."
         },
         {
           "label": "Mostrar etiquetas",
-          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta adicional / alternativamente a las marcas de verificación."
+          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta en lugar de/ adicionalmente a las marcas de verificación."
         },
         {
           "label": "Color de Remplazo de Transparencia",
@@ -61,7 +61,7 @@
         },
         {
           "label": "Espacio de imagen en modo de pantalla completa",
-          "description": "Si tiene descripciones además de las imágenes, configure el porcentaje del espacio que debería usar la imagen en modo de pantalla completa."
+          "description": "Si tiene descripciones además de las imágenes, configurar el porcentaje del espacio que debería usar la imagen en modo de pantalla completa."
         }
       ]
     },
@@ -78,11 +78,11 @@
         },
         {
           "label": "Título Mudo",
-          "default": "Mudo"
+          "default": "Mudo, actualmente sonoro"
         },
         {
-          "label": "Título Activar sonido",
-          "default": "Activar sonido"
+          "label": "Activar sonido del título",
+          "default": "Activar sonido, actualmente mudo"
         },
         {
           "label": "Título para botón de pantalla completa (introducir)",

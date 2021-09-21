@@ -7,7 +7,7 @@
     },
     {
       "label": "Elementos",
-      "entity": "Elemento",
+      "entity": "elemento",
       "widgets": [
         {
           "label": "Predeterminado"
@@ -20,7 +20,7 @@
             "label": "Imagen"
           },
           {
-            "label": "Subtítulo",
+            "label": "Etiqueta",
             "description": "Texto opcional para una casilla. Por favor, asegúrese que no sea demasiado largo, o de lo contrario se ocultará."
           },
           {
@@ -49,11 +49,11 @@
         },
         {
           "label": "Mostrar marcas de verificación",
-          "description": "Si se activa, la barra deslizadora mostrará una marca de verificación para cada imagen."
+          "description": "Si esta opción está activada, la barra deslizadora mostrará una marca de verificación para cada imagen."
         },
         {
           "label": "Mostrar etiquetas",
-          "description": "Si esta opción está activada, el control deslizante muestra una etiqueta adicional / alternativamente a las posiciones de las imágenes."
+          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta en lugar de/ adicionalmente a las marcas de verificación."
         },
         {
           "label": "Color de Remplazo de Transparencia",
@@ -78,11 +78,11 @@
         },
         {
           "label": "Título Mudo",
-          "default": "Mudo"
+          "default": "Mudo, actualmente sonoro"
         },
         {
-          "label": "Título Activar sonido",
-          "default": "Activar sonido"
+          "label": "Activar sonido del título",
+          "default": "Activar sonido, actualmente mudo"
         },
         {
           "label": "Título para botón de pantalla completa (introducir)",
@@ -90,7 +90,7 @@
         },
         {
           "label": "Título para botón de pantalla completa (salir)",
-          "default": "Salir del modo de pantalla completa"
+          "default": "Salir del modo de PantallaCompleta"
         }
       ]
     }
