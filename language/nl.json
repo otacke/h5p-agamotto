@@ -66,7 +66,7 @@
       ]
     },
     {
-      "label": "Readspeaker",
+      "label": "Voorlezen",
       "fields": [
         {
           "label": "Afbeelding",
@@ -78,11 +78,11 @@
         },
         {
           "label": "Dempen aan titel",
-          "default": "Dempen aan"
+          "default": "Dempen aan, is nu uit"
         },
         {
           "label": "Dempen uit titel",
-          "default": "Dempen uit"
+          "default": "Dempen uit, is nu aan"
         },
         {
           "label": "Titel voor volledig scherm knop (starten)",
