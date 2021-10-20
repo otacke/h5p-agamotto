@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Goiburua",
-      "placeholder": "Hemen hautazko goiburu bat gehitu dezakezu.",
+      "placeholder": "Hemen aukerazko goiburua gehitu dezakezu.",
       "description": "Irudiaren gainean erakutsi nahi duzun goiburua"
     },
     {
@@ -10,7 +10,7 @@
       "entity": "elementua",
       "widgets": [
         {
-          "label": "Lehenetsitakoa"
+          "label": "Lehentsitakoa"
         }
       ],
       "field": {
@@ -36,8 +36,8 @@
       }
     },
     {
-      "label": "Jokaeraren ezarpenak",
-      "description": "Aukera hauekin zereginaren jokaera kontrolatu ahalko duzu.",
+      "label": "Portaeraren ezarpenak",
+      "description": "Aukera hauek lanaren portaera kontrolatzea ahalbidetzen dizute.",
       "fields": [
         {
           "label": "Hasierako irudia",
@@ -78,11 +78,11 @@
         },
         {
           "label": "Pantaila osoko moduaren botoiaren izenburua (sartu)",
-          "default": "Sartu pantaila osoko moduan"
+          "default": "Mututu, une honetan mikrofonoa zabalik"
         },
         {
-          "label": "Mututu izenburua",
-          "default": "Mututu"
+          "label": "Zabaldu mikrofonoaren izenburua",
+          "default": "Zabaldu mikrofonoa, une honetan mutututa"
         },
         {
           "label": "Kendu isilarazpena izenburua",
