@@ -27,6 +27,10 @@
             "label": "Описание",
             "placeholder": "Описание изображения...",
             "description": "Описание изображения по желанию"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -53,7 +57,12 @@
         },
         {
           "label": "Цвет фона при смене изображения",
-          "description": "Выберите цвет, который будет отображаться на прозрачной части фона при смене изображений."
+          "description": "Выберите цвет, который будет отображаться на прозрачной части фона при смене изображений.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -67,6 +76,22 @@
         {
           "label": "Слайдер изображения",
           "default": "Слайдер изображения"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

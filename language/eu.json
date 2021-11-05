@@ -1,0 +1,99 @@
+{
+  "semantics": [
+    {
+      "label": "Goiburua",
+      "placeholder": "Hemen hautazko goiburu bat gehitu dezakezu.",
+      "description": "Irudiaren gainean erakutsi nahi duzun goiburua"
+    },
+    {
+      "label": "Elementuak",
+      "entity": "elementua",
+      "widgets": [
+        {
+          "label": "Lehenetsitakoa"
+        }
+      ],
+      "field": {
+        "label": "Elementua",
+        "fields": [
+          {
+            "label": "Irudia"
+          },
+          {
+            "label": "Etiketa",
+            "description": "Markatxo batentzako hautazko etiketa. Ziurtatu ez dela oso luzea, bestela ez da erakutsiko."
+          },
+          {
+            "label": "Deskribapena",
+            "placeholder": "Nire irudiaren deskribapena...",
+            "description": "Irudiaren hautazko deskribapena"
+          },
+          {
+            "label": "Audioa",
+            "description": "Aukerazko audioa, irudia erakustean erreproduizitzen dena."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Jokaeraren ezarpenak",
+      "description": "Aukera hauekin zereginaren jokaera kontrolatu ahalko duzu.",
+      "fields": [
+        {
+          "label": "Hasierako irudia",
+          "description": "Zehaztu hasierako irudireann zenbakia."
+        },
+        {
+          "label": "Jarri fokua diapositiban",
+          "description": "Gaituz gero, aurkezpenak fokua irudiaren kokapen batean jarriko du."
+        },
+        {
+          "label": "Erakutsi markatxoak",
+          "description": "Gaituz gero, aurkezpenak irudi bakoitzarentzako markatxo bana erakutsiko du."
+        },
+        {
+          "label": "Erakutsi etiketak",
+          "description": "Gaituz gero, aurkezpen-barrak markatxoen ordez ala markatxoekin batera etiketa bat erakutsiko du."
+        },
+        {
+          "label": "Gardentasun Ordezkapenaren Kolorea",
+          "description": "Zehaztu irudien eremu gardenak ordezkatuko dituen kolorea.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+        }
+      ]
+    },
+    {
+      "label": "Irakurgai-bozgorailua",
+      "fields": [
+        {
+          "label": "Irudia",
+          "default": "Irudia"
+        },
+        {
+          "label": "Irudi Aurkezpena",
+          "default": "Irudi Aurkezpena"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Mututu izenburua",
+          "default": "Mututu"
+        },
+        {
+          "label": "Kendu isilarazpena izenburua",
+          "default": "Kendu isilarazpena"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
+        }
+      ]
+    }
+  ]
+}

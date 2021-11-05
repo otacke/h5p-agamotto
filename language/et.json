@@ -26,13 +26,17 @@
           {
             "label": "Kirjeldus",
             "placeholder": "Minu pildi kirjeldus ...",
-            "description": "Valikuline kirjeldus pildi kohta."
+            "description": "Valikuline kirjeldus pildi kohta"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
     },
     {
-      "label": "Käitumise seadmed",
+      "label": "Käitumise seaded",
       "description": "Need seaded lasevad sul juhtida, kuidas ülesanne käitub.",
       "fields": [
         {
@@ -53,7 +57,12 @@
         },
         {
           "label": "Nähtamatuse asendamise värv",
-          "description": "Seadista värv, mis asendab piltide nähtamatud alad."
+          "description": "Seadista värv, mis asendab piltide nähtamatud alad.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -67,6 +76,22 @@
         {
           "label": "Image Slider",
           "default": "Image Slider"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

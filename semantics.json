@@ -70,6 +70,17 @@
             "pre",
             "code"
           ]
+        },
+        {
+          "name": "audio",
+          "type": "audio",
+          "importance": "low",
+          "label": "Audio",
+          "description": "Optional audio that plays when an image is shown.",
+          "optional": true,
+          "widgetExtensions": [
+            "AudioRecorder"
+          ]
         }
       ]
     }
@@ -127,6 +138,16 @@
         "spectrum": {
           "showInput": true
         }
+      },
+      {
+        "name": "imagesDescriptionsRatio",
+        "importance": "medium",
+        "type": "number",
+        "label": "Image space in fullscreen mode",
+        "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode.",
+        "default": 70,
+        "min": 50,
+        "max": 100
       }
     ]
   },
@@ -150,6 +171,34 @@
         "label": "Image Slider",
         "importance": "low",
         "default": "Image Slider"
+      },
+      {
+        "name": "mute",
+        "type": "text",
+        "label": "Mute title",
+        "importance": "low",
+        "default": "Mute"
+      },
+      {
+        "name": "unmute",
+        "type": "text",
+        "label": "Unmute title",
+        "importance": "low",
+        "default": "Unmute"
+      },
+      {
+        "name": "buttonFullscreenEnter",
+        "type": "text",
+        "label": "Title for fullscreen button (enter)",
+        "importance": "low",
+        "default": "Enter fullscreen mode"
+      },
+      {
+        "name": "buttonFullscreenExit",
+        "type": "text",
+        "label": "Title for fullscreen button (exit)",
+        "importance": "low",
+        "default": "Exit fullscreen mode"
       }
     ]
   }

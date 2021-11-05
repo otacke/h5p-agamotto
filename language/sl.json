@@ -1,0 +1,99 @@
+{
+  "semantics": [
+    {
+      "label": "Naslov vsebine",
+      "placeholder": "Neobvezen naslov vsebine.",
+      "description": "Besedilo je prikazano nad sliko."
+    },
+    {
+      "label": "Elementi",
+      "entity": "element",
+      "widgets": [
+        {
+          "label": "Privzet"
+        }
+      ],
+      "field": {
+        "label": "Element",
+        "fields": [
+          {
+            "label": "Slika"
+          },
+          {
+            "label": "Oznaka",
+            "description": "Neobvezna oznaka za točko na drsniku. Prikazana je le, če zapis ni predolg."
+          },
+          {
+            "label": "Opis",
+            "placeholder": "Moj opis slike ...",
+            "description": "Neobvezen opis prikazanega na sliki"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Nastavitve interakcije",
+      "description": "Nastavitve omogočajo nadzor nad interakcijo aktivnosti za udeležence.",
+      "fields": [
+        {
+          "label": "Začetna slika",
+          "description": "Ob zagonu bo prikazana slika vnesene zaporedne številke."
+        },
+        {
+          "label": "Točkovni drsnik",
+          "description": "Drsnik je možno postaviti le na točko posamezne slike in ne prosto (kot videoposnetek)."
+        },
+        {
+          "label": "Prikaži točke",
+          "description": "Točke so za vsako sliko posebej prikazane na drsniku."
+        },
+        {
+          "label": "Prikaži oznake",
+          "description": "Nad točkami na drsniku so prikazane tudi oznake."
+        },
+        {
+          "label": "Nadomestna barva za prosojnost",
+          "description": "Izbrana barva nadomesti prosojna področja slik.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+        }
+      ]
+    },
+    {
+      "label": "Bralnik zaslona",
+      "fields": [
+        {
+          "label": "Slika",
+          "default": "Slika"
+        },
+        {
+          "label": "Drsnik",
+          "default": "Drsnik"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
+        }
+      ]
+    }
+  ]
+}

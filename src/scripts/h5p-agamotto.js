@@ -31,11 +31,16 @@ class Agamotto extends H5P.Question {
         snap: true,
         ticks: false,
         labels: false,
-        transparencyReplacementColor: '#000000'
+        transparencyReplacementColor: '#000000',
+        imagesDescriptionsRatio: 70
       },
       a11y: {
         image: 'Image',
-        imageSlider: 'Image slider'
+        imageSlider: 'Image slider',
+        mute: 'Mute',
+        unmute: 'Unmute',
+        buttonFullscreenEnter: 'Enter fullscreen mode',
+        buttonFullscreenExit: 'Exit fullscreen mode'
       }
     }, this.params);
 
@@ -45,10 +50,14 @@ class Agamotto extends H5P.Question {
     this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
 
+    // Tracking for resizes
+    this.previousSizes = [];
+    this.imagesRepeatedZeroHeight = 0;
+
     // Set hasDescription = true if at least one item has a description
     this.hasDescription = this.params.items.some(item => item.description !== '');
 
-    this.id = contentId;
+    this.contentId = contentId;
 
     // Container for KeyListeners
     this.imageContainer = undefined;
@@ -74,6 +83,9 @@ class Agamotto extends H5P.Question {
         return;
       }
 
+      // Update audio
+      this.setAudio(index, opacity);
+
       // Update images
       this.images.setImage(index, opacity);
 
@@ -92,6 +104,87 @@ class Agamotto extends H5P.Question {
           this.imagesViewed.push(this.position);
         }
       }
+    };
+
+    /**
+     * Set audio.
+     * @param {number} index Current image's index.
+     * @param {number} opacity Current image's opacity.
+     */
+    this.setAudio = (index, opacity) => {
+      // Keep track of current audio
+      const audioIndex = Math.round(1 + index - opacity);
+      if (audioIndex === this.currentAudioId) {
+        return; // skip, already played/playing or null
+      }
+      this.currentAudioId = audioIndex;
+
+      // No need to play
+      if (this.muted) {
+        return;
+      }
+
+      this.stopAudios();
+
+      // Start new audio
+      if (this.audios[audioIndex]) {
+        this.startAudio(this.currentAudioId);
+      }
+    };
+
+    /**
+     * Start audio.
+     * @param {number} id Index.
+     */
+    this.startAudio = (id) => {
+      if (this.audios.length <= id) {
+        return;
+      }
+
+      const currentAudio = this.audios[id];
+      if (!currentAudio) {
+        return;
+      }
+
+      // People might move the slider quickly ...
+      if (!currentAudio.promise) {
+        currentAudio.promise = currentAudio.player.play();
+        currentAudio.promise
+          .finally(() => {
+            currentAudio.promise = null;
+          })
+          .catch(() => {
+            // Browser policy prevents playing
+            this.slider.toggleAudioButton(true);
+          });
+      }
+    };
+
+    /**
+     * Stop audios
+     */
+    this.stopAudios = () => {
+      /*
+       * People may move the slider quickly, and audios that should
+       * be stopped may not have loaded yet.
+       */
+      this.audios.forEach(audio => {
+        if (!audio) {
+          return; // skip, no audio
+        }
+
+        if (audio.promise) {
+          audio.promise.then(() => {
+            audio.player.pause();
+            audio.player.load(); // Reset
+            audio.promise = null;
+          });
+        }
+        else {
+          audio.player.pause();
+          audio.player.load(); // Reset
+        }
+      });
     };
 
     /**
@@ -120,13 +213,21 @@ class Agamotto extends H5P.Question {
       this.spinner = new Spinner('h5p-agamotto-spinner');
       content.appendChild(this.spinner.getDOM());
 
+      // Create audio elements
+      this.audios = this.createAudios(this.params.items);
+      this.audios.forEach(audio => {
+        if (audio) {
+          content.append(audio.player);
+        }
+      });
+
       /*
        * Load images first before DOM is created; will help to prevent layout
        * problems in some cases.
        */
       const promises = [];
       this.params.items.forEach(item => {
-        promises.push(Images.loadImage(item.image, this.id));
+        promises.push(Images.loadImage(item.image, this.contentId));
       });
       Promise
         .all(promises)
@@ -143,17 +244,14 @@ class Agamotto extends H5P.Question {
 
           this.wrapper = document.createElement('div');
           this.wrapper.classList.add('h5p-agamotto-wrapper');
-          this.wrapper.classList.add('h5p-agamotto-passepartout-horizontal');
-          this.wrapper.classList.add('h5p-agamotto-passepartout-top');
-          this.wrapper.classList.add('h5p-agamotto-passepartout-bottom');
           content.appendChild(this.wrapper);
 
           // Title
           if (this.params.title) {
-            const title = document.createElement('div');
-            title.classList.add('h5p-agamotto-title');
-            title.innerHTML = `<h2>${this.params.title}</h2>`;
-            this.wrapper.appendChild(title);
+            this.title = document.createElement('div');
+            this.title.classList.add('h5p-agamotto-title');
+            this.title.innerHTML = `<h2>${this.params.title}</h2>`;
+            this.wrapper.appendChild(this.title);
           }
 
           // Images
@@ -167,6 +265,7 @@ class Agamotto extends H5P.Question {
             labelTexts[i] = this.params.items[i].labelText || '';
           }
           this.slider = new Slider({
+            audio: this.hasAudio(),
             snap: this.params.behaviour.snap,
             ticks: this.params.behaviour.ticks,
             labels: this.params.behaviour.labels,
@@ -176,9 +275,20 @@ class Agamotto extends H5P.Question {
             size: this.maxItem,
             a11y: {
               image: this.params.a11y.image,
-              imageSlider: this.params.a11y.imageSlider
+              imageSlider: this.params.a11y.imageSlider,
+              mute: this.params.a11y.mute,
+              unmute: this.params.a11y.unmute,
+              buttonFullscreenEnter: this.params.a11y.buttonFullscreenEnter,
+              buttonFullscreenExit: this.params.a11y.buttonFullscreenExit
+            },
+            selector: this.selector,
+            parent: this
+          }, {
+            onButtonFullscreenClicked: () => {
+              this.handleFullscreenClicked();
             }
-          }, this.selector, this);
+          });
+
           this.wrapper.appendChild(this.slider.getDOM());
           this.slider.resize();
 
@@ -191,28 +301,19 @@ class Agamotto extends H5P.Question {
             this.descriptions = new Descriptions(descriptionTexts, this.selector, this, this.contentId);
             this.wrapper.appendChild(this.descriptions.getDOM());
             this.descriptions.resize();
-            // Passepartout at the bottom is not needed, because we have a description
-            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
             this.heightDescriptions = this.descriptions.offsetHeight;
           }
           else {
             this.heightDescriptions = 0;
           }
 
-          // Add passepartout depending on the combination of elements
-          if (this.params.showTitle) {
-            // Passepartout at the top is not needed, because we have a title
-            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-          }
-          else if (!this.hasDescription) {
-            // No passepartout is needed at all, because we just have an image
-            this.wrapper.classList.remove('h5p-agamotto-passepartout-horizontal');
-            this.wrapper.classList.remove('h5p-agamotto-passepartout-top');
-            this.wrapper.classList.remove('h5p-agamotto-passepartout-bottom');
-          }
-
           // KeyListeners for Images that will allow to jump from one image to another
           this.imageContainer = this.images.getDOM ();
+
+          // Focus slider so people can click on the image and use keyboard
+          this.imageContainer.addEventListener('click', () => {
+            this.slider.focus({preventScroll: true});
+          });
 
           // Trigger xAPI when starting to view content
           this.xAPIExperienced();
@@ -244,40 +345,51 @@ class Agamotto extends H5P.Question {
             this.updateContent(topIndex, topOpacity);
           });
 
-          // Add Resize Handler
-          window.addEventListener('resize', () => {
-            // Prevent infinite resize loops
-            if (!this.resizeCooling) {
-              /*
-               * Decrease the size of the content if on a mobile device in landscape
-               * orientation, because it might be hard to use it otherwise.
-               * iOS devices don't switch screen.height and screen.width on rotation
-               */
-              if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
-                const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-                this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+          // Detect audio muting
+          this.slider.on('muted', () => {
+            this.muted = true;
+            this.stopAudios();
+          });
+
+          // Detect audio unmuting
+          this.slider.on('unmuted', () => {
+            this.muted = false;
+            this.startAudio(this.currentAudioId);
+          });
+
+          this.on('resize', () => {
+            this.handleResize();
+          });
+
+          // Add fullscreen listeners
+          this.container = document.querySelector('.h5p-container');
+          if (this.container && !this.noFullscreen) {
+            this.slider.enableFullscreenButton();
+
+            this.on('enterFullScreen', () => {
+              setTimeout(() => { // Needs time to get into fullscreen for window.innerHeight
+                this.setFixedSize(true);
+                this.slider.setFullScreenButtonTitle(true);
+              }, 250);
+            });
+
+            this.on('exitFullScreen', () => {
+              this.setFixedSize(false);
+              this.slider.setFullScreenButtonTitle(false);
+            });
+
+            // Resize fullscreen dimensions when rotating screen
+            window.addEventListener('orientationchange', () => {
+              if (H5P.isFullscreen) {
+                setTimeout(() => { // Needs time to rotate for window.innerHeight
+                  this.setFixedSize(true);
+                }, 250);
               }
               else {
-                // Portrait orientation
-                this.wrapper.style.width = 'auto';
+                this.setFixedSize(false);
               }
-
-              // Resize DOM elements
-              this.images.resize();
-              this.slider.resize();
-              if (this.hasDescription) {
-                this.descriptions.resize();
-              }
-
-              setTimeout(() => {
-                this.trigger('resize');
-              });
-
-              this.resizeCooling = setTimeout(() => {
-                this.resizeCooling = null;
-              }, Agamotto.RESIZE_COOLING_PERIOD);
-            }
-          });
+            }, false);
+          }
 
           this.trigger('resize');
         })
@@ -286,6 +398,131 @@ class Agamotto extends H5P.Question {
         });
 
       return content;
+    };
+
+    /**
+     * Handle resize.
+     */
+    this.handleResize = () => {
+      /*
+       * Decrease the size of the content if on a mobile device in landscape
+       * orientation, because it might be hard to use it otherwise.
+       * iOS devices don't switch screen.height and screen.width on rotation
+       */
+      if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+        const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
+        this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+      }
+      else {
+        // Portrait orientation
+        this.wrapper.style.width = 'auto';
+      }
+
+      // Resize DOM elements
+      this.images.resize();
+      if (this.hasDescription) {
+        this.descriptions.resize();
+      }
+
+      this.slider.resize();
+
+      window.requestAnimationFrame(() => {
+        // Keep Agamotto.RESIZE_REPETITIONS previous sizes
+        this.previousSizes.push(this.images.getSize());
+        if (this.previousSizes.length > Agamotto.RESIZE_REPETITIONS) {
+          this.previousSizes.shift();
+        }
+
+        // Resize again if needed
+        if (this.isResizeNeeded()) {
+          clearTimeout(this.extraResize);
+          this.extraResize = setTimeout(() => {
+            this.trigger('resize');
+          }, Agamotto.RESIZE_COOLING_PERIOD);
+        }
+      });
+    };
+
+    /**
+     * Check if a resize is needed.
+     * @return {boolean} True, if resize is required.
+     */
+    this.isResizeNeeded = () => {
+      /*
+       * Images need time to resize, and we resize again until
+       * the size didn't yield Agamotto.RESIZE_REPETITIONS different
+       * sizes in Agamotto.RESIZE_REPETITIONS retries - 3 to prevent
+       * infinite resizes when scroll bar is added/removed
+       * In case of problems when getting height 0, stop resize after
+       * Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT attempts
+       */
+
+      // Check for minimal number of required resizes to be sure
+      let resizeNeeded = this.previousSizes.length < Agamotto.RESIZE_REPETITIONS;
+
+      // Check for height being 0
+      if (!resizeNeeded) {
+        resizeNeeded = this.previousSizes.some(size => size.height === 0);
+        if (resizeNeeded) {
+          this.imagesRepeatedZeroHeight++;
+        }
+        else {
+          this.imagesRepeatedZeroHeight = 0;
+        }
+
+        if (this.imagesRepeatedZeroHeight === Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT) {
+          this.imagesRepeatedZeroHeight = 0;
+          resizeNeeded = false; // Stop loop
+        }
+      }
+
+      // Check for number of identical previous sizes
+      if (!resizeNeeded) {
+        const differentSizes = {};
+        this.previousSizes
+          .map(size => `${size.width}|${size.height}`)
+          .forEach(size => {
+            differentSizes[size] = true;
+          });
+
+        resizeNeeded = Object.keys(differentSizes).length === Agamotto.RESIZE_REPETITIONS;
+      }
+
+      return resizeNeeded;
+    };
+
+    /**
+     * Create audio elements from items.
+     * @param {object[]} items Items from params.
+     * @return {object[]} Audio elements.
+     */
+    this.createAudios = (items) => {
+      const audioElements = [];
+
+      items.forEach(item => {
+        if (!item.audio || item.audio.length < 1 || !item.audio[0].path) {
+          audioElements.push(null);
+          return;
+        }
+
+        const player = document.createElement('audio');
+        player.style.display = 'none';
+        player.src = H5P.getPath(item.audio[0].path, this.contentId);
+        audioElements.push({
+          player: player,
+          promise: null
+        });
+      });
+
+      return audioElements;
+    };
+
+    /**
+     * Detect whether there's at least one audio.
+     * @return {boolean} True, if content has audio.
+     */
+    this.hasAudio = () => {
+      return this.audios.some(audio => audio !== null);
     };
 
     /**
@@ -335,6 +572,121 @@ class Agamotto extends H5P.Question {
     this.getTitle = () => {
       return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
     };
+
+    /**
+     * Handle fullscreen button clicked.
+     */
+    this.handleFullscreenClicked = () => {
+      setTimeout(() => {
+        this.toggleFullscreen();
+      }, 300); // Some devices don't register user gesture before call to to requestFullscreen
+    };
+
+    /**
+     * Toggle fullscreen button.
+     * @param {string|boolean} state enter|false for enter, exit|true for exit.
+     */
+    this.toggleFullscreen = (state) => {
+      if (!this.container) {
+        return;
+      }
+
+      if (typeof state === 'string') {
+        if (state === 'enter') {
+          state = false;
+        }
+        else if (state === 'exit') {
+          state = true;
+        }
+      }
+
+      if (typeof state !== 'boolean') {
+        state = !H5P.isFullscreen;
+      }
+
+      if (state === true) {
+        H5P.fullScreen(H5P.jQuery(this.container), this);
+      }
+      else {
+        H5P.exitFullScreen();
+      }
+    };
+
+    /**
+     * Remove fullscreen button.
+     */
+    this.removeFullscreenButton = () => {
+      if (!this.slider) { // Not yet instantiated
+        this.noFullscreen = true;
+        return;
+      }
+      this.slider.removeFullscreenButton();
+    };
+
+    /**
+     * Fix height to current screen size.
+     * @param {boolean} state If true, fix height.
+     */
+    this.setFixedSize = (state) => {
+      const images = this.images.getDOM();
+      const slider = this.slider.getDOM();
+      const descriptions = (this.descriptions) ? this.descriptions.getDOM() : null;
+
+      // Reset values
+      if (this.title) {
+        this.title.style.maxWidth = '';
+      }
+      images.style.maxWidth = '';
+      images.style.maxHeight = '';
+      slider.style.maxWidth = '';
+      if (descriptions) {
+        descriptions.style.maxHeight = '';
+        descriptions.style.maxWidth = '';
+        descriptions.style.overflowY = '';
+      }
+
+      setTimeout(() => {
+        if (state) {
+          const headingHeight = (this.title) ? this.title.offsetHeight : 0;
+          const sliderHeight = slider.offsetHeight;
+
+          const maxHeight = window.innerHeight - 2 * this.wrapper.offsetTop - headingHeight - sliderHeight;
+          let imagesMaxHeight = (descriptions) ? maxHeight * this.params.behaviour.imagesDescriptionsRatio / 100 : maxHeight;
+
+          // Scale images down if required
+          if (images.offsetHeight > imagesMaxHeight) {
+            const maxWidth = `${imagesMaxHeight * images.offsetWidth / images.offsetHeight}px`;
+            if (this.title) {
+              this.title.style.maxWidth = maxWidth;
+            }
+
+            // Set maximum width to allow centering
+            images.style.maxWidth = maxWidth;
+            slider.style.maxWidth = maxWidth;
+            if (descriptions) {
+              descriptions.style.maxWidth = maxWidth;
+            }
+          }
+          else {
+            imagesMaxHeight = images.offsetHeight;
+          }
+
+          // Set maximum height for images + descriptions
+          images.style.maxHeight = `${imagesMaxHeight}px`;
+          if (descriptions && descriptions.offsetHeight > maxHeight - imagesMaxHeight) {
+            descriptions.style.maxHeight = `${maxHeight - imagesMaxHeight}px`;
+            descriptions.style.overflowY = 'auto';
+          }
+        }
+
+        // Resize
+        window.requestAnimationFrame(() => {
+          this.slider.resize();
+          this.images.resize();
+          this.trigger('resize');
+        });
+      }, 0);
+    };
   }
 
   /**
@@ -371,7 +723,13 @@ class Agamotto extends H5P.Question {
 /** @constant {string} */
 Agamotto.DEFAULT_DESCRIPTION = 'Agamotto';
 
-/** @constant {string} Cooldown period in ms to prevent infinite resizing */
-Agamotto.RESIZE_COOLING_PERIOD = 50;
+/** @constant {number} Cooldown period in ms to prevent infinite resizing */
+Agamotto.RESIZE_COOLING_PERIOD = 75;
+
+/** @constant {number} Number of consecutive identical resizes */
+Agamotto.RESIZE_REPETITIONS = 3;
+
+/** @constant {number} Number of maximum resizes with height zero */
+Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT = 50;
 
 export default Agamotto;

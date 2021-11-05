@@ -27,6 +27,10 @@
             "label": "Beschreibung",
             "placeholder": "Meine Bildbeschreibung ...",
             "description": "Optionale Beschreibung für das Bild"
+          },
+          {
+            "label": "Tondatei",
+            "description": "Optionale Tondatei, die abgespielt wird, wenn ein Bild angezeigt wird."
           }
         ]
       }
@@ -53,7 +57,12 @@
         },
         {
           "label": "Ersatzfarbe für Transparenz",
-          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
+          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden.",
+          "default": "#000000"
+        },
+        {
+          "label": "Bildanteil im Vollbildmodus",
+          "description": "Falls du Beschreibungen zu den Bildern hinzugefügt hast, setze hier den Prozentsatz des Platzes, den Bilder im Vollbildmodus einnehmen sollen."
         }
       ]
     },
@@ -67,6 +76,22 @@
         {
           "label": "Schieberegler für Bilder",
           "default": "Schieberegler für Bilder"
+        },
+        {
+          "label": "Beschriftung des \"Stummschalten\"-Buttons",
+          "default": "Stummschalten"
+        },
+        {
+          "label": "Beschriftung des \"Lautschalten\"-Buttons",
+          "default": "Lautschalten"
+        },
+        {
+          "label": "Titel des Vollbild-Buttons (aktivieren)",
+          "default": "Gehe in den Vollbildmodus"
+        },
+        {
+          "label": "Titel des Vollbild-Buttons (deaktivieren)",
+          "default": "Verlasse den Vollbildmodus"
         }
       ]
     }

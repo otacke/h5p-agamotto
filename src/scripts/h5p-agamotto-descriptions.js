@@ -9,25 +9,19 @@ class Descriptions {
    * @param {string} parent Parent class Agamotto.
    */
   constructor(texts, selector, parent) {
-    this.texts = texts;
     this.selector = selector;
-
-    this.descriptionTop = document.createElement('div');
-    this.descriptionTop.classList.add('h5p-agamotto-description-top');
-    this.descriptionTop.style.opacity = 1;
-    this.descriptionTop.innerHTML = texts[0];
-    // For ARIA, description is part of image alt text
-    this.descriptionTop.setAttribute('aria-hidden', 'true');
-
-    this.descriptionBottom = document.createElement('div');
-    this.descriptionBottom.classList.add('h5p-agamotto-description-bottom');
-    this.descriptionBottom.style.opacity = 0;
-    this.descriptionBottom.innerHTML = texts[1];
 
     this.descriptionsContainer = document.createElement('div');
     this.descriptionsContainer.classList.add('h5p-agamotto-descriptions-container');
-    this.descriptionsContainer.appendChild(this.descriptionTop);
-    this.descriptionsContainer.appendChild(this.descriptionBottom);
+
+    // Add wrappers
+    this.descriptionWrappers = this.buildDescriptionWrappers(texts);
+    this.descriptionWrappers.forEach((wrapper) => {
+      this.descriptionsContainer.appendChild(wrapper);
+    });
+
+    this.descriptionWrappers[0].classList.remove('h5p-agamotto-hidden');
+    this.currentDescriptionText = this.descriptionWrappers[0].textContent;
 
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', event => {
@@ -49,11 +43,35 @@ class Descriptions {
   }
 
   /**
+   * Build wrappers for descriptions.
+   * @param {string[]} texts Description texts.
+   * @return {HTMLElement[]} Wrappers.
+   */
+  buildDescriptionWrappers(texts) {
+    const wrappers = [];
+
+    if (!Array.isArray(texts)) {
+      return wrappers;
+    }
+
+    texts.forEach((text) => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('h5p-agamotto-description-bottom');
+      wrapper.classList.add('h5p-agamotto-hidden');
+      wrapper.setAttribute('aria-hidden', 'true');
+      wrapper.innerHTML = text;
+      wrappers.push(wrapper);
+    });
+
+    return wrappers;
+  }
+
+  /**
    * Get current description text.
    * @return {string} Current description text.
    */
   getCurrentDescriptionText() {
-    return this.descriptionTop.textContent;
+    return this.currentDescriptionText;
   }
 
   /**
@@ -62,20 +80,22 @@ class Descriptions {
    * @param {number} opacity Description (image) opacity, [0..1].
    */
   setText(index, opacity) {
+    this.descriptionWrappers.forEach((wrapper) => {
+      wrapper.classList.add('h5p-agamotto-hidden');
+    });
 
-    // Switch position to make selecting links possible, threshold is 0.5 opacity
-    if (opacity > 0.5) {
-      this.descriptionTop.innerHTML = this.texts[index];
-      this.descriptionBottom.innerHTML = this.texts[Util.constrain(index + 1, 0, this.texts.length - 1)];
-      this.descriptionTop.style.opacity = opacity;
-      this.descriptionBottom.style.opacity = 1 - opacity;
+    const wrapperTop = this.descriptionWrappers[index];
+    const wrapperBottom = this.descriptionWrappers[Util.constrain(index + 1, 0, this.descriptionWrappers.length - 1)];
+
+    wrapperTop.classList.remove('h5p-agamotto-hidden');
+    wrapperBottom.classList.remove('h5p-agamotto-hidden');
+
+    wrapperTop.style.opacity = opacity;
+    if (wrapperTop !== wrapperBottom) {
+      wrapperBottom.style.opacity = 1 - opacity;
     }
-    else {
-      this.descriptionTop.innerHTML = this.texts[Util.constrain(index + 1, 0, this.texts.length - 1)];
-      this.descriptionBottom.innerHTML = this.texts[index];
-      this.descriptionTop.style.opacity = 1 - opacity;
-      this.descriptionBottom.style.opacity = opacity;
-    }
+
+    this.currentDescriptionText = (opacity > 0.5) ? wrapperTop.textContent : wrapperBottom.textContent;
   }
 
   /**
@@ -84,11 +104,14 @@ class Descriptions {
   resize() {
     // We need to determine the highest of all description texts for resizing
     let height = 0;
-    this.texts.forEach(text => {
-      this.descriptionBottom.innerHTML = text;
-      height = Math.max(height, this.descriptionBottom.offsetHeight);
-    });
-    this.descriptionsContainer.style.height = height + 'px';
+
+    setTimeout(() => {
+      this.descriptionWrappers.forEach((wrapper) => {
+        height = Math.max(height, wrapper.offsetHeight);
+      });
+
+      this.descriptionsContainer.style.height = `${height}px`;
+    }, 0);
   }
 }
 

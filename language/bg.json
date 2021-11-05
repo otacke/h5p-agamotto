@@ -27,6 +27,10 @@
             "label": "Описание",
             "placeholder": "Описание на моето изображение ...",
             "description": "Незадължително описание на изображението"
+          },
+          {
+            "label": "Audio",
+            "description": "Допълнителен звук, който се възпроизвежда, когато се показва изображението."
           }
         ]
       }
@@ -53,7 +57,12 @@
         },
         {
           "label": "Цвят, който заменя прозрачната област",
-          "description": "Задайте цвят, който ще замени прозрачните области на изображенията."
+          "description": "Задайте цвят, който ще замени прозрачните области на изображенията.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -67,6 +76,22 @@
         {
           "label": "Плъзгаща лента с изображения",
           "default": "Плъзгаща лента с изображения"
+        },
+        {
+          "label": "Без звук",
+          "default": "Без звук"
+        },
+        {
+          "label": "Включване на звука",
+          "default": "Включване на звука"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

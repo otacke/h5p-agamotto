@@ -1,16 +1,16 @@
 {
   "semantics": [
     {
-      "label": "Heading",
-      "placeholder": "Here you can add an optional heading.",
-      "description": "The heading you'd like to show above the image"
+      "label": "Koptekst",
+      "placeholder": "Hier kunt u een optionele koptekst toevoegen.",
+      "description": "De koptekst die u wilt tonen boven de afbeelding"
     },
     {
       "label": "Items",
       "entity": "Item",
       "widgets": [
         {
-          "label": "Default"
+          "label": "Standaard"
         }
       ],
       "field": {
@@ -27,6 +27,10 @@
             "label": "Beschrijving",
             "placeholder": "Mijn afbeeldingsbeschrijving ...",
             "description": "Optionele beschrijving van de afbeelding"
+          },
+          {
+            "label": "Audio",
+            "description": "Optionele audio die speelt wanneer een afbeelding wordt getoond."
           }
         ]
       }
@@ -36,8 +40,8 @@
       "description": "Deze opties bepalen hoe de taak op de input reageert.",
       "fields": [
         {
-          "label": "Start image",
-          "description": "Set the number of the image to start with."
+          "label": "Start afbeelding",
+          "description": "Stel het nummer in van de afbeelding om mee te starten."
         },
         {
           "label": "Inschakelen schuifregelaar",
@@ -52,8 +56,13 @@
           "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
         },
         {
-          "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images."
+          "label": "Vervangende kleur voor transparant",
+          "description": "Stel de kleur in die de transparante gebieden van de afbeeldingen vervangt.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -61,12 +70,28 @@
       "label": "Readspeaker",
       "fields": [
         {
-          "label": "Image",
-          "default": "Image"
+          "label": "Afbeelding",
+          "default": "Afbeelding"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Afbeeldingsschuifregelaar",
+          "default": "Afbeeldingsschuifregelaar"
+        },
+        {
+          "label": "Dempen aan titel",
+          "default": "Dempen aan"
+        },
+        {
+          "label": "Dempen uit titel",
+          "default": "Dempen uit"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

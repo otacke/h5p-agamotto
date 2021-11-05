@@ -5,32 +5,34 @@ class Slider extends H5P.EventDispatcher {
   /**
    * Slider object.
    * @param {object} params Options for the slider.
-   * @param {boolean} params.snap If true, slider will snap to fixed positions.
-   * @param {boolean} params.ticks If true, slider container will display ticks.
-   * @param {boolean} params.labels If true, slider container will display tick labels.
-   * @param {number} params.startRatio Set the start ratio.
+   * @param {boolean} [params.snap] If true, slider will snap to fixed positions.
+   * @param {boolean} [params.ticks] If true, slider container will display ticks.
+   * @param {boolean} [params.labels] If true, slider container will display tick labels.
+   * @param {number} [params.startRatio] Set the start ratio.
    * @param {object[]} params.labelTexts Tick labels.
    * @param {string} params.labelTexts.text Tick label.
    * @param {number} params.size Number of positions/ticks.
-   * @param {string} selector CSS class name of parent node.
-   * @param {string} parent Parent class Agamotto.
+   * @param {string} params.selector CSS class name of parent node.
+   * @param {object} params.parent Parent class Agamotto.
    */
-  constructor(params, selector, parent) {
+  constructor(params, callbacks = {}) {
     super();
 
-    params = Util.extend({
+    this.params = Util.extend({
       snap: true,
       ticks: false,
       labels: false,
-      startRatio: 0,
+      startRatio: 0
     }, params);
 
-    this.params = params;
-    this.selector = selector;
-    this.parent = parent;
+    this.callbacks = callbacks;
+    this.callbacks.onButtonFullscreenClicked = callbacks.onButtonFullscreenClicked || (() => {});
+
+    this.selector = params.selector;
+    this.parent = params.parent;
 
     this.trackWidth = 0;
-    this.trackOffset = null;
+    this.audioButtonOffset = 0;
     this.thumbPosition = 0;
     this.ratio = params.startRatio;
 
@@ -40,21 +42,53 @@ class Slider extends H5P.EventDispatcher {
     this.sliderdown = false;
     this.keydown = false;
     this.interactionstarted = false;
-    this.wasUsed = false;
+    this.extraInitResizes = 1;
+
+    this.container = document.createElement('div');
+    this.container.classList.add('h5p-agamotto-slider-container');
+
+    if (this.params.audio) {
+      this.muted = false;
+      this.audioButton = document.createElement('button');
+      this.audioButton.classList.add('h5p-agamotto-slider-button');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
+      this.audioButton.setAttribute('tabindex', 0);
+      this.audioButton.setAttribute('aria-label', this.params.a11y.mute);
+      this.audioButtonOffset = 28; // Magic number, extra offset for audio button
+      this.audioButton.addEventListener('click', (event) => {
+        this.handleClickAudioButton(event);
+      });
+      this.audioButton.addEventListener('touchstart', (event) => {
+        this.handleClickAudioButton(event);
+      });
+      this.container.appendChild(this.audioButton);
+    }
 
     this.track = document.createElement('div');
     this.track.classList.add('h5p-agamotto-slider-track');
+    this.container.appendChild(this.track);
 
     this.thumb = document.createElement('div');
     this.thumb.classList.add('h5p-agamotto-slider-thumb');
     this.thumb.setAttribute('tabindex', 0);
     this.thumb.setAttribute('role', 'slider');
     this.thumb.setAttribute('aria-label', this.params.a11y.imageSlider);
-
-    this.container = document.createElement('div');
-    this.container.classList.add('h5p-agamotto-slider-container');
-    this.container.appendChild(this.track);
     this.container.appendChild(this.thumb);
+
+    this.fullscreenButton = document.createElement('button');
+    this.fullscreenButton.classList.add('h5p-agamotto-slider-button');
+    this.fullscreenButton.classList.add('h5p-agamotto-slider-fullscreen');
+    this.fullscreenButton.classList.add('h5p-agamotto-slider-fullscreen-enter');
+    this.fullscreenButton.setAttribute('aria-label', this.params.a11y.buttonFullscreenEnter);
+    this.fullscreenButton.classList.add('h5p-agamotto-button-none');
+    this.fullscreenButton.setAttribute('tabindex', 0);
+    this.fullscreenButton.addEventListener('click', (event) => {
+      this.handleClickFullscreenButton(event);
+    });
+    this.fullscreenButton.addEventListener('touchstart', (event) => {
+      this.handleClickFullscreenButton(event);
+    });
+    this.container.appendChild(this.fullscreenButton);
 
     /*
      * We could put the next two blocks in one loop and check for ticks/labels
@@ -66,7 +100,7 @@ class Slider extends H5P.EventDispatcher {
     if (this.params.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
       const placeTicks = (event) => {
-        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET, true);
+        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET - this.audioButtonOffset, true);
       };
       for (i = 0; i <= this.params.size; i++) {
         this.ticks[i] = document.createElement('div');
@@ -117,6 +151,10 @@ class Slider extends H5P.EventDispatcher {
      * screen when using the slider which would be weird.
      */
     this.container.addEventListener('touchstart', event => {
+      if (event.target === this.fullscreenButton || event.target === this.audioButton) {
+        return;
+      }
+
       event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
@@ -124,6 +162,10 @@ class Slider extends H5P.EventDispatcher {
     });
 
     this.container.addEventListener('touchmove', event => {
+      if (event.target === this.fullscreenButton || event.target === this.audioButton) {
+        return;
+      }
+
       event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
@@ -131,6 +173,10 @@ class Slider extends H5P.EventDispatcher {
     });
 
     this.container.addEventListener('touchend', event => {
+      if (event.target === this.fullscreenButton || event.target === this.audioButton) {
+        return;
+      }
+
       event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
@@ -177,6 +223,95 @@ class Slider extends H5P.EventDispatcher {
   }
 
   /**
+   * Detect whether audio is muted.
+   * @return {boolean} True, if muted.
+   */
+  isMuted() {
+    return this.muted;
+  }
+
+  /**
+   * Handle click/tap on fullscreen button.
+   * @param {Event} event Click/Touchstart event.
+   */
+  handleClickFullscreenButton(event) {
+    event.preventDefault();
+    this.callbacks.onButtonFullscreenClicked();
+    return false;
+  }
+
+  /**
+   * Enable fullscreen button.
+   */
+  enableFullscreenButton() {
+    this.fullscreenButton.classList.remove('h5p-agamotto-button-none');
+  }
+
+  /**
+   * Remove fullscreen button.
+   */
+  removeFullscreenButton() {
+    this.container.removeChild(this.fullscreenButton);
+    this.resize();
+  }
+
+  /**
+   * Set fullscreen title.
+   * @param {boolean} state If true, fullscreen entered, else exited.
+   */
+  setFullScreenButtonTitle(state) {
+    if (!this.fullscreenButton) {
+      return;
+    }
+
+    if (state) {
+      this.fullscreenButton.setAttribute('aria-label', this.params.a11y.buttonFullscreenExit);
+    }
+    else {
+      this.fullscreenButton.setAttribute('aria-label', this.params.a11y.buttonFullscreenEnter);
+    }
+  }
+
+  /**
+   * Handle click/tap on audio button.
+   * @param {Event} event Click/Touchstart event.
+   */
+  handleClickAudioButton(event) {
+    event.preventDefault();
+    this.toggleAudioButton();
+    return false;
+  }
+
+  /**
+   * Toggle audio button.
+   * @param {boolean} [muted] Override for audio button.
+   */
+  toggleAudioButton(muted) {
+    if (!this.audioButton) {
+      return;
+    }
+
+    if (typeof muted === 'boolean') {
+      this.muted = !muted;
+    }
+
+    if (this.isMuted()) {
+      this.audioButton.classList.remove('h5p-agamotto-slider-audio-muted');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-unmuted');
+      this.audioButton.setAttribute('aria-label', this.params.a11y.mute);
+      this.trigger('unmuted');
+      this.muted = false;
+    }
+    else {
+      this.muted = true;
+      this.trigger('muted');
+      this.audioButton.classList.remove('h5p-agamotto-slider-audio-unmuted');
+      this.audioButton.classList.add('h5p-agamotto-slider-audio-muted');
+      this.audioButton.setAttribute('aria-label', this.params.a11y.unmute);
+    }
+  }
+
+  /**
    * Handle sliding with keys.
    * @param {Event} event Key event.
    * @param {number} nextItemId Id of item to slide to.
@@ -204,7 +339,7 @@ class Slider extends H5P.EventDispatcher {
   getCurrentItemId(rounded = true) {
     let itemPosition = this.getPosition() / this.getWidth() * this.params.size;
     if (rounded) {
-      itemPosition = Math.round(itemPosition);
+      itemPosition = Util.constrain(0, Math.round(itemPosition), this.params.size);
     }
     return itemPosition;
   }
@@ -238,8 +373,14 @@ class Slider extends H5P.EventDispatcher {
    * @param {number} value Slider's width.
    */
   setWidth(value) {
-    this.trackWidth = value;
-    this.track.style.width = `${value}px`;
+    if (this.params.audio) {
+      this.track.style.left = `${Slider.TRACK_OFFSET + this.audioButtonOffset}px`;
+    }
+
+    const fullscreenButtonOffset = this.fullscreenButton.offsetWidth + 4;
+
+    this.trackWidth = value - this.audioButtonOffset - fullscreenButtonOffset;
+    this.track.style.width = `${value - this.audioButtonOffset - fullscreenButtonOffset}px`;
   }
 
   /**
@@ -266,12 +407,7 @@ class Slider extends H5P.EventDispatcher {
       position = parseInt(position);
     }
     else if (typeof position === 'object') {
-      // Need to compute left offset of slider when DOM has been built
-      if (this.trackOffset === null) {
-        this.trackOffset = this.computeTrackOffset();
-      }
-
-      position = this.getPointerX(position) - this.trackOffset;
+      position = this.getPointerX(position) - this.computeTrackOffset() - this.audioButtonOffset;
     }
     else {
       position = 0;
@@ -292,9 +428,10 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Update DOM
-    this.thumb.style.left = position + Slider.THUMB_OFFSET + 'px';
+    this.thumb.style.left = position + Slider.THUMB_OFFSET + this.audioButtonOffset + 'px';
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
+
     this.thumb.setAttribute(
       'aria-valuetext',
       this.params.labels ?
@@ -323,6 +460,14 @@ class Slider extends H5P.EventDispatcher {
    */
   isUsed() {
     return this.sliderdown;
+  }
+
+  /**
+   * Focus slider.
+   * @param {object} [options] regular element.focus options.
+   */
+  focus(options = {}) {
+    this.thumb.focus(options);
   }
 
   /**
@@ -361,6 +506,12 @@ class Slider extends H5P.EventDispatcher {
    * Resize the slider.
    */
   resize() {
+    if (this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET && this.extraInitResizes < 0) {
+      return; // Skip, already correct width
+    }
+
+    this.extraInitResizes--;
+
     this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
 
@@ -368,7 +519,7 @@ class Slider extends H5P.EventDispatcher {
     // Update ticks
     if (this.params.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
-        this.ticks[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+        this.ticks[i].style.left = Slider.TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) + 'px';
       }
     }
     // Height to enlarge the slider container
@@ -384,16 +535,16 @@ class Slider extends H5P.EventDispatcher {
         switch (i) {
           case (0):
             // First label
-            this.labels[i].style.left = (Slider.TRACK_OFFSET / 2) + 'px';
+            this.labels[i].style.left = (Slider.TRACK_OFFSET / 2) + this.audioButtonOffset + 'px';
             break;
           case (this.labels.length - 1):
             // Last label
-            this.labels[i].style.right = (Slider.TRACK_OFFSET / 2) + 'px';
+            this.labels[i].style.right = (Slider.TRACK_OFFSET / 2) + this.fullscreenButton.offsetWidth + 4 + 'px';
             break;
           default:
             // Centered over tick mark position
             var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-            this.labels[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + 'px';
+            this.labels[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + this.audioButtonOffset + 'px';
         }
 
         // Detect overlapping labels
@@ -428,23 +579,20 @@ class Slider extends H5P.EventDispatcher {
    * @return {number} Track offset.
    */
   computeTrackOffset() {
-    let trackOffset = parseInt(window.getComputedStyle(this.container).marginLeft || 0);
-
     const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
     if (questionContainer) {
       const style = window.getComputedStyle(questionContainer);
-      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+
+      if (H5P.isFullscreen) {
+        return this.container.offsetLeft + Slider.TRACK_OFFSET;
+      }
+      else {
+        return questionContainer.getBoundingClientRect().left + parseInt(style.paddingLeft) + Slider.TRACK_OFFSET;
+      }
     }
-
-    const wrapper = Util.findClosest(this.container, this.selector);
-    if (wrapper) {
-      const style = window.getComputedStyle(wrapper);
-      trackOffset += parseInt(style.paddingLeft) + parseInt(style.marginLeft);
+    else { // Fallback
+      return this.container.offsetLeft + Slider.TRACK_OFFSET;
     }
-
-    trackOffset += Slider.TRACK_OFFSET;
-
-    return trackOffset;
   }
 
   /**

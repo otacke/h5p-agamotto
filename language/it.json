@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Intestazione",
-      "placeholder": "Qui puoi aggiungere un'intestazione facoltativa",
+      "placeholder": "Qui puoi aggiungere un'intestazione aggiuntiva",
       "description": "L'intestazione che ti piacerebbe mostrare sopra l'immagine"
     },
     {
@@ -27,6 +27,10 @@
             "label": "Descrizione",
             "placeholder": "La descrizione della mia immagine...",
             "description": "Descrizione facoltativa per l'immagine"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -53,7 +57,12 @@
         },
         {
           "label": "Colore di sostituzione della trasparenza",
-          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini"
+          "description": "Imposta il colore che sostituirà le aree di trasparenza delle immagini",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -67,6 +76,22 @@
         {
           "label": "Image Slider",
           "default": "Image Slider"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

@@ -27,6 +27,10 @@
             "label": "Περιγραφή",
             "placeholder": "Η περιγραφή της εικόνας μου...",
             "description": "Περιγραφή της εικόνας (προαιρετικό)"
+          },
+          {
+            "label": "Audio",
+            "description": "Optional audio that plays when an image is shown."
           }
         ]
       }
@@ -53,7 +57,12 @@
         },
         {
           "label": "Χρώμα αντί για διαφάνεια",
-          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων."
+          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων.",
+          "default": "#000000"
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
         }
       ]
     },
@@ -65,8 +74,24 @@
           "default": "Εικόνα"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Slider εικόνας",
+          "default": "Slider εικόνας"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
         }
       ]
     }

@@ -2,7 +2,7 @@
   "title": "Agamotto",
   "description": "Displays an interactive sequence of images",
   "majorVersion": 1,
-  "minorVersion": 5,
+  "minorVersion": 6,
   "patchVersion": 2,
   "runnable": 1,
   "embedTypes": [
@@ -35,6 +35,11 @@
       "machineName": "H5PEditor.ColorSelector",
       "majorVersion": 1,
       "minorVersion": 2
+    },
+    {
+      "machineName": "H5PEditor.AudioRecorder",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "preloadedDependencies": [
