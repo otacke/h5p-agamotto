@@ -78,7 +78,7 @@
         },
         {
           "label": "Mute title",
-          "default": "Mute"
+          "default": "Σίγαση, για την ώρα χωρίς σίγαση"
         },
         {
           "label": "Unmute title",
