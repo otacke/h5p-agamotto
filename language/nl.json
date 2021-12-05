@@ -7,7 +7,7 @@
     },
     {
       "label": "Items",
-      "entity": "Item",
+      "entity": "item",
       "widgets": [
         {
           "label": "Standaard"
@@ -21,7 +21,7 @@
           },
           {
             "label": "Label",
-            "description": "Optionele beschrijving voor een afbeeldingspositie. Let op, maak deze niet te lang, want anders wordt deze niet getoond."
+            "description": "Optioneel label voor een afbeeldingspositie. Let op, maak deze niet te lang, want anders wordt deze niet getoond."
           },
           {
             "label": "Beschrijving",
@@ -37,23 +37,23 @@
     },
     {
       "label": "Gedragsinstellingen",
-      "description": "Deze opties bepalen hoe de taak op de input reageert.",
+      "description": "Met deze opties kun je bepalen hoe de opgave zich gedraagt.",
       "fields": [
         {
-          "label": "Start afbeelding",
+          "label": "Startafbeelding",
           "description": "Stel het nummer in van de afbeelding om mee te starten."
         },
         {
           "label": "Inschakelen schuifregelaar",
-          "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar naar de dichtsbijzijnde afbeeldingspositie glijden."
+          "description": "Indien geactiveerd, zal de schuifregelaar naar een afbeeldingspositie glijden."
         },
         {
           "label": "Toon afbeeldingsposities",
-          "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar voor elke afbeelding de positie tonen."
+          "description": "Indien geactiveerd, zal de schuifregelaar voor elke afbeelding de positie markeren."
         },
         {
           "label": "Toon labels",
-          "description": "Als deze optie is geactiveerd, dan zal de schuifregelaar de labels tonen in plaats van/ of als aanvulling op de afbeeldingposities."
+          "description": "Indien geactiveerd, zal de schuifregelaar de labels tonen in plaats van/of als aanvulling op de afbeeldingposities."
         },
         {
           "label": "Vervangende kleur voor transparant",
@@ -61,12 +61,12 @@
         },
         {
           "label": "Afbeeldingsruimte in volledig scherm modus",
-          "description": "Als je beschrijvingen hebt bij de afbeelingen, stel dan het percentage van de ruimte voor de afbeelingen in volledige scherm modus in."
+          "description": "Als je beschrijvingen hebt bij de afbeeldingen, stel dan het percentage van de ruimte voor de afbeeldingen in volledige scherm modus in."
         }
       ]
     },
     {
-      "label": "Voorlezen",
+      "label": "Voorlezer",
       "fields": [
         {
           "label": "Afbeelding",
@@ -77,20 +77,20 @@
           "default": "Afbeeldingsschuifregelaar"
         },
         {
-          "label": "Dempen aan titel",
+          "label": "Titel voor \"Dempen aan\"-knop",
           "default": "Dempen aan, is nu uit"
         },
         {
-          "label": "Dempen uit titel",
+          "label": "Titel voor \"Dempen uit\"-knop",
           "default": "Dempen uit, is nu aan"
         },
         {
           "label": "Titel voor volledig scherm knop (starten)",
-          "default": "Starten volledig scherm modus"
+          "default": "Start volledig scherm modus"
         },
         {
           "label": "Titel voor volledig scherm knop (afsluiten)",
-          "default": "Afsluiten volledig scherm modus"
+          "default": "Sluit volledig scherm modus"
         }
       ]
     }
