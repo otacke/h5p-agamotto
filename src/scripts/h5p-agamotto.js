@@ -574,7 +574,7 @@ class Agamotto extends H5P.Question {
       return {
         type: 'image',
         value: this.position + 1
-      }
+      };
     };
 
     /**
