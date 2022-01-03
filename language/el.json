@@ -82,7 +82,7 @@
         },
         {
           "label": "Unmute title",
-          "default": "Unmute"
+          "default": "Κατάργηση σίγασης, προς το παρόν σε σίγαση"
         },
         {
           "label": "Title for fullscreen button (enter)",
