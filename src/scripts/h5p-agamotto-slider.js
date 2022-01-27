@@ -216,8 +216,8 @@ class Slider extends H5P.EventDispatcher {
       const key = event.which || event.keyCode;
       if (key === this.keydown) {
         this.keydown = false;
-        parent.xAPIInteracted();
-        parent.xAPICompleted();
+        this.parent.xAPIInteracted();
+        this.parent.xAPICompleted();
       }
     });
   }
