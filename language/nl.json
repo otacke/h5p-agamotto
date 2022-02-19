@@ -44,7 +44,7 @@
           "description": "Stel het nummer in van de afbeelding om mee te starten."
         },
         {
-          "label": "Inschakelen schuifregelaar",
+          "label": "Uitlijnen schuifregelaar",
           "description": "Indien geactiveerd, zal de schuifregelaar naar een afbeeldingspositie glijden."
         },
         {
@@ -85,7 +85,7 @@
           "default": "Dempen uit, is nu aan"
         },
         {
-          "label": "Titel voor volledig scherm knop (starten)",
+          "label": "Titel voor volledig scherm knop (enter)",
           "default": "Start volledig scherm modus"
         },
         {
