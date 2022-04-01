@@ -3,7 +3,7 @@
     {
       "label": "Pealkiri",
       "placeholder": "Siin saad lisada valikulise pealkirja.",
-      "description": "Pealkiri, mida sa tahaksid pildi kohal näidata."
+      "description": "Pealkiri, mida sa tahaksid pildi kohal näidata"
     },
     {
       "label": "Objektid",
@@ -78,11 +78,11 @@
         },
         {
           "label": "Mute title",
-          "default": "Mute"
+          "default": "Vaigista, praegu heli aktiivne"
         },
         {
           "label": "Unmute title",
-          "default": "Unmute"
+          "default": "Aktiveeri heli, praegu vaigistatud"
         },
         {
           "label": "Title for fullscreen button (enter)",
