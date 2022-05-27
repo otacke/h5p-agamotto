@@ -1,0 +1,98 @@
+{
+  "semantics": [
+    {
+      "label": "Толгой",
+      "placeholder": "Та сонголтоор гарчиг оруулж болно.",
+      "description": "Зургийн дээр харуулах гарчиг"
+    },
+    {
+      "label": "Зүйлс",
+      "entity": "зүйл",
+      "widgets": [
+        {
+          "label": "Үндсэн"
+        }
+      ],
+      "field": {
+        "label": "Хэсэг",
+        "fields": [
+          {
+            "label": "Зураг"
+          },
+          {
+            "label": "Шошго",
+            "description": "Сонголтоор өгөх гарчиг. Хэтэрхий урт байж болохгүй бөгөөд урт үед харагдахгүй болно."
+          },
+          {
+            "label": "Тайлбар",
+            "placeholder": "Миний зургийн тайлбар ...",
+            "description": "Зурагт харуулах сонголтын тайлбар"
+          },
+          {
+            "label": "Аудио",
+            "description": "Зургыг харуулж байх үед сонголтоор тоглуулах аудио."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Тохиргоо",
+      "description": "Даалгаврыг тохируулах тохиргоо болно.",
+      "fields": [
+        {
+          "label": "Зураг эхлүүлэх",
+          "description": "Эхлэх зургыг дугаарыг тохируулах."
+        },
+        {
+          "label": "Слайдерийг болиулах",
+          "description": "Идэвхжүүлсэн тохиолдолд слайдер зургийн байрлалаар солигдоно."
+        },
+        {
+          "label": "Зураасыг харуулах",
+          "description": "Идэвхжүүлсэн тохиолдолд слайдууд зураг бүрийн доор зураас байдлаар харагдана."
+        },
+        {
+          "label": "Нэрийг харуулах",
+          "description": "Идэвжүүлсэн тохиолдолд зураасны дээд хэсэгт нэр нь нэмэгдэж харагдана."
+        },
+        {
+          "label": "Тунгалаг байдлыг орлох өнгө",
+          "description": "Тунгалаг зургийн ард харуулах өнгийг сонгох."
+        },
+        {
+          "label": "Бүтэн дэлгэцээр харуулах үед зургийн зай",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+        }
+      ]
+    },
+    {
+      "label": "Readspeaker",
+      "fields": [
+        {
+          "label": "Image",
+          "default": "Image"
+        },
+        {
+          "label": "Image Slider",
+          "default": "Image Slider"
+        },
+        {
+          "label": "Mute title",
+          "default": "Mute, currently unmuted"
+        },
+        {
+          "label": "Unmute title",
+          "default": "Unmute, currently muted"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Exit fullscreen mode"
+        }
+      ]
+    }
+  ]
+}
