@@ -363,7 +363,10 @@ class Agamotto extends H5P.Question {
 
           // Add fullscreen listeners
           this.container = document.querySelector('.h5p-container');
-          if (this.container && !this.noFullscreen) {
+          if (
+            this.container && !this.noFullscreen &&
+            this.isRoot() && H5P.fullscreenSupported
+          ) {
             this.slider.enableFullscreenButton();
 
             this.on('enterFullScreen', () => {
