@@ -78,11 +78,11 @@
         },
         {
           "label": "Nadpis ztlumit",
-          "default": "Ztlumit"
+          "default": "Ztlumit, momentálně zapnuto"
         },
         {
           "label": "Nadpis zesílit",
-          "default": "Zesílit"
+          "default": "Zesílit, momentálně ztlumeno"
         },
         {
           "label": "Nadpis tlačítka na celou obrazovku (zahájit)",
