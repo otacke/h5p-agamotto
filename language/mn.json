@@ -1,13 +1,13 @@
 {
   "semantics": [
     {
-      "label": "Толгой",
-      "placeholder": "Та сонголтоор гарчиг оруулж болно.",
+      "label": "Гарчиг",
+      "placeholder": "Та сонголтоор нэмэлт гарчиг оруулж болно.",
       "description": "Зургийн дээр харуулах гарчиг"
     },
     {
-      "label": "Зүйлс",
-      "entity": "зүйл",
+      "label": "Хэсгүүд",
+      "entity": "хэсэг",
       "widgets": [
         {
           "label": "Үндсэн"
@@ -26,30 +26,30 @@
           {
             "label": "Тайлбар",
             "placeholder": "Миний зургийн тайлбар ...",
-            "description": "Зурагт харуулах сонголтын тайлбар"
+            "description": "Зургийн тайлбар сонголтоор"
           },
           {
             "label": "Аудио",
-            "description": "Зургыг харуулж байх үед сонголтоор тоглуулах аудио."
+            "description": "Зургийг харуулж байх үед сонголтоор тоглуулах аудио."
           }
         ]
       }
     },
     {
       "label": "Тохиргоо",
-      "description": "Даалгаврыг тохируулах тохиргоо болно.",
+      "description": "Даалгаврын тохиргоог удирдах хэсэг.",
       "fields": [
         {
           "label": "Зураг эхлүүлэх",
-          "description": "Эхлэх зургыг дугаарыг тохируулах."
+          "description": "Эхэнд харуулах зургийн дугаарыг тохируулах."
         },
         {
           "label": "Слайдерийг болиулах",
-          "description": "Идэвхжүүлсэн тохиолдолд слайдер зургийн байрлалаар солигдоно."
+          "description": "Идэвхжүүлсэн тохиолдолд слайд зургийн байрлалаар солигдоно."
         },
         {
           "label": "Зураасыг харуулах",
-          "description": "Идэвхжүүлсэн тохиолдолд слайдууд зураг бүрийн доор зураас байдлаар харагдана."
+          "description": "Идэвхжүүлсэн тохиолдолд зураг бүрийн доор слайдууд зураас байдлаар харагдана."
         },
         {
           "label": "Нэрийг харуулах",
@@ -61,36 +61,36 @@
         },
         {
           "label": "Бүтэн дэлгэцээр харуулах үед зургийн зай",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "description": "Таны оруулсан зурганд тайлбар байгаа тохиолдолд хэдэн хувиар бүтэн дэлгэцний зайг эзлэхийг тохируулах боломжтой."
         }
       ]
     },
     {
-      "label": "Readspeaker",
+      "label": "Бичвэр уншигч",
       "fields": [
         {
-          "label": "Image",
-          "default": "Image"
+          "label": "Зураг",
+          "default": "Зураг"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Зураг Шилжүүлэгч",
+          "default": "Зураг Шилжүүлэгч"
         },
         {
-          "label": "Mute title",
-          "default": "Mute, currently unmuted"
+          "label": "Гарчгийг нуух",
+          "default": "Нуух, одоогоор нээлтэй байна"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute, currently muted"
+          "label": "Гарчгийг харуулах",
+          "default": "Харуулах, одоогоор нуусан байна"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Бүтэн дэлгэц харуулах товч (томруулах)",
+          "default": "Бүтэн дэлгэцээр харуулах"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Бүтэн дэлгэцийг болиулах товч (гарах)",
+          "default": "Бүтэн дэлгэцийг болиулах"
         }
       ]
     }
