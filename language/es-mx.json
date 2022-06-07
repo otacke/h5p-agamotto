@@ -3,7 +3,7 @@
     {
       "label": "Encabezado",
       "placeholder": "Aquí puede añadir un encabezado opcional.",
-      "description": "El encabezado que le gustaría mostrar arriba de la imagen"
+      "description": "El encabezado que le gustaría mostrar encima de la imagen"
     },
     {
       "label": "Elementos",
@@ -21,7 +21,7 @@
           },
           {
             "label": "Etiqueta",
-            "description": "Texto opcional para una casilla. Por favor, asegúrese que no sea demasiado largo, o de lo contrario se ocultará."
+            "description": "Etiqueta opcional para una casilla. Por favor, asegúrese que no sea demasiado larga, o de lo contrario se ocultará."
           },
           {
             "label": "Descripción",
@@ -30,7 +30,7 @@
           },
           {
             "label": "Audio",
-            "description": "Audio opcional que se reproduce cuando es mostrada una imagen."
+            "description": "Audio opcional que se reproduce cuando se muestra una imagen."
           }
         ]
       }
@@ -49,18 +49,18 @@
         },
         {
           "label": "Mostrar marcas de verificación",
-          "description": "Si esta opción está activada, la barra deslizadora mostrará una marca de verificación para cada imagen."
+          "description": "Si esta opción está activada, la barra deslizante mostrará una marca de verificación para cada imagen."
         },
         {
           "label": "Mostrar etiquetas",
-          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta en lugar de/ adicionalmente a las marcas de verificación."
+          "description": "Si esta opción está activada, la barra deslizante muestra una etiqueta en lugar de/además de las marcas de verificación."
         },
         {
-          "label": "Color de Remplazo de Transparencia",
+          "label": "Color de Reemplazo de Transparencia",
           "description": "Configurar el color que remplazará las áreas transparentes de las imágenes."
         },
         {
-          "label": "Espacio de imagen en modo de pantalla completa",
+          "label": "Espacio de la imagen en modo de pantalla completa",
           "description": "Si tiene descripciones además de las imágenes, configurar el porcentaje del espacio que debería usar la imagen en modo de pantalla completa."
         }
       ]
@@ -73,8 +73,8 @@
           "default": "Imagen"
         },
         {
-          "label": "Deslizador de Imagen",
-          "default": "Deslizador de Imagen"
+          "label": "Control deslizante de imagen",
+          "default": "Control deslizante de imagen"
         },
         {
           "label": "Título Mudo",
@@ -82,7 +82,7 @@
         },
         {
           "label": "Activar sonido del título",
-          "default": "Activar sonido, actualmente mudo"
+          "default": "Activar sonido, actualmente silenciado"
         },
         {
           "label": "Título para botón de pantalla completa (introducir)",
