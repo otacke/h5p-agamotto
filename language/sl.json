@@ -29,8 +29,8 @@
             "description": "Neobvezen opis prikazanega na sliki"
           },
           {
-            "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "label": "Zvočni posnetek",
+            "description": "Neobvezen zvočni posnetek, ki se predvaja ob prikazu slike."
           }
         ]
       }
@@ -60,8 +60,8 @@
           "description": "Izbrana barva nadomesti prosojna področja slik."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Odstotek slike v celozaslonskem načinu",
+          "description": "Nastavitev omogoča določitev prostora za prikaz slike v odstotkih. Preostali delež je namenjen dodatnim opisom."
         }
       ]
     },
@@ -77,20 +77,20 @@
           "default": "Drsnik"
         },
         {
-          "label": "Mute title",
-          "default": "Mute"
+          "label": "Besedilo za vklop nemega načina predvajanja",
+          "default": "Utišaj zvok"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute"
+          "label": "Besedilo za izhod iz nemega načina predvajanja",
+          "default": "Povrni zvok"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Besedilo za celozaslonski način",
+          "default": "Celozaslonski način"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Besedilo za zaključek celozaslonskega načina",
+          "default": "Zapusti celozaslonski način"
         }
       ]
     }
