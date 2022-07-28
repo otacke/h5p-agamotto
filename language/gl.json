@@ -36,7 +36,7 @@
       }
     },
     {
-      "label": "Configuración de comportamnento",
+      "label": "Configuración do comportamento",
       "description": "Estas opcións permitiranche controlar o comportamento da tarefa.",
       "fields": [
         {
@@ -57,12 +57,11 @@
         },
         {
           "label": "Color de substitución de transparencia",
-          "description": "Establece a cor que substituirá as áreas transparentes das imaxes.",
-          "default": "#000000"
+          "description": "Establece a cor que substituirá as áreas transparentes das imaxes."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Espacio da imaxe en modo de pantalla completa",
+          "description": "Se tes descricións ademais de imaxes, establece a porcentaxe de espacio que deberían usar as imaxes en modo de pantalla completa."
         }
       ]
     },
@@ -79,19 +78,19 @@
         },
         {
           "label": "Título para silenciado",
-          "default": "Silenciar"
+          "default": "Silenciar, agora non silenciado"
         },
         {
           "label": "Título para activar son",
-          "default": "Activar son"
+          "default": "Activar son, agora silenciado"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Título para o botón de pantalla completa (entrar)",
+          "default": "Entrar modo de pantalla completa"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Título para botón de modo de pantalla completa (saír)",
+          "default": "Saír de modo de pantalla completa"
         }
       ]
     }

@@ -57,8 +57,7 @@
         },
         {
           "label": "Läpinäkyvyyden korvaava väri",
-          "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet.",
-          "default": "#000000"
+          "description": "Määritä väri joka täyttyy kuvan läpinäkyvät alueet."
         },
         {
           "label": "Image space in fullscreen mode",

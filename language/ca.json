@@ -3,7 +3,7 @@
     {
       "label": "Encapçalament",
       "placeholder": "Aquí podeu afegir un encapçalament opcional.",
-      "description": "L’encapçalament que voleu que es mostri a sobre de la imatge."
+      "description": "L’encapçalament que voleu que es mostri a sobre de la imatge"
     },
     {
       "label": "Elements",
@@ -57,12 +57,11 @@
         },
         {
           "label": "Color per substituir la transparència",
-          "description": "Establiu el color que substituirà les àrees transparents de les imatges.",
-          "default": "#000000"
+          "description": "Establiu el color que substituirà les àrees transparents de les imatges."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Espai de la imatge en mode pantalla completa",
+          "description": "Si teniu descripcions acompanyant les imatges, establiu el percentatge d'espai que les imatges haurien d'utilitzar en mode pantalla completa."
         }
       ]
     },
@@ -74,24 +73,24 @@
           "default": "Imatge"
         },
         {
-          "label": "Imatge Slider",
-          "default": "Imatge Slider"
+          "label": "Botó de desplaçament de la imatge",
+          "default": "Botó de desplaçament de la imatge"
         },
         {
-          "label": "Silencia title",
+          "label": "Silencia el títol",
           "default": "Silencia"
         },
         {
-          "label": "Activa el so title",
+          "label": "Activa el so del títol",
           "default": "Activa el so"
         },
         {
-          "label": "Title for fullscreen button (enter)",
+          "label": "Títol per al botó de pantalla completa (intro)",
           "default": "Enter fullscreen mode"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Títol per al botó de pantalla completa (surt)",
+          "default": "Surt del mode pantalla completa"
         }
       ]
     }

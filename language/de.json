@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Titel",
+      "label": "Überschrift",
       "placeholder": "Hier kannst du optional einen Titel angeben.",
       "description": "Der Titel, der über dem Bild angezeigt werden soll"
     },
@@ -37,7 +37,7 @@
     },
     {
       "label": "Verhaltenseinstellungen",
-      "description": "Diese Optionen legen fest, wie die Aufgabe im Detail funktioniert.",
+      "description": "Diese Optionen kontrollieren, wie sich die Aufgabe verhält.",
       "fields": [
         {
           "label": "Startbild",
@@ -57,8 +57,7 @@
         },
         {
           "label": "Ersatzfarbe für Transparenz",
-          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden.",
-          "default": "#000000"
+          "description": "Setze hier die Farbe, durch die transparente Bereiche in den Bildern ersetzt werden."
         },
         {
           "label": "Bildanteil im Vollbildmodus",
@@ -79,11 +78,11 @@
         },
         {
           "label": "Beschriftung des \"Stummschalten\"-Buttons",
-          "default": "Stummschalten"
+          "default": "Stummschalten, ist laut"
         },
         {
           "label": "Beschriftung des \"Lautschalten\"-Buttons",
-          "default": "Lautschalten"
+          "default": "Lautschalten, ist stumm"
         },
         {
           "label": "Titel des Vollbild-Buttons (aktivieren)",

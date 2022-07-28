@@ -177,14 +177,14 @@
         "type": "text",
         "label": "Mute title",
         "importance": "low",
-        "default": "Mute"
+        "default": "Mute, currently unmuted"
       },
       {
         "name": "unmute",
         "type": "text",
         "label": "Unmute title",
         "importance": "low",
-        "default": "Unmute"
+        "default": "Unmute, currently muted"
       },
       {
         "name": "buttonFullscreenEnter",

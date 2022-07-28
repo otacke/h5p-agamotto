@@ -1,10 +1,10 @@
 {
   "name": "h5p-agamotto",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Displays an interactive sequence of images",
   "scripts": {
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack",
-    "watch": "./node_modules/.bin/webpack --watch"
+    "build": "cross-env NODE_ENV=production webpack",
+    "watch": "cross-env NODE_ENV=development webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -18,25 +18,25 @@
   },
   "homepage": "https://github.com/otacke/h5p-agaotto#readme",
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-destructuring": "^7.12.13",
-    "@babel/preset-env": "^7.12.10",
-    "babel-loader": "^8.2.2",
-    "cross-env": "^5.2.1",
-    "css-loader": "^5.0.1",
-    "eslint": "^7.18.0",
-    "eslint-plugin-jest": "^24.1.3",
-    "jest": "^26.6.3",
-    "mini-css-extract-plugin": "^1.3.4",
-    "node-sass": "^4.13.1",
-    "regenerator-runtime": "^0.13.7",
-    "resolve-url-loader": "^3.1.2",
-    "sass-loader": "^10.1.1",
-    "webpack": "^5.15.0",
-    "webpack-cli": "^4.0.0"
+    "@babel/cli": "^7.18.9",
+    "@babel/core": "^7.18.9",
+    "@babel/plugin-transform-destructuring": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "babel-loader": "^8.2.5",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.20.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "regenerator-runtime": "^0.13.9",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
+    "stylelint": "^14.9.1",
+    "stylelint-config-recommended": "^8.0.0",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "core-js": "^3.6.4"
+    "core-js": "^3.23.5",
+    "detect-browser": "^5.3.0"
   }
 }

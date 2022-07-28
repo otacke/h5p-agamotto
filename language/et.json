@@ -3,7 +3,7 @@
     {
       "label": "Pealkiri",
       "placeholder": "Siin saad lisada valikulise pealkirja.",
-      "description": "Pealkiri, mida sa tahaksid pildi kohal näidata."
+      "description": "Pealkiri, mida sa tahaksid pildi kohal näidata"
     },
     {
       "label": "Objektid",
@@ -57,8 +57,7 @@
         },
         {
           "label": "Nähtamatuse asendamise värv",
-          "description": "Seadista värv, mis asendab piltide nähtamatud alad.",
-          "default": "#000000"
+          "description": "Seadista värv, mis asendab piltide nähtamatud alad."
         },
         {
           "label": "Image space in fullscreen mode",
@@ -79,11 +78,11 @@
         },
         {
           "label": "Mute title",
-          "default": "Mute"
+          "default": "Vaigista, praegu heli aktiivne"
         },
         {
           "label": "Unmute title",
-          "default": "Unmute"
+          "default": "Aktiveeri heli, praegu vaigistatud"
         },
         {
           "label": "Title for fullscreen button (enter)",

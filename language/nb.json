@@ -1,23 +1,23 @@
 {
   "semantics": [
     {
-      "label": "Heading",
+      "label": "Overskrift",
       "placeholder": "Here you can add an optional heading.",
-      "description": "The heading you'd like to show above the image"
+      "description": "Tekst som vises over bildet"
     },
     {
       "label": "Items",
       "entity": "item",
       "widgets": [
         {
-          "label": "Default"
+          "label": "Standard"
         }
       ],
       "field": {
         "label": "Item",
         "fields": [
           {
-            "label": "Image"
+            "label": "Bilde"
           },
           {
             "label": "Label",
@@ -57,8 +57,7 @@
         },
         {
           "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images.",
-          "default": "#000000"
+          "description": "Set the color that will replace transparent areas of the images."
         },
         {
           "label": "Image space in fullscreen mode",

@@ -1,5 +1,6 @@
 import Promise from 'core-js/features/promise';
 import Util from './h5p-agamotto-util';
+import { detect } from 'detect-browser';
 
 /** Class representing Images */
 class Images {
@@ -69,6 +70,24 @@ class Images {
 
       // This is necessary to prevent security errors in some cases.
       const src = imageCanvas.toDataURL('image/jpeg');
+
+      if (src.length <= 6) {
+        /*
+         * toDataURL requires images on iOS to have a maximum size of 3 megapixels
+         * for devices with less than 256 MB RAM and 5 megapixels for devices with
+         * greater or equal than 256 MB RAM
+         */
+        if ((detect().name || '').toLowerCase() === 'ios') {
+          const pixelCount = this.images[i].img.naturalWidth * this.images[i].img.naturalHeight;
+          if (pixelCount > Images.FIVE_MEGAPIXELS) {
+            console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 5 megapixels. Please scale down images.');
+          }
+          else if (pixelCount > Images.THREE_MEGAPIXELS) {
+            console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 3 megapixels. Please scale down images.');
+          }
+        }
+      }
+
       image.crossOrigin = this.images[i].img.crossOrigin; // Use the same crossOrigin policy as the inital load used.
       image.src = src;
       this.images[i].img = image;
@@ -205,5 +224,11 @@ class Images {
     });
   }
 }
+
+/** @constant {number} Pixels in images with three megapixels */
+Images.THREE_MEGAPIXELS = 2952192;
+
+/** @constant {number} Pixels in images with five megapixels */
+Images.FIVE_MEGAPIXELS = 4915200;
 
 export default Images;

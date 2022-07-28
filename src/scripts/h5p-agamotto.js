@@ -363,7 +363,10 @@ class Agamotto extends H5P.Question {
 
           // Add fullscreen listeners
           this.container = document.querySelector('.h5p-container');
-          if (this.container && !this.noFullscreen) {
+          if (
+            this.container && !this.noFullscreen &&
+            this.isRoot() && H5P.fullscreenSupported
+          ) {
             this.slider.enableFullscreenButton();
 
             this.on('enterFullScreen', () => {
@@ -563,6 +566,18 @@ class Agamotto extends H5P.Question {
         // Only trigger this once
         this.completed = true;
       }
+    };
+
+    /**
+     * Get context data.
+     * Contract used for confusion report.
+     * @return {object} Context data.
+     */
+    this.getContext = () => {
+      return {
+        type: 'image',
+        value: this.position + 1
+      };
     };
 
     /**

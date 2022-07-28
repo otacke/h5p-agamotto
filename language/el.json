@@ -57,8 +57,7 @@
         },
         {
           "label": "Χρώμα αντί για διαφάνεια",
-          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων.",
-          "default": "#000000"
+          "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων."
         },
         {
           "label": "Image space in fullscreen mode",
@@ -79,11 +78,11 @@
         },
         {
           "label": "Mute title",
-          "default": "Mute"
+          "default": "Σίγαση, για την ώρα χωρίς σίγαση"
         },
         {
           "label": "Unmute title",
-          "default": "Unmute"
+          "default": "Κατάργηση σίγασης, προς το παρόν σε σίγαση"
         },
         {
           "label": "Title for fullscreen button (enter)",

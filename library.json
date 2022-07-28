@@ -3,7 +3,7 @@
   "description": "Displays an interactive sequence of images",
   "majorVersion": 1,
   "minorVersion": 6,
-  "patchVersion": 2,
+  "patchVersion": 3,
   "runnable": 1,
   "embedTypes": [
     "iframe"
@@ -34,7 +34,7 @@
     {
       "machineName": "H5PEditor.ColorSelector",
       "majorVersion": 1,
-      "minorVersion": 2
+      "minorVersion": 3
     },
     {
       "machineName": "H5PEditor.AudioRecorder",
@@ -46,7 +46,7 @@
     {
       "machineName": "H5P.Question",
       "majorVersion": 1,
-      "minorVersion": 4
+      "minorVersion": 5
     }
   ]
 }

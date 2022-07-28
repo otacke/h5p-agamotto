@@ -115,6 +115,7 @@ class Slider extends H5P.EventDispatcher {
       for (i = 0; i <= this.params.size; i++) {
         this.labels[i] = document.createElement('div');
         this.labels[i].classList.add('h5p-agamotto-tick-label');
+        this.labels[i].setAttribute('aria-hidden', 'true');
         this.labels[i].innerHTML = this.params.labelTexts[i];
         this.container.appendChild(this.labels[i]);
       }
@@ -216,8 +217,8 @@ class Slider extends H5P.EventDispatcher {
       const key = event.which || event.keyCode;
       if (key === this.keydown) {
         this.keydown = false;
-        parent.xAPIInteracted();
-        parent.xAPICompleted();
+        this.parent.xAPIInteracted();
+        this.parent.xAPICompleted();
       }
     });
   }
