@@ -59,7 +59,9 @@ class Descriptions {
       wrapper.classList.add('h5p-agamotto-description-bottom');
       wrapper.classList.add('h5p-agamotto-hidden');
       wrapper.setAttribute('aria-hidden', 'true');
-      wrapper.innerHTML = text;
+      if (text) {
+        wrapper.innerHTML = text;
+      }
       wrappers.push(wrapper);
     });
 
