@@ -46,6 +46,9 @@ class Agamotto extends H5P.Question {
 
     this.extras = contentData;
 
+    // Keep track of whether the content is visible or not
+    this.isVisible = false;
+
     this.maxItem = this.params.items.length - 1;
     this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
@@ -82,6 +85,8 @@ class Agamotto extends H5P.Question {
       if (this.slider.isUsed() && opacity === this.images.getTopOpacity() && (opacity !== 1 || this.position === index)) {
         return;
       }
+
+      this.currentIndex = index;
 
       // Update audio
       this.setAudio(index, opacity);
@@ -137,6 +142,10 @@ class Agamotto extends H5P.Question {
      * @param {number} id Index.
      */
     this.startAudio = (id) => {
+      if (!this.isVisible) {
+        return; // Don't play when content is not visible
+      }
+
       if (this.audios.length <= id) {
         return;
       }
@@ -191,7 +200,25 @@ class Agamotto extends H5P.Question {
      * Register the DOM elements with H5P.Question.
      */
     this.registerDomElements = () => {
-      this.setContent(this.createDOM());
+      this.content = this.createDOM();
+
+      // Stop audio when content gets hidden and start when gets visible
+      new IntersectionObserver(entries => {
+        const entry = entries[0];
+        if (entry.intersectionRatio === 0) {
+          this.isVisible = false;
+          this.stopAudios();
+        }
+        else if (entry.intersectionRatio === 1) {
+          this.isVisible = true;
+          this.startAudio(this.currentIndex);
+        }
+      }, {
+        root: document.documentElement,
+        threshold: [0, 1] // Get events when it is shown and hidden
+      }).observe(this.content);
+
+      this.setContent(this.content);
     };
 
     /**
