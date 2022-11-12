@@ -3,5 +3,5 @@
     "config:base"
   ],
   "rangeStrategy": "update-lockfile",
-  "schedule": ["on saturday"]
+  "schedule": ["on the last day of the month"]
 }
