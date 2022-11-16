@@ -2,25 +2,25 @@
   "semantics": [
     {
       "label": "Overskrift",
-      "placeholder": "Here you can add an optional heading.",
-      "description": "Tekst som vises over bildet"
+      "placeholder": "Du kan legge til en valgfri overskrift her.",
+      "description": "Overskriften til å vise over bildet"
     },
     {
-      "label": "Items",
-      "entity": "item",
+      "label": "Elementer",
+      "entity": "element",
       "widgets": [
         {
           "label": "Standard"
         }
       ],
       "field": {
-        "label": "Item",
+        "label": "Element",
         "fields": [
           {
             "label": "Bilde"
           },
           {
-            "label": "Label",
+            "label": "Merking",
             "description": "Optional label for a tick. Please make sure it's not too long, or it will be hidden."
           },
           {
@@ -78,11 +78,11 @@
         },
         {
           "label": "Mute title",
-          "default": "Mute"
+          "default": "Demp, for tiden ikke dempet"
         },
         {
           "label": "Unmute title",
-          "default": "Unmute"
+          "default": "Slå på demp, for tiden dempet"
         },
         {
           "label": "Title for fullscreen button (enter)",
