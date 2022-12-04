@@ -584,12 +584,8 @@ class Slider extends H5P.EventDispatcher {
     if (questionContainer) {
       const style = window.getComputedStyle(questionContainer);
 
-      if (H5P.isFullscreen) {
-        return this.container.offsetLeft + Slider.TRACK_OFFSET;
-      }
-      else {
-        return questionContainer.getBoundingClientRect().left + parseInt(style.paddingLeft) + Slider.TRACK_OFFSET;
-      }
+      return questionContainer.getBoundingClientRect().left +
+        parseInt(style.paddingLeft) + Slider.TRACK_OFFSET;
     }
     else { // Fallback
       return this.container.offsetLeft + Slider.TRACK_OFFSET;
