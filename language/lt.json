@@ -1,0 +1,98 @@
+{
+  "semantics": [
+    {
+      "label": "Antraštė",
+      "placeholder": "Čia galite pridėti pasirenkamą antraštę.",
+      "description": "Antraštė, kurią norite rodyti virš paveiksliuko"
+    },
+    {
+      "label": "Elementai",
+      "entity": "elementas",
+      "widgets": [
+        {
+          "label": "Numatytasis"
+        }
+      ],
+      "field": {
+        "label": "Elementas",
+        "fields": [
+          {
+            "label": "Paveikslėlis"
+          },
+          {
+            "label": "Pavadinimas",
+            "description": "Optional label for a tick. Please make sure it's not too long, or it will be hidden."
+          },
+          {
+            "label": "Aprašymas",
+            "placeholder": "Mano paveikslėlio aprašymas...",
+            "description": "Pasirenkamas paveikslėlio aprašas"
+          },
+          {
+            "label": "Garsas",
+            "description": "Optional audio that plays when an image is shown."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Veikimo nustatymai",
+      "description": "Šios parinktys leis jums valdyti, kaip veikia užduotis.",
+      "fields": [
+        {
+          "label": "Start image",
+          "description": "Set the number of the image to start with."
+        },
+        {
+          "label": "Snap slider",
+          "description": "If activated, the slider will snap to an image's position."
+        },
+        {
+          "label": "Display tick marks",
+          "description": "If activated, the slider bar will display a tick mark for each image."
+        },
+        {
+          "label": "Rodyti pavadinimus",
+          "description": "If activated, the slider bar will display a label instead of/in addition to tick marks."
+        },
+        {
+          "label": "Transparency Replacement Color",
+          "description": "Set the color that will replace transparent areas of the images."
+        },
+        {
+          "label": "Image space in fullscreen mode",
+          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+        }
+      ]
+    },
+    {
+      "label": "Readspeaker",
+      "fields": [
+        {
+          "label": "Paveikslėlis",
+          "default": "Paveikslėlis"
+        },
+        {
+          "label": "Image Slider",
+          "default": "Image Slider"
+        },
+        {
+          "label": "Nuildyti pavadinimą",
+          "default": "Mute, currently unmuted"
+        },
+        {
+          "label": "Atšaukti nutildymą pavadinimui",
+          "default": "Unmute, currently muted"
+        },
+        {
+          "label": "Title for fullscreen button (enter)",
+          "default": "Enter fullscreen mode"
+        },
+        {
+          "label": "Title for fullscreen button (exit)",
+          "default": "Išeiti iš viso ekrano režimo"
+        }
+      ]
+    }
+  ]
+}
