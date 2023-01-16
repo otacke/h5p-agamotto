@@ -2,26 +2,26 @@
   "semantics": [
     {
       "label": "Cabeçalho",
-      "placeholder": "Aqui, pode ser adicionado um cabeçalho adicional",
-      "description": "O Cabeçalho que deseja mostrar antes da imagem"
+      "placeholder": "Aqui, pode ser adicionado um cabeçalho opcional.",
+      "description": "O cabeçalho que pretende mostrar antes da imagem"
     },
     {
       "label": "Itens",
-      "entity": "item",
+      "entity": "artigo",
       "widgets": [
         {
           "label": "Predefinição"
         }
       ],
       "field": {
-        "label": "Item",
+        "label": "Artigo",
         "fields": [
           {
             "label": "Imagem"
           },
           {
             "label": "Rótulo",
-            "description": "Rótulo opcional para o marcador. Certifique-se de que não seja demasiado longo, pois ficará oculto"
+            "description": "Rótulo opcional para o marcador. Certifique-se de que não seja demasiado longo, pois ficará oculto."
           },
           {
             "label": "Descrição",
@@ -60,13 +60,13 @@
           "description": "Selecionar a cor que substituirá as áreas transparentes das imagens."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Espaço da imagem no modo ecrã inteiro",
+          "description": "Se tiver descrições além das imagens, defina a porcentagem de espaço que as imagens devem usar no modo de modo ecrã inteiro."
         }
       ]
     },
     {
-      "label": "Readspeaker",
+      "label": "ReadSpeaker",
       "fields": [
         {
           "label": "Imagem",
@@ -77,20 +77,20 @@
           "default": "Controlo deslizante da imagem"
         },
         {
-          "label": "Mute title",
-          "default": "Mute, currently unmuted"
+          "label": "Título de desactivar som",
+          "default": "Desactivar som, sem som no momento"
         },
         {
-          "label": "Unmute title",
-          "default": "Unmute, currently muted"
+          "label": "Título Activar som",
+          "default": "Activar som, actualmente desactivar som"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Título para botão de ecrã inteiro (entrar)",
+          "default": "Entrar no modo ecrã inteiro"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Título do botão de ecrã inteiro (sair)",
+          "default": "Sair do modo ecrã inteiro"
         }
       ]
     }
