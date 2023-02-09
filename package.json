@@ -3,6 +3,7 @@
   "version": "1.6.4",
   "description": "Displays an interactive sequence of images",
   "scripts": {
+    "lint": "eslint './src/**/*.js'",
     "build": "cross-env NODE_ENV=production webpack",
     "watch": "cross-env NODE_ENV=development webpack --watch"
   },
@@ -26,6 +27,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "eslint": "^8.26.0",
+    "eslint-plugin-jsdoc": "^39.8.0",
     "mini-css-extract-plugin": "^2.6.1",
     "regenerator-runtime": "^0.13.10",
     "sass": "^1.55.0",
