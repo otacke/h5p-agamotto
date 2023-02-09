@@ -8,7 +8,7 @@ import Util from './h5p-agamotto-util';
 /** Class for Agamotto interaction */
 class Agamotto extends H5P.Question {
   /**
-   * @constructor
+   * @class
    * @param {object} params Params from semantics.json.
    * @param {string} contentId ContentId.
    * @param {object} contentData contentData.
@@ -58,7 +58,7 @@ class Agamotto extends H5P.Question {
     this.imagesRepeatedZeroHeight = 0;
 
     // Set hasDescription = true if at least one item has a description
-    this.hasDescription = this.params.items.some(item => item.description !== '');
+    this.hasDescription = this.params.items.some((item) => item.description !== '');
 
     this.contentId = contentId;
 
@@ -76,6 +76,7 @@ class Agamotto extends H5P.Question {
 
     /**
      * Update images and descriptions.
+     *
      * @param {number} index Index of top image.
      * @param {number} opacity Opacity of top image.
      */
@@ -113,6 +114,7 @@ class Agamotto extends H5P.Question {
 
     /**
      * Set audio.
+     *
      * @param {number} index Current image's index.
      * @param {number} opacity Current image's opacity.
      */
@@ -139,6 +141,7 @@ class Agamotto extends H5P.Question {
 
     /**
      * Start audio.
+     *
      * @param {number} id Index.
      */
     this.startAudio = (id) => {
@@ -177,7 +180,7 @@ class Agamotto extends H5P.Question {
        * People may move the slider quickly, and audios that should
        * be stopped may not have loaded yet.
        */
-      this.audios.forEach(audio => {
+      this.audios.forEach((audio) => {
         if (!audio) {
           return; // skip, no audio
         }
@@ -203,7 +206,7 @@ class Agamotto extends H5P.Question {
       this.content = this.createDOM();
 
       // Stop audio when content gets hidden and start when gets visible
-      new IntersectionObserver(entries => {
+      new IntersectionObserver((entries) => {
         const entry = entries[0];
         if (entry.intersectionRatio === 0) {
           this.isVisible = false;
@@ -223,6 +226,8 @@ class Agamotto extends H5P.Question {
 
     /**
      * Create the DOM.
+     *
+     * @returns {HTMLElement} DOM.
      */
     this.createDOM = () => {
       const content = document.createElement('div');
@@ -242,7 +247,7 @@ class Agamotto extends H5P.Question {
 
       // Create audio elements
       this.audios = this.createAudios(this.params.items);
-      this.audios.forEach(audio => {
+      this.audios.forEach((audio) => {
         if (audio) {
           content.append(audio.player);
         }
@@ -253,12 +258,12 @@ class Agamotto extends H5P.Question {
        * problems in some cases.
        */
       const promises = [];
-      this.params.items.forEach(item => {
+      this.params.items.forEach((item) => {
         promises.push(Images.loadImage(item.image, this.contentId));
       });
       Promise
         .all(promises)
-        .then(results => {
+        .then((results) => {
           this.images = results.map((item, index) => ({
             img: item,
             alt: this.params.items[index].image.params.alt,
@@ -339,13 +344,13 @@ class Agamotto extends H5P.Question {
 
           // Focus slider so people can click on the image and use keyboard
           this.imageContainer.addEventListener('click', () => {
-            this.slider.focus({preventScroll: true});
+            this.slider.focus({ preventScroll: true });
           });
 
           // Trigger xAPI when starting to view content
           this.xAPIExperienced();
 
-          this.slider.on('update', event => {
+          this.slider.on('update', (event) => {
             /*
              * Map the slider value to the image indexes. Since we might not
              * want to initiate opacity shifts right away, we can add a margin to
@@ -423,7 +428,7 @@ class Agamotto extends H5P.Question {
 
           this.trigger('resize');
         })
-        .catch(error => {
+        .catch((error) => {
           console.warn(error);
         });
 
@@ -475,7 +480,8 @@ class Agamotto extends H5P.Question {
 
     /**
      * Check if a resize is needed.
-     * @return {boolean} True, if resize is required.
+     *
+     * @returns {boolean} True, if resize is required.
      */
     this.isResizeNeeded = () => {
       /*
@@ -492,7 +498,7 @@ class Agamotto extends H5P.Question {
 
       // Check for height being 0
       if (!resizeNeeded) {
-        resizeNeeded = this.previousSizes.some(size => size.height === 0);
+        resizeNeeded = this.previousSizes.some((size) => size.height === 0);
         if (resizeNeeded) {
           this.imagesRepeatedZeroHeight++;
         }
@@ -510,8 +516,8 @@ class Agamotto extends H5P.Question {
       if (!resizeNeeded) {
         const differentSizes = {};
         this.previousSizes
-          .map(size => `${size.width}|${size.height}`)
-          .forEach(size => {
+          .map((size) => `${size.width}|${size.height}`)
+          .forEach((size) => {
             differentSizes[size] = true;
           });
 
@@ -523,13 +529,14 @@ class Agamotto extends H5P.Question {
 
     /**
      * Create audio elements from items.
+     *
      * @param {object[]} items Items from params.
-     * @return {object[]} Audio elements.
+     * @returns {object[]} Audio elements.
      */
     this.createAudios = (items) => {
       const audioElements = [];
 
-      items.forEach(item => {
+      items.forEach((item) => {
         if (!item.audio || item.audio.length < 1 || !item.audio[0].path) {
           audioElements.push(null);
           return;
@@ -549,14 +556,16 @@ class Agamotto extends H5P.Question {
 
     /**
      * Detect whether there's at least one audio.
-     * @return {boolean} True, if content has audio.
+     *
+     * @returns {boolean} True, if content has audio.
      */
     this.hasAudio = () => {
-      return this.audios.some(audio => audio !== null);
+      return this.audios.some((audio) => audio !== null);
     };
 
     /**
      * Read contents to screen readers.
+     *
      * @param {string} [intro] Optional intro text.
      */
     this.announceARIA = (intro) => {
@@ -598,7 +607,8 @@ class Agamotto extends H5P.Question {
     /**
      * Get context data.
      * Contract used for confusion report.
-     * @return {object} Context data.
+     *
+     * @returns {object} Context data.
      */
     this.getContext = () => {
       return {
@@ -609,7 +619,8 @@ class Agamotto extends H5P.Question {
 
     /**
      * Get the content type title.
-     * @return {string} title.
+     *
+     * @returns {string} title.
      */
     this.getTitle = () => {
       return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
@@ -626,6 +637,7 @@ class Agamotto extends H5P.Question {
 
     /**
      * Toggle fullscreen button.
+     *
      * @param {string|boolean} state enter|false for enter, exit|true for exit.
      */
     this.toggleFullscreen = (state) => {
@@ -667,6 +679,7 @@ class Agamotto extends H5P.Question {
 
     /**
      * Fix height to current screen size.
+     *
      * @param {boolean} state If true, fix height.
      */
     this.setFixedSize = (state) => {
@@ -733,8 +746,9 @@ class Agamotto extends H5P.Question {
 
   /**
    * Remove missing items and limit amount.
+   *
    * @param {object[]} items Items defined in semantics.org.
-   * @return {object[]} Sanitized items.
+   * @returns {object[]} Sanitized items.
    */
   static sanitizeItems(items) {
     /*
@@ -744,7 +758,7 @@ class Agamotto extends H5P.Question {
      * frames.
      */
     items = items
-      .filter(item => {
+      .filter((item) => {
         if (!item.image || !item.image.params || !item.image.params.file) {
           console.warn('An image is missing. I will continue without it, but please check your settings.');
           return false;
@@ -752,7 +766,7 @@ class Agamotto extends H5P.Question {
         return true;
       })
       .splice(0, 50)
-      .map(item => {
+      .map((item) => {
         item.image.params.alt = item.image.params.alt || '';
         item.image.params.title = item.image.params.title || '';
         return item;

@@ -6,6 +6,7 @@ import { detect } from 'detect-browser';
 class Images {
   /**
    * Images object
+   *
    * @class Images
    * @param {object[]} images Array containing the images.
    * @param {string} transparencyReplacementColor Replacement color for transparency.
@@ -14,7 +15,7 @@ class Images {
     this.images = images;
 
     // Sanitize properties
-    this.images.map(image => {
+    this.images.map((image) => {
       image.alt = Util.stripHTML(image.alt);
       image.title = Util.stripHTML(image.title);
       image.description = Util.stripHTML(image.description);
@@ -120,7 +121,8 @@ class Images {
 
   /**
    * Get the DOM elements.
-   * @return {HTMLElement} The DOM elements.
+   *
+   * @returns {HTMLElement} The DOM elements.
    */
   getDOM() {
     return this.container;
@@ -128,7 +130,8 @@ class Images {
 
   /**
    * Get ALT tag of currently visible image.
-   * @return {string} ALT tag of currently visible image.
+   *
+   * @returns {string} ALT tag of currently visible image.
    */
   getCurrentAltTag() {
     return this.imageTop.getAttribute('alt');
@@ -136,14 +139,17 @@ class Images {
 
   /**
    * Get all alt tags or title tags as alternative.
-   * @return {object[]} Alt tags or title texts.
-.  */
+   *
+   * @returns {object[]} Alt tags or title texts.
+.
+   */
   getAltTitleTags() {
-    return this.images.map(image => image.alt || image.title);
+    return this.images.map((image) => image.alt || image.title);
   }
 
   /**
    * Set the visible image combination.
+   *
    * @param {number} index Image index.
    * @param {number} opacity Image opacity, [0..1].
    */
@@ -171,7 +177,8 @@ class Images {
 
   /**
    * Get image size.
-   * @return {object} Size.
+   *
+   * @returns {object} Size.
    */
   getSize() {
     return {
@@ -182,7 +189,8 @@ class Images {
 
   /**
    * Get the image ratio.
-   * @return {number} Image ratio.
+   *
+   * @returns {number} Image ratio.
    */
   getRatio() {
     return this.ratio;
@@ -190,7 +198,8 @@ class Images {
 
   /**
    * Get opacity of top image.
-   * @return {number} Opacity of top image.
+   *
+   * @returns {number} Opacity of top image.
    */
   getTopOpacity() {
     return parseFloat(this.imageTop.style.opacity || '');
@@ -198,9 +207,10 @@ class Images {
 
   /**
    * Load an Image.
+   *
    * @param {object} imageObject Image object.
    * @param {number} id H5P ID.
-   * @return {Promise} Promise for image being loaded.
+   * @returns {Promise} Promise for image being loaded.
    */
   static loadImage(imageObject, id) {
     return new Promise((resolve, reject) => {

@@ -4,6 +4,7 @@ import Util from './h5p-agamotto-util';
 class Slider extends H5P.EventDispatcher {
   /**
    * Slider object.
+   *
    * @param {object} params Options for the slider.
    * @param {boolean} [params.snap] If true, slider will snap to fixed positions.
    * @param {boolean} [params.ticks] If true, slider container will display ticks.
@@ -14,6 +15,8 @@ class Slider extends H5P.EventDispatcher {
    * @param {number} params.size Number of positions/ticks.
    * @param {string} params.selector CSS class name of parent node.
    * @param {object} params.parent Parent class Agamotto.
+   * @param {object} callbacks Callbacks.
+   * @param {function} [callbacks.onButtonFullscreenClicked] Fullscreen button clicked.
    */
   constructor(params, callbacks = {}) {
     super();
@@ -122,7 +125,7 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Event Listeners for Mouse Interface
-    document.addEventListener('mousemove', event => {
+    document.addEventListener('mousemove', (event) => {
       if (this.sliderdown) {
         this.setPosition(event, false);
       }
@@ -133,12 +136,12 @@ class Slider extends H5P.EventDispatcher {
         this.snap();
       }
     });
-    this.track.addEventListener('mousedown', event => {
+    this.track.addEventListener('mousedown', (event) => {
       event = event || window.event;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
-    this.thumb.addEventListener('mousedown', event => {
+    this.thumb.addEventListener('mousedown', (event) => {
       event = event || window.event;
       this.sliderdown = true;
       this.setPosition(event, false);
@@ -151,7 +154,7 @@ class Slider extends H5P.EventDispatcher {
      * However, if you don't use preventDefault, people will also slide the
      * screen when using the slider which would be weird.
      */
-    this.container.addEventListener('touchstart', event => {
+    this.container.addEventListener('touchstart', (event) => {
       if (event.target === this.fullscreenButton || event.target === this.audioButton) {
         return;
       }
@@ -162,7 +165,7 @@ class Slider extends H5P.EventDispatcher {
       this.setPosition(event, false);
     });
 
-    this.container.addEventListener('touchmove', event => {
+    this.container.addEventListener('touchmove', (event) => {
       if (event.target === this.fullscreenButton || event.target === this.audioButton) {
         return;
       }
@@ -173,7 +176,7 @@ class Slider extends H5P.EventDispatcher {
       this.setPosition(event, false);
     });
 
-    this.container.addEventListener('touchend', event => {
+    this.container.addEventListener('touchend', (event) => {
       if (event.target === this.fullscreenButton || event.target === this.audioButton) {
         return;
       }
@@ -184,7 +187,7 @@ class Slider extends H5P.EventDispatcher {
       this.snap();
     });
 
-    this.thumb.addEventListener('keydown', event => {
+    this.thumb.addEventListener('keydown', (event) => {
       // Prevent repeated pressing of a key
       if (this.keydown !== false) {
         return;
@@ -211,7 +214,7 @@ class Slider extends H5P.EventDispatcher {
           break;
       }
     });
-    this.thumb.addEventListener('keyup', event => {
+    this.thumb.addEventListener('keyup', (event) => {
       // Only trigger xAPI if the interaction started by a particular key has ended
       event = event || window.event;
       const key = event.which || event.keyCode;
@@ -225,7 +228,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Detect whether audio is muted.
-   * @return {boolean} True, if muted.
+   *
+   * @returns {boolean} True, if muted.
    */
   isMuted() {
     return this.muted;
@@ -233,7 +237,9 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle click/tap on fullscreen button.
+   *
    * @param {Event} event Click/Touchstart event.
+   * @returns {boolean} False.
    */
   handleClickFullscreenButton(event) {
     event.preventDefault();
@@ -258,6 +264,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set fullscreen title.
+   *
    * @param {boolean} state If true, fullscreen entered, else exited.
    */
   setFullScreenButtonTitle(state) {
@@ -275,7 +282,9 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle click/tap on audio button.
+   *
    * @param {Event} event Click/Touchstart event.
+   * @returns {boolean} False.
    */
   handleClickAudioButton(event) {
     event.preventDefault();
@@ -285,6 +294,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Toggle audio button.
+   *
    * @param {boolean} [muted] Override for audio button.
    */
   toggleAudioButton(muted) {
@@ -314,6 +324,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle sliding with keys.
+   *
    * @param {Event} event Key event.
    * @param {number} nextItemId Id of item to slide to.
    */
@@ -334,8 +345,9 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get id of current item pointed at by slider.
+   *
    * @param {boolean} [rounded = true] If true, position will be rounded.
-   * @return {number} Id of item pointed at. Can be a float.
+   * @returns {number} Id of item pointed at. Can be a float.
    */
   getCurrentItemId(rounded = true) {
     let itemPosition = this.getPosition() / this.getWidth() * this.params.size;
@@ -347,7 +359,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the DOM elements.
-   * @return {HTMLElement} The DOM elements.
+   *
+   * @returns {HTMLElement} The DOM elements.
    */
   getDOM() {
     return this.container;
@@ -371,6 +384,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the slider's width.
+   *
    * @param {number} value Slider's width.
    */
   setWidth(value) {
@@ -386,7 +400,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the slider's width.
-   * @return {number} Slider's width.
+   *
+   * @returns {number} Slider's width.
    */
   getWidth() {
     return this.trackWidth;
@@ -394,6 +409,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the position of the thumb on the slider track.
+   *
    * @param {number} position Position on the slider track from 0 to max.
    * @param {boolean} animate If true, slide instead of jumping.
    * @param {boolean} resize If true, won't recompute position/width ratio.
@@ -449,7 +465,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the current slider position.
-   * @return {number} Current slider position.
+   *
+   * @returns {number} Current slider position.
    */
   getPosition() {
     return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
@@ -457,7 +474,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get current slider down state.
-   * @return {boolean} True, if slider is in usw.
+   *
+   * @returns {boolean} True, if slider is in usw.
    */
   isUsed() {
     return this.sliderdown;
@@ -465,6 +483,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Focus slider.
+   *
    * @param {object} [options] regular element.focus options.
    */
   focus(options = {}) {
@@ -489,8 +508,9 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the horizontal position of the pointer/finger.
+   *
    * @param {Event} e Delivering event.
-   * @return {number} Horizontal pointer/finger position.
+   * @returns {number} Horizontal pointer/finger position.
    */
   getPointerX(e) {
     let pointerX = 0;
@@ -556,13 +576,13 @@ class Slider extends H5P.EventDispatcher {
 
       // Hide labels if some of them overlap and remove their vertical space
       if (overlapping) {
-        this.labels.forEach(label => {
+        this.labels.forEach((label) => {
           label.classList.add('h5p-agamotto-hidden');
         });
         maxLabelHeight = 0;
       }
       else {
-        this.labels.forEach(label => {
+        this.labels.forEach((label) => {
           label.classList.remove('h5p-agamotto-hidden');
         });
       }
@@ -577,7 +597,8 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Compute offset for setting slider track zero position.
-   * @return {number} Track offset.
+   *
+   * @returns {number} Track offset.
    */
   computeTrackOffset() {
     const questionContainer = Util.findClosest(this.container, 'h5p-question-content');
@@ -594,9 +615,10 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Detect overlapping labels
+   *
    * @param {HTMLElement} label1 Label 1.
    * @param {HTMLElement} label2 Label 2.
-   * @return {boolean} True if labels are overlapping.
+   * @returns {boolean} True if labels are overlapping.
    */
   areOverlapping(label1, label2) {
     const rect1 = label1.getBoundingClientRect();
