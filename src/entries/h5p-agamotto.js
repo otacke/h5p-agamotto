@@ -1,4 +1,4 @@
-import './../styles/h5p-agamotto.css';
+import './../styles/h5p-agamotto.scss';
 import Agamotto from './../scripts/h5p-agamotto.js';
 
 // Load library
