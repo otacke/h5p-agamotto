@@ -1,5 +1,4 @@
-import Promise from 'core-js/features/promise';
-import Util from './h5p-agamotto-util';
+import Util from '@services/h5p-agamotto-util';
 import { detect } from 'detect-browser';
 
 /** Class representing Images */

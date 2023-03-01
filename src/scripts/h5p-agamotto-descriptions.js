@@ -1,4 +1,4 @@
-import Util from './h5p-agamotto-util';
+import Util from '@services/h5p-agamotto-util';
 
 /** Class representing Descriptions */
 class Descriptions {
