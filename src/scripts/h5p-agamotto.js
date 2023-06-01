@@ -75,7 +75,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Update images and descriptions.
-     *
      * @param {number} index Index of top image.
      * @param {number} opacity Opacity of top image.
      */
@@ -113,7 +112,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Set audio.
-     *
      * @param {number} index Current image's index.
      * @param {number} opacity Current image's opacity.
      */
@@ -140,7 +138,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Start audio.
-     *
      * @param {number} id Index.
      */
     this.startAudio = (id) => {
@@ -225,7 +222,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Create the DOM.
-     *
      * @returns {HTMLElement} DOM.
      */
     this.createDOM = () => {
@@ -479,7 +475,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Check if a resize is needed.
-     *
      * @returns {boolean} True, if resize is required.
      */
     this.isResizeNeeded = () => {
@@ -528,7 +523,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Create audio elements from items.
-     *
      * @param {object[]} items Items from params.
      * @returns {object[]} Audio elements.
      */
@@ -555,7 +549,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Detect whether there's at least one audio.
-     *
      * @returns {boolean} True, if content has audio.
      */
     this.hasAudio = () => {
@@ -564,7 +557,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Read contents to screen readers.
-     *
      * @param {string} [intro] Optional intro text.
      */
     this.announceARIA = (intro) => {
@@ -606,7 +598,6 @@ class Agamotto extends H5P.Question {
     /**
      * Get context data.
      * Contract used for confusion report.
-     *
      * @returns {object} Context data.
      */
     this.getContext = () => {
@@ -618,7 +609,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Get the content type title.
-     *
      * @returns {string} title.
      */
     this.getTitle = () => {
@@ -636,7 +626,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Toggle fullscreen button.
-     *
      * @param {string|boolean} state enter|false for enter, exit|true for exit.
      */
     this.toggleFullscreen = (state) => {
@@ -678,7 +667,6 @@ class Agamotto extends H5P.Question {
 
     /**
      * Fix height to current screen size.
-     *
      * @param {boolean} state If true, fix height.
      */
     this.setFixedSize = (state) => {
@@ -745,7 +733,6 @@ class Agamotto extends H5P.Question {
 
   /**
    * Remove missing items and limit amount.
-   *
    * @param {object[]} items Items defined in semantics.org.
    * @returns {object[]} Sanitized items.
    */

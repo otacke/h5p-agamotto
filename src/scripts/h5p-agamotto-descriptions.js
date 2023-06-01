@@ -4,7 +4,6 @@ import Util from '@services/h5p-agamotto-util';
 class Descriptions {
   /**
    * Descriptions object.
-   *
    * @param {object[]} texts Array containing the texts for the images.
    * @param {string} selector CSS class name of parent node.
    * @param {string} parent Parent class Agamotto.
@@ -37,7 +36,6 @@ class Descriptions {
 
   /**
    * Get DOM elements.
-   *
    * @returns {HTMLElement} DOM elements.
    */
   getDOM() {
@@ -46,7 +44,6 @@ class Descriptions {
 
   /**
    * Build wrappers for descriptions.
-   *
    * @param {string[]} texts Description texts.
    * @returns {HTMLElement[]} Wrappers.
    */
@@ -73,7 +70,6 @@ class Descriptions {
 
   /**
    * Get current description text.
-   *
    * @returns {string} Current description text.
    */
   getCurrentDescriptionText() {
@@ -82,7 +78,6 @@ class Descriptions {
 
   /**
    * Set the description text.
-   *
    * @param {number} index Description (image) index.
    * @param {number} opacity Description (image) opacity, [0..1].
    */

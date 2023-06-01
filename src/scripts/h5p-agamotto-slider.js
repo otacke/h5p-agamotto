@@ -4,7 +4,6 @@ import Util from '@services/h5p-agamotto-util';
 class Slider extends H5P.EventDispatcher {
   /**
    * Slider object.
-   *
    * @param {object} params Options for the slider.
    * @param {boolean} [params.snap] If true, slider will snap to fixed positions.
    * @param {boolean} [params.ticks] If true, slider container will display ticks.
@@ -228,7 +227,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Detect whether audio is muted.
-   *
    * @returns {boolean} True, if muted.
    */
   isMuted() {
@@ -237,7 +235,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle click/tap on fullscreen button.
-   *
    * @param {Event} event Click/Touchstart event.
    * @returns {boolean} False.
    */
@@ -264,7 +261,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set fullscreen title.
-   *
    * @param {boolean} state If true, fullscreen entered, else exited.
    */
   setFullScreenButtonTitle(state) {
@@ -282,7 +278,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle click/tap on audio button.
-   *
    * @param {Event} event Click/Touchstart event.
    * @returns {boolean} False.
    */
@@ -294,7 +289,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Toggle audio button.
-   *
    * @param {boolean} [muted] Override for audio button.
    */
   toggleAudioButton(muted) {
@@ -324,7 +318,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Handle sliding with keys.
-   *
    * @param {Event} event Key event.
    * @param {number} nextItemId Id of item to slide to.
    */
@@ -345,8 +338,7 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get id of current item pointed at by slider.
-   *
-   * @param {boolean} [rounded = true] If true, position will be rounded.
+   * @param {boolean} [rounded] If true, position will be rounded.
    * @returns {number} Id of item pointed at. Can be a float.
    */
   getCurrentItemId(rounded = true) {
@@ -359,7 +351,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the DOM elements.
-   *
    * @returns {HTMLElement} The DOM elements.
    */
   getDOM() {
@@ -384,7 +375,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the slider's width.
-   *
    * @param {number} value Slider's width.
    */
   setWidth(value) {
@@ -400,7 +390,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the slider's width.
-   *
    * @returns {number} Slider's width.
    */
   getWidth() {
@@ -409,7 +398,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Set the position of the thumb on the slider track.
-   *
    * @param {number} position Position on the slider track from 0 to max.
    * @param {boolean} animate If true, slide instead of jumping.
    * @param {boolean} resize If true, won't recompute position/width ratio.
@@ -465,7 +453,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the current slider position.
-   *
    * @returns {number} Current slider position.
    */
   getPosition() {
@@ -474,7 +461,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get current slider down state.
-   *
    * @returns {boolean} True, if slider is in usw.
    */
   isUsed() {
@@ -483,7 +469,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Focus slider.
-   *
    * @param {object} [options] regular element.focus options.
    */
   focus(options = {}) {
@@ -508,7 +493,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Get the horizontal position of the pointer/finger.
-   *
    * @param {Event} e Delivering event.
    * @returns {number} Horizontal pointer/finger position.
    */
@@ -597,7 +581,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Compute offset for setting slider track zero position.
-   *
    * @returns {number} Track offset.
    */
   computeTrackOffset() {
@@ -615,7 +598,6 @@ class Slider extends H5P.EventDispatcher {
 
   /**
    * Detect overlapping labels
-   *
    * @param {HTMLElement} label1 Label 1.
    * @param {HTMLElement} label2 Label 2.
    * @returns {boolean} True if labels are overlapping.

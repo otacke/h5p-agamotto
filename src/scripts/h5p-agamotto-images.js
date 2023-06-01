@@ -5,7 +5,6 @@ import { detect } from 'detect-browser';
 class Images {
   /**
    * Images object
-   *
    * @class Images
    * @param {object[]} images Array containing the images.
    * @param {string} transparencyReplacementColor Replacement color for transparency.
@@ -120,7 +119,6 @@ class Images {
 
   /**
    * Get the DOM elements.
-   *
    * @returns {HTMLElement} The DOM elements.
    */
   getDOM() {
@@ -129,7 +127,6 @@ class Images {
 
   /**
    * Get ALT tag of currently visible image.
-   *
    * @returns {string} ALT tag of currently visible image.
    */
   getCurrentAltTag() {
@@ -138,7 +135,6 @@ class Images {
 
   /**
    * Get all alt tags or title tags as alternative.
-   *
    * @returns {object[]} Alt tags or title texts.
 .
    */
@@ -148,7 +144,6 @@ class Images {
 
   /**
    * Set the visible image combination.
-   *
    * @param {number} index Image index.
    * @param {number} opacity Image opacity, [0..1].
    */
@@ -176,7 +171,6 @@ class Images {
 
   /**
    * Get image size.
-   *
    * @returns {object} Size.
    */
   getSize() {
@@ -188,7 +182,6 @@ class Images {
 
   /**
    * Get the image ratio.
-   *
    * @returns {number} Image ratio.
    */
   getRatio() {
@@ -197,7 +190,6 @@ class Images {
 
   /**
    * Get opacity of top image.
-   *
    * @returns {number} Opacity of top image.
    */
   getTopOpacity() {
@@ -206,7 +198,6 @@ class Images {
 
   /**
    * Load an Image.
-   *
    * @param {object} imageObject Image object.
    * @param {number} id H5P ID.
    * @returns {Promise} Promise for image being loaded.

@@ -2,7 +2,6 @@
 class Util {
   /**
    * Extend an array just like JQuery's extend.
-   *
    * @returns {object} Merged objects.
    */
   static extend() {
@@ -23,7 +22,6 @@ class Util {
 
   /**
    * Strip HTML tags.
-   *
    * @param {string} html HTML string.
    * @returns {string} String without HTML tags.
    */
@@ -35,7 +33,6 @@ class Util {
 
   /**
    * Retrieve true string from HTML encoded string.
-   *
    * @param {string} input Input string.
    * @returns {string} Output string.
    */
@@ -49,7 +46,6 @@ class Util {
 
   /**
    * Map a value from one range to another.
-   *
    * @param {number} value Value to me remapped.
    * @param {number} lo1 Lower boundary of first range.
    * @param {number} hi1 Upper boundary of first range.
@@ -63,7 +59,6 @@ class Util {
 
   /**
    * Constrain a number value within a range.
-   *
    * @param {number} value Value to be constrained.
    * @param {number} lo Lower boundary of the range.
    * @param {number} hi Upper boundary of the range.
@@ -75,7 +70,6 @@ class Util {
 
   /**
    * Find closest element with class.
-   *
    * @param {HTMLElement} element Element to start with.
    * @param {string} classname ='.' Name of class to look for.
    * @returns {HTMLElement} Element found.
@@ -95,7 +89,6 @@ class Util {
 
   /**
    * Detect mobile devices (http://detectmobilebrowsers.com/)
-   *
    * @returns {boolean} True if running on a mobile device.
    */
   static isMobileDevice() {
