@@ -4,8 +4,8 @@
   "description": "Displays an interactive sequence of images",
   "scripts": {
     "lint": "stylelint './src/**/*.scss' && eslint './src/**/*.js'",
-    "build": "cross-env NODE_ENV=production webpack",
-    "watch": "cross-env NODE_ENV=development webpack --watch"
+    "build": "webpack --mode=production",
+    "watch": "webpack --mode=development --watch"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,6 @@
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.4",
     "babel-loader": "^9.1.2",
-    "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "eslint": "^8.41.0",
     "eslint-plugin-jsdoc": "^46.1.0",
