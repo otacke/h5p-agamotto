@@ -21,7 +21,7 @@
           },
           {
             "label": "Pavadinimas",
-            "description": "Optional label for a tick. Please make sure it's not too long, or it will be hidden."
+            "description": "Papildoma žymeklis skirtas varnelei. Įsitikinkite, kad jis nėra per ilgas, kitaip jis bus paslėptas."
           },
           {
             "label": "Aprašymas",
@@ -30,7 +30,7 @@
           },
           {
             "label": "Garsas",
-            "description": "Optional audio that plays when an image is shown."
+            "description": "Pasirenkamas garso įrašas, kuris grojamas, kai rodomas vaizdas."
           }
         ]
       }
@@ -40,56 +40,56 @@
       "description": "Šios parinktys leis jums valdyti, kaip veikia užduotis.",
       "fields": [
         {
-          "label": "Start image",
-          "description": "Set the number of the image to start with."
+          "label": "Pradžios paveikslėlis",
+          "description": "Nustatykite pradinio paveikslėlio numerį."
         },
         {
-          "label": "Snap slider",
-          "description": "If activated, the slider will snap to an image's position."
+          "label": "Užfiksuokite slankiklį",
+          "description": "Jei įjungta, slankiklis užsifiksuos vaizdo vietoje."
         },
         {
-          "label": "Display tick marks",
-          "description": "If activated, the slider bar will display a tick mark for each image."
+          "label": "Rodyti varnelių žymes",
+          "description": "Jei įjungta, slankiklio juosta bus rodoma kiekviename vaizde."
         },
         {
           "label": "Rodyti pavadinimus",
-          "description": "If activated, the slider bar will display a label instead of/in addition to tick marks."
+          "description": "Jei suaktyvinta, slankiklio juostoje bus rodoma etiketė vietoj varnelės arba kartu su varnele."
         },
         {
-          "label": "Transparency Replacement Color",
-          "description": "Set the color that will replace transparent areas of the images."
+          "label": "Fono spalvos skaidrumas",
+          "description": "Nustatykite spalvą, kurią rodys skaidriame fone keičiant vaizdus."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Paveiksliuko erdvė viso ekrano režimu",
+          "description": "Jei be vaizdų turite ir aprašymų, nustatykite, kiek procentų vietos vaizdai turėtų užimti viso ekrano režimu."
         }
       ]
     },
     {
-      "label": "Readspeaker",
+      "label": "Skaitymo garsiakalbis",
       "fields": [
         {
           "label": "Paveikslėlis",
           "default": "Paveikslėlis"
         },
         {
-          "label": "Image Slider",
-          "default": "Image Slider"
+          "label": "Paveikslėlių slankiklis",
+          "default": "Paveikslėlių slankiklis"
         },
         {
-          "label": "Nuildyti pavadinimą",
-          "default": "Mute, currently unmuted"
+          "label": "Nutildyti pavadinimą",
+          "default": "Nutildyti, dabar įjungta."
         },
         {
           "label": "Atšaukti nutildymą pavadinimui",
-          "default": "Unmute, currently muted"
+          "default": "Įjungti, dabar nutildyta."
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Viso ekrano mygtuko pavadinimas (įveskite)",
+          "default": "Įjungti viso ekrano režimą"
         },
         {
-          "label": "Title for fullscreen button (exit)",
+          "label": "Viso ekrano mygtuko pavadinimas (išeiti)",
           "default": "Išeiti iš viso ekrano režimo"
         }
       ]
