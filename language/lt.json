@@ -53,7 +53,7 @@
         },
         {
           "label": "Rodyti pavadinimus",
-          "description": "Jei suaktyvinta, slankiklio juostoje bus rodoma etiketė vietoj varnelės arba kartu su varnele."
+          "description": "Jei suaktyvinta, slankiklio juostoje bus rodoma žyma vietoj varnelės arba kartu su varnele."
         },
         {
           "label": "Fono spalvos skaidrumas",
@@ -77,7 +77,7 @@
           "default": "Paveikslėlių slankiklis"
         },
         {
-          "label": "Nutildyti pavadinimą",
+          "label": "„Nutildyti“ pavadinimas",
           "default": "Nutildyti, dabar įjungta."
         },
         {
