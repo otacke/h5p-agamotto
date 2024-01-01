@@ -32,7 +32,7 @@
     "sass-loader": "^13.3.2",
     "stylelint": "^15.11.0",
     "stylelint-config-recommended": "^13.0.0",
-    "stylelint-config-recommended-scss": "^13.0.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },
