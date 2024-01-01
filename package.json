@@ -30,7 +30,7 @@
     "regenerator-runtime": "^0.14.0",
     "sass": "^1.69.4",
     "sass-loader": "^13.3.2",
-    "stylelint": "^15.11.0",
+    "stylelint": "^16.0.0",
     "stylelint-config-recommended": "^13.0.0",
     "stylelint-config-recommended-scss": "^13.0.0",
     "webpack": "^5.89.0",
