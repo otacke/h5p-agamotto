@@ -201,23 +201,26 @@ class Agamotto extends H5P.Question {
     this.registerDomElements = () => {
       this.content = this.createDOM();
 
-      // Stop audio when content gets hidden and start when gets visible
-      new IntersectionObserver((entries) => {
-        const entry = entries[0];
-        if (entry.intersectionRatio === 0) {
-          this.isVisible = false;
-          this.stopAudios();
-        }
-        else if (entry.intersectionRatio === 1) {
-          this.isVisible = true;
-          this.startAudio(this.currentIndex);
-        }
-      }, {
-        root: document.documentElement,
-        threshold: [0, 1] // Get events when it is shown and hidden
-      }).observe(this.content);
-
       this.setContent(this.content);
+
+      window.requestAnimationFrame(() => {
+      // Stop audio when content gets hidden and start when gets visible
+        new IntersectionObserver((entries) => {
+          const entry = entries[0];
+          if (entry.intersectionRatio === 0) {
+            this.isVisible = false;
+            this.stopAudios();
+
+          }
+          else if (entry.intersectionRatio === 1) {
+            this.isVisible = true;
+            this.startAudio(this.currentIndex);
+          }
+        }, {
+          root: document.documentElement,
+          threshold: [0, 1] // Get events when it is shown and hidden
+        }).observe(this.content);
+      });
     };
 
     /**
