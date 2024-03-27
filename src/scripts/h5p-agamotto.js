@@ -541,6 +541,11 @@ class Agamotto extends H5P.Question {
         const player = document.createElement('audio');
         player.style.display = 'none';
         player.src = H5P.getPath(item.audio[0].path, this.contentId);
+
+        if (item.audio[0].mime) {
+          player.setAttribute('type', item.audio[0].mime);
+        }
+
         audioElements.push({
           player: player,
           promise: null
