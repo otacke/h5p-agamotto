@@ -141,8 +141,8 @@ class Agamotto extends H5P.Question {
      * @param {number} id Index.
      */
     this.startAudio = (id) => {
-      if (!this.isVisible) {
-        return; // Don't play when content is not visible
+      if (!this.isVisible || this.muted === true) {
+        return; // Don't play when content is not visible or muted
       }
 
       if (this.audios.length <= id) {
