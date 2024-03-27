@@ -588,8 +588,13 @@ class Slider extends H5P.EventDispatcher {
     if (questionContainer) {
       const style = window.getComputedStyle(questionContainer);
 
+      const sliderOffset = (this.container.offsetLeft === Slider.TRACK_OFFSET) ?
+        Slider.TRACK_OFFSET :
+        Slider.TRACK_OFFSET + this.container.offsetLeft;
+
       return questionContainer.getBoundingClientRect().left +
-        parseInt(style.paddingLeft) + Slider.TRACK_OFFSET;
+        parseInt(style.paddingLeft) +
+        sliderOffset;
     }
     else { // Fallback
       return this.container.offsetLeft + Slider.TRACK_OFFSET;
