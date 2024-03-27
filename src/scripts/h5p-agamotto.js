@@ -154,6 +154,11 @@ class Agamotto extends H5P.Question {
         return;
       }
 
+      const mimeType = currentAudio.player?.getAttribute('type') || '';
+      if (!currentAudio.player.canPlayType(mimeType)) {
+        return;
+      }
+
       // People might move the slider quickly ...
       if (!currentAudio.promise) {
         currentAudio.promise = currentAudio.player.play();
