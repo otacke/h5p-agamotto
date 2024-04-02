@@ -212,12 +212,23 @@ class Agamotto extends H5P.Question {
       // Stop audio when content gets hidden and start when gets visible
         new IntersectionObserver((entries) => {
           const entry = entries[0];
-          if (entry.intersectionRatio === 0) {
-            this.isVisible = false;
-            this.stopAudios();
 
+          if (entry.intersectionRatio === 0) {
+            /*
+             * This timout is a workaround for Firefox 124. Firefox, for some
+             * reason, triggers the IntersectionObserver even when resizing
+             * the browser window. Firefox will report an intersection of 0 and
+             * then 1 briefly after. The time delta seems to be ~14ms locally,
+             * but setting it to 100 doesn't hurt and feels safer.
+             */
+            this.stopAudioTimeout = window.setTimeout(() => {
+              this.isVisible = false;
+              this.stopAudios();
+            }, 100);
           }
           else if (entry.intersectionRatio === 1) {
+            clearTimeout(this.stopAudioTimeout);
+
             this.isVisible = true;
             this.startAudio(this.currentIndex);
           }
