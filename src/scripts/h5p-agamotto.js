@@ -48,6 +48,9 @@ class Agamotto extends H5P.Question {
     // Keep track of whether the content is visible or not
     this.isVisible = false;
 
+    // HFP-3880 Keep track of time spent processing fullscreen exit so that the intersection observer does not trigger
+    this.pauseIntOb = false;
+
     this.maxItem = this.params.items.length - 1;
     this.startImage = Util.constrain(this.params.behaviour.startImage - 1, 0, this.maxItem);
     this.selector = '.h5p-agamotto-wrapper';
@@ -211,24 +214,16 @@ class Agamotto extends H5P.Question {
       window.requestAnimationFrame(() => {
       // Stop audio when content gets hidden and start when gets visible
         new IntersectionObserver((entries) => {
+          if (this.pauseIntOb) {
+            return;
+          }
           const entry = entries[0];
 
           if (entry.intersectionRatio === 0) {
-            /*
-             * This timout is a workaround for Firefox 124. Firefox, for some
-             * reason, triggers the IntersectionObserver even when resizing
-             * the browser window. Firefox will report an intersection of 0 and
-             * then 1 briefly after. The time delta seems to be ~14ms locally,
-             * but setting it to 100 doesn't hurt and feels safer.
-             */
-            this.stopAudioTimeout = window.setTimeout(() => {
-              this.isVisible = false;
-              this.stopAudios();
-            }, 100);
+            this.isVisible = false;
+            this.stopAudios();
           }
           else if (entry.intersectionRatio === 1) {
-            clearTimeout(this.stopAudioTimeout);
-
             this.isVisible = true;
             this.startAudio(this.currentIndex);
           }
@@ -436,6 +431,7 @@ class Agamotto extends H5P.Question {
               }
               else {
                 this.setFixedSize(false);
+                this.pauseIntOb = false;
               }
             }, false);
           }
@@ -674,6 +670,7 @@ class Agamotto extends H5P.Question {
         H5P.fullScreen(H5P.jQuery(this.container), this);
       }
       else {
+        this.pauseIntOb = true;
         H5P.exitFullScreen();
       }
     };
