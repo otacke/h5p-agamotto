@@ -458,7 +458,10 @@ class Agamotto extends H5P.Question {
        * orientation, because it might be hard to use it otherwise.
        * iOS devices don't switch screen.height and screen.width on rotation
        */
-      if (Util.isMobileDevice() && Math.abs(window.orientation) === 90) {
+      if (
+        Util.isMobileDevice() &&
+        Math.abs(window.screen.orientation.angle) === 90
+      ) {
         const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
         this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
       }
