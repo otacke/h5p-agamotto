@@ -11,6 +11,7 @@ src
 .gitmodules
 .h5pignore
 .travis.yml
+eslint.config.js
 karma.conf.js
 webpack.config.js
 webpack.dev.config.js
