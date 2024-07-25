@@ -29,8 +29,8 @@
             "description": "Περιγραφή της εικόνας (προαιρετικό)"
           },
           {
-            "label": "Audio",
-            "description": "Optional audio that plays when an image is shown."
+            "label": "Ήχος",
+            "description": "Προαιρετικός ήχος που αναπαράγεται όταν εμφανίζεται μια εικόνα."
           }
         ]
       }
@@ -60,8 +60,8 @@
           "description": "Επιλέξτε το χρώμα που θα αντικαταστήσει τα διάφανα τμήματα των εικόνων."
         },
         {
-          "label": "Image space in fullscreen mode",
-          "description": "If you have descriptions in addition to the images, set the the percentage of space that the images should use in fullscreen mode."
+          "label": "Μέγεθος εικόνας σε λειτουργία πλήρους οθόνης",
+          "description": "Εάν έχετε περιγραφές εκτός από τις εικόνες, ορίστε το ποσοστό του χώρου που θα πρέπει να χρησιμοποιούν οι εικόνες στη λειτουργία πλήρους οθόνης."
         }
       ]
     },
@@ -77,20 +77,20 @@
           "default": "Slider εικόνας"
         },
         {
-          "label": "Mute title",
+          "label": "Κείμενο για σίγαση",
           "default": "Σίγαση, για την ώρα χωρίς σίγαση"
         },
         {
-          "label": "Unmute title",
+          "label": "Κείμενο για κατάργηση σίγασης",
           "default": "Κατάργηση σίγασης, προς το παρόν σε σίγαση"
         },
         {
-          "label": "Title for fullscreen button (enter)",
-          "default": "Enter fullscreen mode"
+          "label": "Κείμενο για κουμπί προβολής πλήρους οθόνης (είσοδος)",
+          "default": "Είσοδος σε προβολή πλήρους οθόνης"
         },
         {
-          "label": "Title for fullscreen button (exit)",
-          "default": "Exit fullscreen mode"
+          "label": "Κείμενο για κουμπί προβολής πλήρους οθόνης (έξοδος)",
+          "default": "Έξοδος από την προβολή πλήρους οθόνης"
         }
       ]
     }
