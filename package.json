@@ -1,6 +1,6 @@
 {
   "name": "h5p-agamotto",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "description": "Displays an interactive sequence of images",
   "scripts": {
     "lint": "stylelint './src/**/*.scss' && eslint './src/**/*.js'",
