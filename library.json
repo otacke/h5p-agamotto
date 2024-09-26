@@ -13,7 +13,7 @@
   "machineName": "H5P.Agamotto",
   "coreApi": {
     "majorVersion": 1,
-    "minorVersion": 19
+    "minorVersion": 27
   },
   "preloadedJs": [
     {
