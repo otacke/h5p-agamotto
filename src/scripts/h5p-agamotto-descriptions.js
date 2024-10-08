@@ -93,8 +93,10 @@ class Descriptions {
     wrapperBottom.classList.remove('h5p-agamotto-hidden');
 
     wrapperTop.style.opacity = opacity;
+    wrapperTop.style.zIndex = (opacity < 0.5) ? 0 : 1;
     if (wrapperTop !== wrapperBottom) {
       wrapperBottom.style.opacity = 1 - opacity;
+      wrapperBottom.style.zIndex = (1 - opacity) < 0.5 ? 0 : 1;
     }
 
     this.currentDescriptionText = (opacity > 0.5) ? wrapperTop.textContent : wrapperBottom.textContent;
