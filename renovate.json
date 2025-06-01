@@ -1,7 +1,0 @@
-{
-  "extends": [
-    "config:base"
-  ],
-  "rangeStrategy": "update-lockfile",
-  "schedule": ["on the last day of the month"]
-}
