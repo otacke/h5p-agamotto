@@ -1,0 +1,98 @@
+{
+  "semantics": [
+    {
+      "label": "Titlu",
+      "placeholder": "Aici puteți adăuga un titlu opțional.",
+      "description": "Titlul pe care doriți să-l afișați deasupra imaginii."
+    },
+    {
+      "label": "Elemente",
+      "entity": "element",
+      "widgets": [
+        {
+          "label": "Implicit"
+        }
+      ],
+      "field": {
+        "label": "Element",
+        "fields": [
+          {
+            "label": "Imagine"
+          },
+          {
+            "label": "Etichetă",
+            "description": "Etichetă opțională pentru un marcaj. Vă rugăm să vă asigurați că nu este prea lungă, altfel va fi ascunsă."
+          },
+          {
+            "label": "Descriere",
+            "placeholder": "Descrierea imaginii mele...",
+            "description": "Descriere opțională pentru imagine."
+          },
+          {
+            "label": "Audio",
+            "description": "Fișier audio opțional care este redat atunci când este afișată o imagine."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Setări de comportament",
+      "description": "Aceste opțiuni vă vor permite să controlați cum se comportă sarcina.",
+      "fields": [
+        {
+          "label": "Imagine de start",
+          "description": "Setați numărul imaginii cu care să se înceapă."
+        },
+        {
+          "label": "Glisor cu fixare",
+          "description": "Dacă este activat, glisorul se va fixa pe poziția unei imagini."
+        },
+        {
+          "label": "Afișează marcaje",
+          "description": "Dacă este activat, bara glisorului va afișa un marcaj pentru fiecare imagine."
+        },
+        {
+          "label": "Afișează etichete",
+          "description": "Dacă este activat, bara glisorului va afișa o etichetă în locul/pe lângă marcaje."
+        },
+        {
+          "label": "Culoare de înlocuire a transparenței",
+          "description": "Setați culoarea care va înlocui zonele transparente ale imaginilor."
+        },
+        {
+          "label": "Spațiu pentru imagine în modul ecran complet",
+          "description": "Dacă aveți descrieri pe lângă imagini, setați procentajul de spațiu pe care imaginile ar trebui să îl ocupe în modul ecran complet."
+        }
+      ]
+    },
+    {
+      "label": "Cititor de ecran",
+      "fields": [
+        {
+          "label": "Imagine",
+          "default": "Imagine"
+        },
+        {
+          "label": "Glisor de imagini",
+          "default": "Glisor de imagini"
+        },
+        {
+          "label": "Titlu pentru dezactivare sunet",
+          "default": "Dezactivează sunetul, în prezent activat"
+        },
+        {
+          "label": "Titlu pentru activare sunet",
+          "default": "Activează sunetul, în prezent dezactivat"
+        },
+        {
+          "label": "Titlu pentru butonul ecran complet (intrare)",
+          "default": "Intră în modul ecran complet"
+        },
+        {
+          "label": "Titlu pentru butonul ecran complet (ieșire)",
+          "default": "Ieși din modul ecran complet"
+        }
+      ]
+    }
+  ]
+}
