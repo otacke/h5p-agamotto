@@ -4,6 +4,24 @@ import Slider from '@scripts//h5p-agamotto-slider';
 import Spinner from '@scripts//h5p-agamotto-spinner';
 import Util from '@services/h5p-agamotto-util';
 
+/** @constant {number} ROUNDING_PRECISION Rounding precision for calculations. */
+const ROUNDING_PRECISION = 10;
+
+/** @constant {number} FIFTY_PERCENT Percentage of visibility required to count as viewed. */
+const FIFTY_PERCENT = 0.5;
+
+/** @constant {number} FULLSCREEN_TIMEOUT_MS Timeout in ms to allow for fullscreen to be entered. */
+const FULLSCREEN_TIMEOUT_MS = 250;
+
+/** @constant {number} FULLSCREEN_TIMEOUT_LONG_MS Timeout in ms to allow for fullscreen to be entered. */
+const FULLSCREEN_TIMEOUT_LONG_MS = 300;
+
+/** @constant {number} RIGHT_ANGLE_DEGREES Degrees in a right angle. */
+const RIGHT_ANGLE_DEGREES = 90;
+
+/** @constant {number} MAX_IMAGES Maximum number of images allowed. */
+const MAX_IMAGES = 50;
+
 /** Class for Agamotto interaction */
 class Agamotto extends H5P.Question {
   /**
@@ -31,7 +49,7 @@ class Agamotto extends H5P.Question {
         ticks: false,
         labels: false,
         transparencyReplacementColor: '#000000',
-        imagesDescriptionsRatio: 70
+        imagesDescriptionsRatio: 70,
       },
       a11y: {
         image: 'Image',
@@ -39,8 +57,8 @@ class Agamotto extends H5P.Question {
         mute: 'Mute',
         unmute: 'Unmute',
         buttonFullscreenEnter: 'Enter fullscreen mode',
-        buttonFullscreenExit: 'Exit fullscreen mode'
-      }
+        buttonFullscreenExit: 'Exit fullscreen mode',
+      },
     }, this.params);
 
     this.extras = contentData;
@@ -80,8 +98,12 @@ class Agamotto extends H5P.Question {
      */
     this.updateContent = (index, opacity) => {
       // Limit updates for performance reasons, will be a little jumpy though
-      opacity = Math.round(opacity * 10) / 10;
-      if (this.slider.isUsed() && opacity === this.images.getTopOpacity() && (opacity !== 1 || this.position === index)) {
+      opacity = Math.round(opacity * ROUNDING_PRECISION) / ROUNDING_PRECISION;
+      if (
+        this.slider.isUsed() &&
+        opacity === this.images.getTopOpacity() &&
+        (opacity !== 1 || this.position === index)
+      ) {
         return;
       }
 
@@ -234,7 +256,7 @@ class Agamotto extends H5P.Question {
           }
         }, {
           root: document.documentElement,
-          threshold: [0, 1] // Get events when it is shown and hidden
+          threshold: [0, 1], // Get events when it is shown and hidden
         }).observe(this.content);
       });
     };
@@ -282,7 +304,7 @@ class Agamotto extends H5P.Question {
             img: item,
             alt: this.params.items[index].image.params.alt,
             title: this.params.items[index].image.params.title,
-            description: this.params.items[index].description
+            description: this.params.items[index].description,
           }));
 
           // We can hide the spinner now
@@ -325,14 +347,14 @@ class Agamotto extends H5P.Question {
               mute: this.params.a11y.mute,
               unmute: this.params.a11y.unmute,
               buttonFullscreenEnter: this.params.a11y.buttonFullscreenEnter,
-              buttonFullscreenExit: this.params.a11y.buttonFullscreenExit
+              buttonFullscreenExit: this.params.a11y.buttonFullscreenExit,
             },
             selector: this.selector,
-            parent: this
+            parent: this,
           }, {
             onButtonFullscreenClicked: () => {
               this.handleFullscreenClicked();
-            }
+            },
           });
 
           this.wrapper.appendChild(this.slider.getDOM());
@@ -376,7 +398,7 @@ class Agamotto extends H5P.Question {
               0 + margin,
               this.slider.getWidth() - margin,
               0,
-              this.maxItem
+              this.maxItem,
             );
 
             // Account for margin change and mapping outside the image indexes
@@ -387,7 +409,7 @@ class Agamotto extends H5P.Question {
              * before blending than a linear function
              */
             const linearOpacity = (1 - Util.constrain(mappedValue - topIndex, 0, 1));
-            const topOpacity = 0.5 * (1 - Math.cos(Math.PI * linearOpacity));
+            const topOpacity = FIFTY_PERCENT * (1 - Math.cos(Math.PI * linearOpacity));
 
             this.updateContent(topIndex, topOpacity);
           });
@@ -420,7 +442,7 @@ class Agamotto extends H5P.Question {
               setTimeout(() => { // Needs time to get into fullscreen for window.innerHeight
                 this.setFixedSize(true);
                 this.slider.setFullScreenButtonTitle(true);
-              }, 250);
+              }, FULLSCREEN_TIMEOUT_MS);
             });
 
             this.on('exitFullScreen', () => {
@@ -433,7 +455,7 @@ class Agamotto extends H5P.Question {
               if (H5P.isFullscreen) {
                 setTimeout(() => { // Needs time to rotate for window.innerHeight
                   this.setFixedSize(true);
-                }, 250);
+                }, FULLSCREEN_TIMEOUT_MS);
               }
               else {
                 this.setFixedSize(false);
@@ -461,10 +483,11 @@ class Agamotto extends H5P.Question {
        */
       if (
         Util.isMobileDevice() &&
-        Math.abs(window.screen.orientation.angle) === 90
+        Math.abs(window.screen.orientation.angle) === RIGHT_ANGLE_DEGREES
       ) {
         const determiningDimension = (/iPhone/.test(navigator.userAgent)) ? screen.width : screen.height;
-        this.wrapper.style.width = Math.round((determiningDimension / 2) * this.images.getRatio()) + 'px';
+        // eslint-disable-next-line no-magic-numbers
+        this.wrapper.style.width = `${Math.round((determiningDimension / 2) * this.images.getRatio()) }px`;
       }
       else {
         // Portrait orientation
@@ -568,7 +591,7 @@ class Agamotto extends H5P.Question {
 
         audioElements.push({
           player: player,
-          promise: null
+          promise: null,
         });
       });
 
@@ -631,7 +654,7 @@ class Agamotto extends H5P.Question {
     this.getContext = () => {
       return {
         type: 'image',
-        value: this.position + 1
+        value: this.position + 1,
       };
     };
 
@@ -640,7 +663,7 @@ class Agamotto extends H5P.Question {
      * @returns {string} title.
      */
     this.getTitle = () => {
-      return H5P.createTitle((this.extras.metadata && this.extras.metadata.title) ? this.extras.metadata.title : 'Agamotto');
+      return H5P.createTitle((this.extras.metadata?.title) ? this.extras.metadata.title : 'Agamotto');
     };
 
     /**
@@ -649,7 +672,7 @@ class Agamotto extends H5P.Question {
     this.handleFullscreenClicked = () => {
       setTimeout(() => {
         this.toggleFullscreen();
-      }, 300); // Some devices don't register user gesture before call to to requestFullscreen
+      }, FULLSCREEN_TIMEOUT_LONG_MS); // Some devices don't register user gesture before call to to requestFullscreen
     };
 
     /**
@@ -720,8 +743,11 @@ class Agamotto extends H5P.Question {
           const headingHeight = (this.title) ? this.title.offsetHeight : 0;
           const sliderHeight = slider.offsetHeight;
 
+          // eslint-disable-next-line no-magic-numbers
           const maxHeight = window.innerHeight - 2 * this.wrapper.offsetTop - headingHeight - sliderHeight;
-          let imagesMaxHeight = (descriptions) ? maxHeight * this.params.behaviour.imagesDescriptionsRatio / 100 : maxHeight;
+          let imagesMaxHeight = (descriptions) ?
+            maxHeight * this.params.behaviour.imagesDescriptionsRatio / 100 :
+            maxHeight;
 
           // Scale images down if required
           if (images.offsetHeight > imagesMaxHeight) {
@@ -779,7 +805,7 @@ class Agamotto extends H5P.Question {
         }
         return true;
       })
-      .splice(0, 50)
+      .splice(0, MAX_IMAGES)
       .map((item) => {
         item.image.params.alt = item.image.params.alt || '';
         item.image.params.title = item.image.params.title || '';

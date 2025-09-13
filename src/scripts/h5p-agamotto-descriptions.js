@@ -1,5 +1,8 @@
 import Util from '@services/h5p-agamotto-util';
 
+/** @constant {number} OPACITY_THRESHOLD Opacity threshold for descriptions. */
+const OPACITY_THRESHOLD = 0.5;
+
 /** Class representing Descriptions */
 class Descriptions {
   /**
@@ -93,13 +96,13 @@ class Descriptions {
     wrapperBottom.classList.remove('h5p-agamotto-hidden');
 
     wrapperTop.style.opacity = opacity;
-    wrapperTop.style.zIndex = (opacity < 0.5) ? 0 : 1;
+    wrapperTop.style.zIndex = (opacity < OPACITY_THRESHOLD) ? 0 : 1;
     if (wrapperTop !== wrapperBottom) {
       wrapperBottom.style.opacity = 1 - opacity;
-      wrapperBottom.style.zIndex = (1 - opacity) < 0.5 ? 0 : 1;
+      wrapperBottom.style.zIndex = (1 - opacity) < OPACITY_THRESHOLD ? 0 : 1;
     }
 
-    this.currentDescriptionText = (opacity > 0.5) ? wrapperTop.textContent : wrapperBottom.textContent;
+    this.currentDescriptionText = (opacity > OPACITY_THRESHOLD) ? wrapperTop.textContent : wrapperBottom.textContent;
   }
 
   /**

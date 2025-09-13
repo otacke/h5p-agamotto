@@ -1,5 +1,11 @@
 import Util from '@services/h5p-agamotto-util';
 
+/** @constant {number} LUCKY_FOUR Some offset, but not sure why that value. */
+const LUCKY_FOUR = 4;
+
+/** @constant {number} TICK_BUFFER_FALLBACK Fallback for tick buffer. */
+const TICK_BUFFER_FALLBACK = 7;
+
 /** Class representing a Slider */
 class Slider extends H5P.EventDispatcher {
   /**
@@ -24,7 +30,7 @@ class Slider extends H5P.EventDispatcher {
       snap: true,
       ticks: false,
       labels: false,
-      startRatio: 0
+      startRatio: 0,
     }, params);
 
     this.callbacks = callbacks;
@@ -180,7 +186,6 @@ class Slider extends H5P.EventDispatcher {
         return;
       }
 
-      event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
       this.snap();
@@ -191,33 +196,31 @@ class Slider extends H5P.EventDispatcher {
       if (this.keydown !== false) {
         return;
       }
-      event = event || window.event;
-      const key = event.which || event.keyCode;
-      switch (key) {
-        case 35: // end
+
+      switch (event.code) {
+        case 'End':
           this.handleKeyMove(event, this.params.size);
           break;
 
-        case 36: // home
+        case 'Home':
           this.handleKeyMove(event, 0);
           break;
 
-        case 37: // left
-        case 38: // up
+        case 'ArrowLeft':
+        case 'ArrowUp':
           this.handleKeyMove(event, this.getCurrentItemId(true) - 1);
           break;
 
-        case 39: // right
-        case 40: // down
+        case 'ArrowRight':
+        case 'ArrowDown':
           this.handleKeyMove(event, this.getCurrentItemId(true) + 1);
           break;
       }
     });
+
     this.thumb.addEventListener('keyup', (event) => {
       // Only trigger xAPI if the interaction started by a particular key has ended
-      event = event || window.event;
-      const key = event.which || event.keyCode;
-      if (key === this.keydown) {
+      if (event.code === this.keydown) {
         this.keydown = false;
         this.parent.xAPIInteracted();
         this.parent.xAPICompleted();
@@ -382,7 +385,7 @@ class Slider extends H5P.EventDispatcher {
       this.track.style.left = `${Slider.TRACK_OFFSET + this.audioButtonOffset}px`;
     }
 
-    const fullscreenButtonOffset = this.fullscreenButton.offsetWidth + 4;
+    const fullscreenButtonOffset = this.fullscreenButton.offsetWidth + LUCKY_FOUR;
 
     this.trackWidth = value - this.audioButtonOffset - fullscreenButtonOffset;
     this.track.style.width = `${value - this.audioButtonOffset - fullscreenButtonOffset}px`;
@@ -433,7 +436,7 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Update DOM
-    this.thumb.style.left = position + Slider.THUMB_OFFSET + this.audioButtonOffset + 'px';
+    this.thumb.style.left = `${position + Slider.THUMB_OFFSET + this.audioButtonOffset  }px`;
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
 
@@ -441,13 +444,13 @@ class Slider extends H5P.EventDispatcher {
       'aria-valuetext',
       this.params.labels ?
         this.labels[currentItemId].innerHTML :
-        this.params.altTitleTexts[currentItemId] || `${this.params.a11y.image} ${currentItemId + 1}`
+        this.params.altTitleTexts[currentItemId] || `${this.params.a11y.image} ${currentItemId + 1}`,
     );
 
     // Inform parent node
     this.trigger('update', {
       position: position,
-      percentage: percentage
+      percentage: percentage,
     });
   }
 
@@ -511,12 +514,16 @@ class Slider extends H5P.EventDispatcher {
    * Resize the slider.
    */
   resize() {
-    if (this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET && this.extraInitResizes < 0) {
+    if (
+      // eslint-disable-next-line no-magic-numbers
+      this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET && this.extraInitResizes < 0
+    ) {
       return; // Skip, already correct width
     }
 
     this.extraInitResizes--;
 
+    // eslint-disable-next-line no-magic-numbers
     this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
 
@@ -524,7 +531,8 @@ class Slider extends H5P.EventDispatcher {
     // Update ticks
     if (this.params.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
-        this.ticks[i].style.left = Slider.TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) + 'px';
+        this.ticks[i].style.left =
+          `${Slider.TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) }px`;
       }
     }
     // Height to enlarge the slider container
@@ -540,16 +548,20 @@ class Slider extends H5P.EventDispatcher {
         switch (i) {
           case (0):
             // First label
-            this.labels[i].style.left = (Slider.TRACK_OFFSET / 2) + this.audioButtonOffset + 'px';
+            // eslint-disable-next-line no-magic-numbers
+            this.labels[i].style.left = `${(Slider.TRACK_OFFSET / 2) + this.audioButtonOffset  }px`;
             break;
           case (this.labels.length - 1):
             // Last label
-            this.labels[i].style.right = (Slider.TRACK_OFFSET / 2) + this.fullscreenButton.offsetWidth + 4 + 'px';
+            // eslint-disable-next-line no-magic-numbers
+            this.labels[i].style.right = `${(Slider.TRACK_OFFSET / 2) + this.fullscreenButton.offsetWidth + 4  }px`;
             break;
           default:
             // Centered over tick mark position
-            var offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-            this.labels[i].style.left = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1) - offset + this.audioButtonOffset + 'px';
+            // eslint-disable-next-line no-magic-numbers
+            const offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
+            const trackOffset = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1);
+            this.labels[i].style.left = `${trackOffset - offset + this.audioButtonOffset}px`;
         }
 
         // Detect overlapping labels
@@ -572,10 +584,10 @@ class Slider extends H5P.EventDispatcher {
       }
 
       // If there are no ticks, put the labels a little closer to the track
-      const buffer = (this.params.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -7;
+      const buffer = (this.params.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -TICK_BUFFER_FALLBACK;
 
       // Update slider height
-      this.container.style.height = (Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer) + 'px';
+      this.container.style.height = `${Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer  }px`;
     }
   }
 
@@ -610,7 +622,12 @@ class Slider extends H5P.EventDispatcher {
   areOverlapping(label1, label2) {
     const rect1 = label1.getBoundingClientRect();
     const rect2 = label2.getBoundingClientRect();
-    return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+    return !(
+      rect1.right < rect2.left ||
+      rect1.left > rect2.right ||
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom
+    );
   }
 }
 

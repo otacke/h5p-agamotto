@@ -50,7 +50,9 @@ class Images {
       }
 
       // Compute offset for centering.
+      // eslint-disable-next-line no-magic-numbers
       const offsetX = Util.constrain((maxX - imgX) / 2, 0, maxX);
+      // eslint-disable-next-line no-magic-numbers
       const offsetY = Util.constrain((maxY - imgY) / 2, 0, maxY);
 
       // Create scaled image with background.
@@ -70,7 +72,7 @@ class Images {
       // This is necessary to prevent security errors in some cases.
       const src = imageCanvas.toDataURL('image/jpeg');
 
-      if (src.length <= 6) {
+      if (src.length <= 'data:,'.length) {
         /*
          * toDataURL requires images on iOS to have a maximum size of 3 megapixels
          * for devices with less than 256 MB RAM and 5 megapixels for devices with
@@ -79,9 +81,11 @@ class Images {
         if ((detect().name || '').toLowerCase() === 'ios') {
           const pixelCount = this.images[i].img.naturalWidth * this.images[i].img.naturalHeight;
           if (pixelCount > Images.FIVE_MEGAPIXELS) {
+            // eslint-disable-next-line @stylistic/js/max-len
             console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 5 megapixels. Please scale down images.');
           }
           else if (pixelCount > Images.THREE_MEGAPIXELS) {
+            // eslint-disable-next-line @stylistic/js/max-len
             console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 3 megapixels. Please scale down images.');
           }
         }
@@ -101,7 +105,7 @@ class Images {
     this.imageTop.setAttribute('title', this.images[0].title);
     this.imageTop.setAttribute('aria-label', (this.images[0].alt !== '') ?
       `${images[0].alt}. ${this.images[0].description}` :
-      this.images[0].description
+      this.images[0].description,
     );
 
     this.imageBottom = document.createElement('img');
@@ -155,7 +159,7 @@ class Images {
     this.imageTop.setAttribute('title', this.images[visibleImageIndex].title);
     this.imageTop.setAttribute('aria-label', (this.images[visibleImageIndex].alt !== '') ?
       `${this.images[visibleImageIndex].alt}. ${this.images[visibleImageIndex].description}` :
-      this.images[visibleImageIndex].description
+      this.images[visibleImageIndex].description,
     );
     this.imageTop.style.opacity = opacity;
   }
@@ -165,7 +169,7 @@ class Images {
    */
   resize() {
     setTimeout(() => {
-      this.container.style.height = this.container.offsetWidth / this.ratio + 'px';
+      this.container.style.height = `${this.container.offsetWidth / this.ratio  }px`;
     }, 0);
   }
 
@@ -176,7 +180,7 @@ class Images {
   getSize() {
     return {
       width: this.container.offsetWidth,
-      height: this.container.offsetHeight
+      height: this.container.offsetHeight,
     };
   }
 
