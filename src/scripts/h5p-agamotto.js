@@ -22,8 +22,20 @@ const RIGHT_ANGLE_DEGREES = 90;
 /** @constant {number} MAX_IMAGES Maximum number of images allowed. */
 const MAX_IMAGES = 50;
 
+/** @constant {string} DEFAULT_DESCRIPTION Default description. */
+const DEFAULT_DESCRIPTION = 'Agamotto';
+
+/** @constant {number} RESIZE_COOLING_PERIOD Cooldown period in ms to prevent infinite resizing. */
+const RESIZE_COOLING_PERIOD = 75;
+
+/** @constant {number} RESIZE_REPETITIONS Number of consecutive identical resizes. */
+const RESIZE_REPETITIONS = 3;
+
+/** @constant {number} RESIZE_REPETITIONS_ZERO_HEIGHT Number of maximum resizes with height zero. */
+const RESIZE_REPETITIONS_ZERO_HEIGHT = 50;
+
 /** Class for Agamotto interaction */
-class Agamotto extends H5P.Question {
+export default class Agamotto extends H5P.Question {
   /**
    * @class
    * @param {object} params Params from semantics.json.
@@ -505,7 +517,7 @@ class Agamotto extends H5P.Question {
       window.requestAnimationFrame(() => {
         // Keep Agamotto.RESIZE_REPETITIONS previous sizes
         this.previousSizes.push(this.images.getSize());
-        if (this.previousSizes.length > Agamotto.RESIZE_REPETITIONS) {
+        if (this.previousSizes.length > RESIZE_REPETITIONS) {
           this.previousSizes.shift();
         }
 
@@ -514,7 +526,7 @@ class Agamotto extends H5P.Question {
           clearTimeout(this.extraResize);
           this.extraResize = setTimeout(() => {
             this.trigger('resize');
-          }, Agamotto.RESIZE_COOLING_PERIOD);
+          }, RESIZE_COOLING_PERIOD);
         }
       });
     };
@@ -526,15 +538,15 @@ class Agamotto extends H5P.Question {
     this.isResizeNeeded = () => {
       /*
        * Images need time to resize, and we resize again until
-       * the size didn't yield Agamotto.RESIZE_REPETITIONS different
-       * sizes in Agamotto.RESIZE_REPETITIONS retries - 3 to prevent
+       * the size didn't yield RESIZE_REPETITIONS different
+       * sizes in RESIZE_REPETITIONS retries - 3 to prevent
        * infinite resizes when scroll bar is added/removed
        * In case of problems when getting height 0, stop resize after
-       * Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT attempts
+       * RESIZE_REPETITIONS_ZERO_HEIGHT attempts
        */
 
       // Check for minimal number of required resizes to be sure
-      let resizeNeeded = this.previousSizes.length < Agamotto.RESIZE_REPETITIONS;
+      let resizeNeeded = this.previousSizes.length < RESIZE_REPETITIONS;
 
       // Check for height being 0
       if (!resizeNeeded) {
@@ -546,7 +558,7 @@ class Agamotto extends H5P.Question {
           this.imagesRepeatedZeroHeight = 0;
         }
 
-        if (this.imagesRepeatedZeroHeight === Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT) {
+        if (this.imagesRepeatedZeroHeight === RESIZE_REPETITIONS_ZERO_HEIGHT) {
           this.imagesRepeatedZeroHeight = 0;
           resizeNeeded = false; // Stop loop
         }
@@ -561,7 +573,7 @@ class Agamotto extends H5P.Question {
             differentSizes[size] = true;
           });
 
-        resizeNeeded = Object.keys(differentSizes).length === Agamotto.RESIZE_REPETITIONS;
+        resizeNeeded = Object.keys(differentSizes).length === RESIZE_REPETITIONS;
       }
 
       return resizeNeeded;
@@ -815,17 +827,3 @@ class Agamotto extends H5P.Question {
     return items;
   }
 }
-
-/** @constant {string} */
-Agamotto.DEFAULT_DESCRIPTION = 'Agamotto';
-
-/** @constant {number} Cooldown period in ms to prevent infinite resizing */
-Agamotto.RESIZE_COOLING_PERIOD = 75;
-
-/** @constant {number} Number of consecutive identical resizes */
-Agamotto.RESIZE_REPETITIONS = 3;
-
-/** @constant {number} Number of maximum resizes with height zero */
-Agamotto.RESIZE_REPETITIONS_ZERO_HEIGHT = 50;
-
-export default Agamotto;

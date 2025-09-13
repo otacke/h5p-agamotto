@@ -1,5 +1,5 @@
 /** Class for an activity indicator aka spinner */
-class Spinner {
+export default class Spinner {
   /**
    * Constructor.
    * @param {string} classNameBase Class name base to define spinner visuals.
@@ -55,5 +55,3 @@ class Spinner {
     this.container.classList.add(`${this.classNameBase}-none`);
   }
 }
-
-export default Spinner;

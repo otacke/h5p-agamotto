@@ -1,8 +1,14 @@
 import Util from '@services/h5p-agamotto-util';
 import { detect } from 'detect-browser';
 
+/** @constant {number} THREE_MEGAPIXELS Pixels in images with three megapixels */
+const THREE_MEGAPIXELS = 2952192;
+
+/** @constant {number} FIVE_MEGAPIXELS Pixels in images with five megapixels */
+const FIVE_MEGAPIXELS = 4915200;
+
 /** Class representing Images */
-class Images {
+export default class Images {
   /**
    * Images object
    * @class Images
@@ -80,11 +86,11 @@ class Images {
          */
         if ((detect().name || '').toLowerCase() === 'ios') {
           const pixelCount = this.images[i].img.naturalWidth * this.images[i].img.naturalHeight;
-          if (pixelCount > Images.FIVE_MEGAPIXELS) {
+          if (pixelCount > FIVE_MEGAPIXELS) {
             // eslint-disable-next-line @stylistic/js/max-len
             console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 5 megapixels. Please scale down images.');
           }
-          else if (pixelCount > Images.THREE_MEGAPIXELS) {
+          else if (pixelCount > THREE_MEGAPIXELS) {
             // eslint-disable-next-line @stylistic/js/max-len
             console.warn('Browsers on iOS may have a limitation that prevents Agamotto to use images larger than 3 megapixels. Please scale down images.');
           }
@@ -228,11 +234,3 @@ class Images {
     });
   }
 }
-
-/** @constant {number} Pixels in images with three megapixels */
-Images.THREE_MEGAPIXELS = 2952192;
-
-/** @constant {number} Pixels in images with five megapixels */
-Images.FIVE_MEGAPIXELS = 4915200;
-
-export default Images;

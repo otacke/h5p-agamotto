@@ -6,8 +6,18 @@ const LUCKY_FOUR = 4;
 /** @constant {number} TICK_BUFFER_FALLBACK Fallback for tick buffer. */
 const TICK_BUFFER_FALLBACK = 7;
 
+// Slider Layout
+/** @constant {number} CONTAINER_DEFAULT_HEIGHT Default container height. */
+const CONTAINER_DEFAULT_HEIGHT = 36;
+
+/** @constant {number} TRACK_OFFSET Offset for the track. */
+const TRACK_OFFSET = 16;
+
+/** @constant {number} THUMB_OFFSET Offset for the thumb. */
+const THUMB_OFFSET = 8;
+
 /** Class representing a Slider */
-class Slider extends H5P.EventDispatcher {
+export default class Slider extends H5P.EventDispatcher {
   /**
    * Slider object.
    * @param {object} params Options for the slider.
@@ -108,7 +118,7 @@ class Slider extends H5P.EventDispatcher {
     if (this.params.ticks === true) {
       // Function used here to avoid creating it in the upcoming loop
       const placeTicks = (event) => {
-        this.setPosition(parseInt(event.target.style.left) - Slider.TRACK_OFFSET - this.audioButtonOffset, true);
+        this.setPosition(parseInt(event.target.style.left) - TRACK_OFFSET - this.audioButtonOffset, true);
       };
       for (i = 0; i <= this.params.size; i++) {
         this.ticks[i] = document.createElement('div');
@@ -382,7 +392,7 @@ class Slider extends H5P.EventDispatcher {
    */
   setWidth(value) {
     if (this.params.audio) {
-      this.track.style.left = `${Slider.TRACK_OFFSET + this.audioButtonOffset}px`;
+      this.track.style.left = `${TRACK_OFFSET + this.audioButtonOffset}px`;
     }
 
     const fullscreenButtonOffset = this.fullscreenButton.offsetWidth + LUCKY_FOUR;
@@ -436,7 +446,7 @@ class Slider extends H5P.EventDispatcher {
     }
 
     // Update DOM
-    this.thumb.style.left = `${position + Slider.THUMB_OFFSET + this.audioButtonOffset  }px`;
+    this.thumb.style.left = `${position + THUMB_OFFSET + this.audioButtonOffset  }px`;
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
 
@@ -459,7 +469,7 @@ class Slider extends H5P.EventDispatcher {
    * @returns {number} Current slider position.
    */
   getPosition() {
-    return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - Slider.THUMB_OFFSET : 0;
+    return (this.thumb.style.left) ? parseInt(this.thumb.style.left) - THUMB_OFFSET : 0;
   }
 
   /**
@@ -516,7 +526,7 @@ class Slider extends H5P.EventDispatcher {
   resize() {
     if (
       // eslint-disable-next-line no-magic-numbers
-      this.getWidth() === parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET && this.extraInitResizes < 0
+      this.getWidth() === parseInt(this.container.offsetWidth) - 2 * TRACK_OFFSET && this.extraInitResizes < 0
     ) {
       return; // Skip, already correct width
     }
@@ -524,7 +534,7 @@ class Slider extends H5P.EventDispatcher {
     this.extraInitResizes--;
 
     // eslint-disable-next-line no-magic-numbers
-    this.setWidth(parseInt(this.container.offsetWidth) - 2 * Slider.TRACK_OFFSET);
+    this.setWidth(parseInt(this.container.offsetWidth) - 2 * TRACK_OFFSET);
     this.setPosition(this.getWidth() * this.ratio, false, true);
 
     let i = 0;
@@ -532,7 +542,7 @@ class Slider extends H5P.EventDispatcher {
     if (this.params.ticks === true) {
       for (i = 0; i < this.ticks.length; i++) {
         this.ticks[i].style.left =
-          `${Slider.TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) }px`;
+          `${TRACK_OFFSET + this.audioButtonOffset + i * this.getWidth() / (this.ticks.length - 1) }px`;
       }
     }
     // Height to enlarge the slider container
@@ -549,18 +559,18 @@ class Slider extends H5P.EventDispatcher {
           case (0):
             // First label
             // eslint-disable-next-line no-magic-numbers
-            this.labels[i].style.left = `${(Slider.TRACK_OFFSET / 2) + this.audioButtonOffset  }px`;
+            this.labels[i].style.left = `${(TRACK_OFFSET / 2) + this.audioButtonOffset  }px`;
             break;
           case (this.labels.length - 1):
             // Last label
             // eslint-disable-next-line no-magic-numbers
-            this.labels[i].style.right = `${(Slider.TRACK_OFFSET / 2) + this.fullscreenButton.offsetWidth + 4  }px`;
+            this.labels[i].style.right = `${(TRACK_OFFSET / 2) + this.fullscreenButton.offsetWidth + 4  }px`;
             break;
           default:
             // Centered over tick mark position
             // eslint-disable-next-line no-magic-numbers
             const offset = Math.ceil(parseInt(window.getComputedStyle(this.labels[i]).width)) / 2;
-            const trackOffset = Slider.TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1);
+            const trackOffset = TRACK_OFFSET + i * this.getWidth() / (this.labels.length - 1);
             this.labels[i].style.left = `${trackOffset - offset + this.audioButtonOffset}px`;
         }
 
@@ -587,7 +597,7 @@ class Slider extends H5P.EventDispatcher {
       const buffer = (this.params.ticks === true || overlapping || maxLabelHeight === 0) ? 0 : -TICK_BUFFER_FALLBACK;
 
       // Update slider height
-      this.container.style.height = `${Slider.CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer  }px`;
+      this.container.style.height = `${CONTAINER_DEFAULT_HEIGHT + maxLabelHeight + buffer  }px`;
     }
   }
 
@@ -600,16 +610,16 @@ class Slider extends H5P.EventDispatcher {
     if (questionContainer) {
       const style = window.getComputedStyle(questionContainer);
 
-      const sliderOffset = (this.container.offsetLeft === Slider.TRACK_OFFSET) ?
-        Slider.TRACK_OFFSET :
-        Slider.TRACK_OFFSET + this.container.offsetLeft;
+      const sliderOffset = (this.container.offsetLeft === TRACK_OFFSET) ?
+        TRACK_OFFSET :
+        TRACK_OFFSET + this.container.offsetLeft;
 
       return questionContainer.getBoundingClientRect().left +
         parseInt(style.paddingLeft) +
         sliderOffset;
     }
     else { // Fallback
-      return this.container.offsetLeft + Slider.TRACK_OFFSET;
+      return this.container.offsetLeft + TRACK_OFFSET;
     }
   }
 
@@ -630,13 +640,3 @@ class Slider extends H5P.EventDispatcher {
     );
   }
 }
-
-// Slider Layout
-/** @constant {number} */
-Slider.CONTAINER_DEFAULT_HEIGHT = 36;
-/** @constant {number} */
-Slider.TRACK_OFFSET = 16;
-/** @constant {number} */
-Slider.THUMB_OFFSET = 8;
-
-export default Slider;

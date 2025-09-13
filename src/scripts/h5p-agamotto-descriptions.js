@@ -3,8 +3,11 @@ import Util from '@services/h5p-agamotto-util';
 /** @constant {number} OPACITY_THRESHOLD Opacity threshold for descriptions. */
 const OPACITY_THRESHOLD = 0.5;
 
+/** @constant {string[]} TAGS_FOR_PROPAGATION_STOPPING Tags that stop event propagation. */
+const TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
+
 /** Class representing Descriptions */
-class Descriptions {
+export default class Descriptions {
   /**
    * Descriptions object.
    * @param {object[]} texts Array containing the texts for the images.
@@ -29,7 +32,7 @@ class Descriptions {
     // Necessary to override the EventListener on document
     this.descriptionsContainer.addEventListener('mouseup', (event) => {
       // Needed for allowing links to work (may contain markup such as strong)
-      if (Descriptions.TAGS_FOR_PROPAGATION_STOPPING.indexOf(event.target.tagName) !== -1) {
+      if (TAGS_FOR_PROPAGATION_STOPPING.indexOf(event.target.tagName) !== -1) {
         event.stopPropagation();
         // Won't pass object and context if invoked by Agamotto.prototype.xAPIInteracted()
         parent.xAPIInteracted();
@@ -121,7 +124,3 @@ class Descriptions {
     }, 0);
   }
 }
-
-Descriptions.TAGS_FOR_PROPAGATION_STOPPING = ['A', 'EM', 'STRONG', 'SUB', 'SUP', 'SPAN'];
-
-export default Descriptions;
