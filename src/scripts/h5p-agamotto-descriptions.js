@@ -117,10 +117,14 @@ export default class Descriptions {
 
     setTimeout(() => {
       this.descriptionWrappers.forEach((wrapper) => {
-        height = Math.max(height, wrapper.offsetHeight);
+        height = Math.max(height, wrapper.scrollHeight);
       });
 
+      if (height === 0) {
+        return;
+      }
+
       this.descriptionsContainer.style.height = `${height}px`;
-    }, 0);
+    }, 100);
   }
 }
