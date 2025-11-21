@@ -152,12 +152,10 @@ export default class Slider extends H5P.EventDispatcher {
       }
     });
     this.track.addEventListener('mousedown', (event) => {
-      event = event || window.event;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
     this.thumb.addEventListener('mousedown', (event) => {
-      event = event || window.event;
       this.sliderdown = true;
       this.setPosition(event, false);
     });
@@ -174,7 +172,6 @@ export default class Slider extends H5P.EventDispatcher {
         return;
       }
 
-      event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
       this.setPosition(event, false);
@@ -185,7 +182,6 @@ export default class Slider extends H5P.EventDispatcher {
         return;
       }
 
-      event = event || window.event;
       event.preventDefault();
       event.stopPropagation();
       this.setPosition(event, false);
@@ -343,7 +339,6 @@ export default class Slider extends H5P.EventDispatcher {
   }
 
   handleTouchMove(event) {
-    event = event || window.event;
     event.preventDefault();
     event.stopPropagation();
     this.setPosition(event, false);
