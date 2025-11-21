@@ -336,7 +336,7 @@ export default class Slider extends H5P.EventDispatcher {
    */
   handleKeyMove(event, nextItemId) {
     event.preventDefault();
-    this.keydown = event.which || event.keyCode;
+    this.keydown = event.code;
     nextItemId = Util.constrain(nextItemId, 0, this.params.size);
 
     this.setPosition(Util.project(nextItemId, 0, this.params.size, 0, this.getWidth()), true);
