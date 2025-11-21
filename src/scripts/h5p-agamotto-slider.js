@@ -14,7 +14,7 @@ const CONTAINER_DEFAULT_HEIGHT = 36;
 const TRACK_OFFSET = 16;
 
 /** @constant {number} THUMB_OFFSET Offset for the thumb. */
-const THUMB_OFFSET = 8;
+const THUMB_OFFSET = 4;
 
 /** Class representing a Slider */
 export default class Slider extends H5P.EventDispatcher {
@@ -446,7 +446,10 @@ export default class Slider extends H5P.EventDispatcher {
     }
 
     // Update DOM
-    this.thumb.style.left = `${position + THUMB_OFFSET + this.audioButtonOffset  }px`;
+    this.thumb.style.setProperty(
+      '--h5p-agamotto-slider-thumb-position',
+      `${position + THUMB_OFFSET + this.audioButtonOffset}px`,
+    );
     const percentage = Math.round(position / this.getWidth() * 100);
     const currentItemId = (this.getCurrentItemId() || 0);
 
