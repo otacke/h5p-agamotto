@@ -227,10 +227,11 @@ export default class Slider extends H5P.EventDispatcher {
     this.thumb.addEventListener('keyup', (event) => {
       // Only trigger xAPI if the interaction started by a particular key has ended
       if (event.code === this.keydown) {
-        this.keydown = false;
         this.parent.xAPIInteracted();
         this.parent.xAPICompleted();
       }
+
+      this.keydown = false;
     });
   }
 
