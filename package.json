@@ -1,6 +1,6 @@
 {
   "name": "h5p-agamotto",
-  "version": "1.6.13",
+  "version": "1.7.0",
   "description": "Displays an interactive sequence of images",
   "scripts": {
     "lint": "stylelint './src/**/*.scss' && eslint './src/**/*.js'",
@@ -31,7 +31,7 @@
     "stylelint": "^17.4.0",
     "stylelint-config-recommended": "^18.0.0",
     "stylelint-config-recommended-scss": "^17.0.0",
-    "webpack": "^5.105.3",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
