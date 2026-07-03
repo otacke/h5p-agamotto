@@ -40,9 +40,9 @@ export default class Agamotto extends H5P.Question {
    * @class
    * @param {object} params Params from semantics.json.
    * @param {string} contentId ContentId.
-   * @param {object} contentData contentData.
+   * @param {object} [extras] Saved state, metadata, etc.
    */
-  constructor(params, contentId, contentData) {
+  constructor(params, contentId, extras = {}) {
     super('agamotto');
 
     if (!params.items) {
@@ -73,7 +73,7 @@ export default class Agamotto extends H5P.Question {
       },
     }, this.params);
 
-    this.extras = contentData;
+    this.extras = extras;
 
     // Keep track of whether the content is visible or not
     this.isVisible = false;
@@ -795,6 +795,14 @@ export default class Agamotto extends H5P.Question {
         });
       }, 0);
     };
+  }
+
+  /**
+   * Workaround for H5P core mutating prototype to inject its isRoot, but ES6 inheritance here.
+   * @returns {boolean} True, if content type is root. Else false.
+   */
+  isRoot() {
+    return !!this.extras.standalone;
   }
 
   /**
